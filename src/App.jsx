@@ -1,6 +1,7 @@
 import Header from './components/Header';
 import Register from './components/Register';
 import MessageBubble from './components/MessageBubble';
+import LogIn from './components/LogIn'; 
 
 function App() {
     return (
