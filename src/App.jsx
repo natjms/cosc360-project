@@ -1,6 +1,7 @@
 import Header from './components/Header';
 import Register from './components/Register';
 import MessageBubble from './components/MessageBubble';
+import LogIn from './components/LogIn'; 
 
 function App() {
     return (
@@ -16,6 +17,7 @@ function App() {
 				alignment='left'
 				sender_src='https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/Magnolia_grandiflora_-_flower_1.jpg/330px-Magnolia_grandiflora_-_flower_1.jpg'
 				/>
+        <LogIn />
         </div>
     );
 }
