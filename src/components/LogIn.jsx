@@ -1,25 +1,32 @@
-// src/LogIn.jsx
-import "./LogIn.css";
+import './Login.css'
+import { useNavigate } from 'react-router-dom';
 
-function LogIn() {
+function Login(props) { 
+    const navigate = useNavigate();
 
-  function handleSubmit() { 
-    return alert ('LogIn successful')
-  }
+     const handleSignup = () => {
+         navigate('/signup'); 
+    };
 
-  return (
-    <>
-      <div className="header">
-        <div className="title">LOG IN</div>
-        <label for = "email">Email</label> <br></br>
-        <input type ="text" name = "email" id = "email"></input> <br></br>
-        <label for = "Password">Password</label> <br></br>
-        <input type ="text" name = "password" id = "password"></input> <br></br>
-        <button type = "submit" onClick = {handleSubmit}>Submit</button>
-      </div>
-
-    </>
-  );
+    return (
+        <>
+        <div className = "window" onClick = {props.toggle}>
+            <button className = "close" onClick = {props.toggle}>Close</button>
+          <div className = "overlay" onClick = {(e) => e.stopPropagation()}>
+            <div className = "content">
+              <h2 className="title">LOG IN</h2>
+                  <label htmlFor = "email">EMAIL</label> 
+                  <input type ="text" name = "email" id = "email" placeholder = "Enter an email"></input> 
+                  <label htmlFor = "Password">PASSWORD</label> 
+                  <input type ="text" name = "password" id = "password" placeholder = "Enter a password"></input> 
+                  <button className = "submit" onClick ={(e) => e.preventDefault}>Submit</button>
+              </div>
+             </div>
+             <p>No Account?</p>
+             <button onClick={handleSignup}>Signup</button>
+        </div>
+        </>
+    );
 }
 
-export default LogIn;
+export default Login;
