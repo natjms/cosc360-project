@@ -1,34 +1,34 @@
 [
 {
 	"title": "The Hunger Games",
-	"Description": "Dystopian novel."
+	"description": "Dystopian novel."
 },
 {
 	"title": "The Seven Husbands of Evelyn Hugo",
-	"Description": "A novel about the life of a Hollywood actress."
+	"description": "A novel about the life of a Hollywood actress."
 },
 {
 	"title": "The Mockingbird",
-	"Description": "A novel about a mockingbird."
+	"description": "A novel about a mockingbird."
 },
 {
 	"title": "Divergent",
-	"Description": "Science fiction novel."
+	"description": "Science fiction novel."
 },
 {
 	"title": "Harry Potter and the Sorcerer's Stone",
-	"Description": "Fantasy novel about a young wizard."
+	"description": "Fantasy novel about a young wizard."
 },
 {
 	"title": "Life of Pi",
-	"Description": "Adventure novel."
+	"description": "Adventure novel."
 },
 {
 	"title": "The Great Gatsby",
-	"Description": "Classic novel about the American Dream."
+	"description": "Classic novel about the American Dream."
 },
 {
 	"title": "The Catcher in the Rye",
-	"Description": "Classic novel about teenage angst."
+	"description": "Classic novel about teenage angst."
 }
 ]
