@@ -1,5 +1,5 @@
 import Navbar from "./Navbar";
-import SearchBar from "./SearchBar";
+import SearchBarNavigator from "./SearchBarNavigator";
 import logo from "../assets/logo.jpg";
 import "../App.css";
 
@@ -12,7 +12,7 @@ function Header() {
             </div>
 
             <div className="header-right">
-                <SearchBar />
+                <SearchBarNavigator />
                 <Navbar />
             </div>
         </header>
