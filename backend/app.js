@@ -15,3 +15,10 @@ server.get('/book', bookGet);
 server.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });
+
+server.get("/api/search/name",
+	function(req, res){
+		console.log(req.params.name);
+		const data = JSON.parse(bookGet());
+		res.send(data);
+});
