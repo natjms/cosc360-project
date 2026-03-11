@@ -21,6 +21,8 @@ server.get("/api/search",
 	function(req, res){
 		res.send(example.filter(
 			function(book){
+				if(req.query.q == null || !req.query.q.trim()) return "";
+
 				return book.title.toLowerCase().includes(req.query.q.toLowerCase()) || book.description.toLowerCase().includes(req.query.q.toLowerCase());
 
 			}
