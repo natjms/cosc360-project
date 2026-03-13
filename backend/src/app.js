@@ -1,7 +1,8 @@
 import express from 'express';
-
+import getDatabaseConnection from './db/connection.js';
 import bookGet from './books/books.js';
 import example from './books/example.json' with { type: "json" };
+import cors from 'cors';
 
 import dotenv from 'dotenv';
 dotenv.config();
@@ -9,6 +10,7 @@ dotenv.config();
 const server = express();
 const port = 3000;
 server.use(express.json());
+server.use(cors());
 
 server.get('/api', (req, res) => {
   res.send('Hello World!');
@@ -31,3 +33,15 @@ server.get("/api/search",
 			}
 		));
 });
+
+
+server.post("/api/user",
+	async function(req, res){
+		console.log("ahsufghadsfb");
+		const db = getDatabaseConnection();
+		let collection = await db.collection("users");
+		let newDocument = req.body;
+  		newDocument.date = new Date();
+		let result = await collection.insertOne(newDocument);
+		res.send(result).status(204);
+	});
