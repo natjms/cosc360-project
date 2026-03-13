@@ -1,0 +1,30 @@
+.home1 { 
+    display: flex; 
+    flex-direction: row; 
+}
+
+.featuredBooks { 
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: auto; 
+    gap: 10px; 
+    padding: 10px;
+}
+
+.book1 {
+  text-align: center;
+  padding: 20px;
+  font-size: 18px;
+}
+
+.book2 {
+  text-align: center;
+  padding: 20px;
+  font-size: 18px;
+}
+
+.book3 {
+  text-align: center;
+  padding: 20px;
+  font-size: 18px;
+}
