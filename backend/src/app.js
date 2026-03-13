@@ -3,6 +3,9 @@ import express from 'express';
 import bookGet from './books/books.js';
 import example from './books/example.json' with { type: "json" };
 
+import dotenv from 'dotenv';
+dotenv.config();
+
 const server = express();
 const port = 3000;
 server.use(express.json());
@@ -27,6 +30,4 @@ server.get("/api/search",
 
 			}
 		));
-		
-
 });
