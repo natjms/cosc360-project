@@ -10,7 +10,6 @@ dotenv.config();
 const server = express();
 const port = 3000;
 server.use(express.json());
-server.use(cors());
 
 server.get('/api', (req, res) => {
   res.send('Hello World!');
@@ -37,11 +36,9 @@ server.get("/api/search",
 
 server.post("/api/user",
 	async function(req, res){
-		console.log("ahsufghadsfb");
-		const db = getDatabaseConnection();
+		const db = await getDatabaseConnection();
 		let collection = await db.collection("users");
 		let newDocument = req.body;
-  		newDocument.date = new Date();
 		let result = await collection.insertOne(newDocument);
-		res.send(result).status(204);
+		res.status(201).send(result);
 	});

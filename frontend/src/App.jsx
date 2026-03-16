@@ -31,10 +31,6 @@ function App() {
 			/>
 
             <Home />
-
-				/>
-        <LogIn />
-	    <p>{book.title}</p>
         </div>
 
     );

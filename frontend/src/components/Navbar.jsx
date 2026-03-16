@@ -1,4 +1,4 @@
-import Login from './Login'
+import Login from './LogIn.jsx'
 import { useState } from 'react'
 
 function Navbar() {
@@ -17,8 +17,10 @@ function Navbar() {
                 <li><a href="/collections">Collections</a></li>
                 <li><a href="/genres">Genres</a></li>
                 <li><a href="/about">About</a></li>
-                <li> <button onClick={togglePop}>Login</button>
-                    {seen && <Login toggle={togglePop} />}</li>
+                <li> 
+	    	    <button onClick={togglePop}>Login</button>
+                    {seen && <Login toggle={togglePop} />}
+	    	</li>
             </ul>
         </nav>
 
