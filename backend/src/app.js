@@ -1,5 +1,5 @@
 import express from 'express';
-import getDatabaseConnection from './db/connection.js';
+import { getDatabaseConnection } from './db/connection.js';
 import bookGet from './books/books.js';
 import example from './books/example.json' with { type: "json" };
 import cors from 'cors';
