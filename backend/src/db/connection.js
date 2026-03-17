@@ -23,3 +23,11 @@ export function objectId(id) {
 		return new mongodb.ObjectId(id);
 	}
 }
+
+export async function assertUniqueness(connection, collection, field, value) {
+	const result = await connection.collection(collection).findOne({[field]: value})
+
+	if (result !== null) {
+		throw new Error(`Uniqueness constraint on ${field} violated`);
+	}
+}

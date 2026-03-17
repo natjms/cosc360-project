@@ -2,7 +2,7 @@ import { randomBytes } from 'node:crypto';
 import bcrypt from 'bcrypt';
 
 import { missingKeys } from '#src/validation.js';
-import { objectId } from '#src/db/connection.js';
+import { objectId, assertUniqueness } from '#src/db/connection.js';
 
 /*
 {
@@ -76,6 +76,9 @@ export async function createAccount(connection, account) {
 		error.issues = validation_issues;
 		throw error;
 	}
+
+	await assertUniqueness(connection, 'accounts', 'username', account.username);
+	await assertUniqueness(connection, 'accounts', 'email', account.email);
 
 	account.password_hash = await bcrypt.hash(account.password_plaintext, 10);
 	delete account.password_plaintext;
