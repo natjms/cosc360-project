@@ -1,7 +1,7 @@
 import express from 'express';
-import { SL, at_least } from '../authentication.js';
+import { SL, at_least } from '#src/authentication.js';
 
-import example from '../books/example.json' with { type: "json" };
+import example from '#src/books/example.json' with { type: "json" };
 
 const router = express.Router();
 

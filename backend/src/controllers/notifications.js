@@ -1,5 +1,5 @@
 import express from 'express';
-import { SL, at_least } from '../authentication.js';
+import { SL, at_least } from '#src/authentication.js';
 
 const router = express.Router();
 
