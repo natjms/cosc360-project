@@ -12,8 +12,10 @@ export default function SearchResults() {
 	useEffect(() => {
 		fetch(`/api/search?q=${encodeURIComponent(search_params.get('q'))}`)
 			.then(response => response.json())
-			.then(items => setSearchResults(items))
-			.then(() => setNewQuery(''));
+			.then(items => {
+				setSearchResults(items);
+				setNewQuery('');
+			})
 	}, [search_params]);
 
 	const changeHandler = (e) => {
