@@ -6,6 +6,8 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import App from './App.jsx'
 import Signup from './components/Signup';
 import SearchResults from './SearchResults.jsx'
+import About from './components/About'; 
+import Collections from './components/Collections'; 
 
 
 createRoot(document.getElementById('root')).render(
@@ -15,6 +17,8 @@ createRoot(document.getElementById('root')).render(
         <Route path="/" element={<App />} />
         <Route path = "/signup" element = {<Signup />} />
         <Route path = "/search" element = {<SearchResults />} />
+        <Route path = '/about' element = {<About />} />
+        <Route path = '/collections' element = {<Collections/>} />
       </Routes>
     </BrowserRouter>
   </StrictMode>,
