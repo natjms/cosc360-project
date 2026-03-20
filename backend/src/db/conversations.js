@@ -10,6 +10,7 @@ import * as books from '#src/db/books.js';
 	complete: Boolean. If true, the conversation is considered complete
 	unread: Boolean. True if there are unread messages
 	last_updated: Unix timestamp (seconds) of when the last message was sent
+	last_message: Message ID of the last message
 }
 */
 
@@ -104,7 +105,7 @@ export async function markConversationRead(connection, conversation_id) {
  * property to the current time in seconds. This may be used when a message
  * has been added to a conversation
  */
-export async function markConversationUnread(connection, conversation_id) {
+export async function markConversationUnread(connection, conversation_id, message_id) {
 	return connection
 		.collection('conversations')
 		.updateOne(
@@ -112,6 +113,7 @@ export async function markConversationUnread(connection, conversation_id) {
 			{'$set': {
 				unread: true,
 				last_updated: Math.floor(Date.now() / 1000),
+				last_message: objectId(message_id),
 			}}
 		);
 }
