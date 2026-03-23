@@ -66,7 +66,8 @@ export async function getConversations(connection, account_id) {
 			],
 			complete: false,
 		})
-		.sort({ unread: -1, last_updated: -1 });
+		.sort({ unread: -1, last_updated: -1 })
+		.toArray();
 }
 
 export async function getCompleteConversations(connection, account_id) {
@@ -79,7 +80,8 @@ export async function getCompleteConversations(connection, account_id) {
 			],
 			complete: true,
 		})
-		.sort({ unread: -1, last_updated: -1 });
+		.sort({ unread: -1, last_updated: -1 })
+		.toArray();
 }
 
 export async function markConversationComplete(connection, conversation_id) {

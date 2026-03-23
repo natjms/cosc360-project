@@ -109,7 +109,8 @@ export function getCollectionById(connection, collection_id) {
 export function getCollectionsFromOwner(connection, account_id) {
 	return connection
 		.collection('collections')
-		.find({ owner: objectId(account_id) });
+		.find({ owner: objectId(account_id) })
+		.toArray();
 }
 
 export function deleteCollection(connection, collection_id) {
@@ -130,5 +131,6 @@ export function getCollectionsByPartialMatch(connection, query) {
 				{ title: new RegExp(`${query}`, 'i'), },
 				{ description: new RegExp(`${query}`, 'i'), }
 			]
-		});
+		})
+		.toArray();
 }

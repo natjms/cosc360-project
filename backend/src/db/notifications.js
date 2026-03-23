@@ -51,7 +51,8 @@ export async function getNotifications(connection, account_id) {
 	
 	return connection
 		.collection('notifications')
-		.find({ account: objectId(account_id) });
+		.find({ account: objectId(account_id) })
+		.toArray();
 }
 
 /**
@@ -65,7 +66,8 @@ export async function getUnreadNotifications(connection, account_id) {
 	
 	return connection
 		.collection('notifications')
-		.find({ account: objectId(account_id), read: false });
+		.find({ account: objectId(account_id), read: false })
+		.toArray();
 }
 
 /**

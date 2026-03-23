@@ -54,11 +54,13 @@ export async function getBookById(connection, book_id) {
 export async function getBooksInPossession(connection, possessor_account_id) {
 	return connection
 		.collection('books')
-		.find({ possessor: objectId(possessor_account_id) });
+		.find({ possessor: objectId(possessor_account_id) })
+		.toArray();
 }
 
 export async function getBooksByEntry(connection, entry_id) {
 	return connection
 		.collection('books')
-		.find({ catalog_entry: objectId(entry_id) });
+		.find({ catalog_entry: objectId(entry_id) })
+		.toArray();
 }

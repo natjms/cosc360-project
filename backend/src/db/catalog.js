@@ -83,5 +83,6 @@ export function getCatalogEntriesByPartialMatch(connection, query) {
 				{ title: new RegExp(`${query}`, 'i'), },
 				{ description: new RegExp(`${query}`, 'i'), }
 			]
-		});
+		})
+		.toArray();
 }

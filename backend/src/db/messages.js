@@ -46,5 +46,6 @@ export async function getMessagesInConversation(connection, conversation_id) {
 	return connection
 		.collection('messages')
 		.find({ conversation: objectId(conversation_id) })
-		.sort({ time: 1 });
+		.sort({ time: 1 })
+		.toArray();
 }
