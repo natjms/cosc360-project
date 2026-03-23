@@ -122,7 +122,7 @@ export function deleteCollection(connection, collection_id) {
  * Search for collections, partial-matching case-insensitive queries against the
  * title and description
  */
-export function getCollectionByPartialMatch(connection, query) {
+export function getCollectionsByPartialMatch(connection, query) {
 	return connection
 		.collection('collections')
 		.find({
