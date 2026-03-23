@@ -75,7 +75,7 @@ export function deleteCatalogEntry(connection, entry_id) {
  * Search the catalog, partial-matching case-insensitive queries against the
  * title and description
  */
-export function getCatalogEntryByPartialMatch(connection, query) {
+export function getCatalogEntriesByPartialMatch(connection, query) {
 	return connection
 		.collection('catalog')
 		.find({
