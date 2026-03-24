@@ -90,6 +90,45 @@ export async function createAccount(connection, account) {
 	return result.insertedId;
 }
 
+export async function updateAccount(connection, account_id, account_patch) {
+	let account = {};
+	let issues = [];
+
+	// Only set the properties if they're explicitly declared in the patch;
+	// otherwise we run the risk of accidentally setting a field to undefined
+	// or null
+	for (let key of ['username', 'email', 'password_plaintext']) {
+		if (Object.hasOwn(account_patch, key)) {
+			account[key] = account_patch[key];
+		}
+	}
+
+	if (account.username && !account.username?.match(/^[a-zA-Z][a-zA-Z0-9_.]+$/)) {
+		issues.push('Invalid username');
+	}
+
+	// This matches things that are not valid email addresses but whatever
+	if (account.email && !account.email?.match(/^\S+@\S+\.\S+$/)) {
+		issues.push('Invalid email');
+	}
+
+	await assertUniqueness(connection, 'accounts', 'username', account.username);
+	await assertUniqueness(connection, 'accounts', 'email', account.email);
+
+	// Encrypt the password
+	if (Object.hasOwn(account, 'password_plaintext')) {
+		account.password_hash = await bcrypt.hash(account.password_plaintext, 10);
+		delete account.password_plaintext;
+	}
+
+	return connection
+		.collection('accounts')
+		.updateOne(
+			{ _id: objectId(account_id) },
+			{ '$set': account }
+		);
+}
+
 /**
  * Given an account ObjectID and a plaintext password, return a promise that
  * resolves to true if the password matches the account's password hash.
