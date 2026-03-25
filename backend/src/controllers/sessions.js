@@ -11,7 +11,7 @@ const unimplemented = (req, res) => {
 
 router.use(connect_db);
 
-router.get('/api/sessions/login', at_least(SL.unauthenticated), unimplemented);
-router.get('/api/sessions/register', at_least(SL.unauthenticated), unimplemented);
+router.get('/login', at_least(SL.unauthenticated), unimplemented);
+router.get('/register', at_least(SL.unauthenticated), unimplemented);
 
 export default router;

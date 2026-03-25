@@ -11,8 +11,8 @@ const unimplemented = (req, res) => {
 
 router.use(connect_db);
 
-router.get('/api/notifications', at_least(SL.admin), unimplemented);
-router.get('/api/notifications/:account_id', at_least(SL.authenticated));
-router.delete('/api/notifications/:account_id/:notification_id', at_least(SL.authenticated));
+router.get('/', at_least(SL.admin), unimplemented);
+router.get('/:account_id', at_least(SL.authenticated));
+router.delete('/:account_id/:notification_id', at_least(SL.authenticated));
 
 export default router;

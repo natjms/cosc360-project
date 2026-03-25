@@ -20,13 +20,13 @@ const server = express();
 const port = 3000;
 server.use(express.json());
 
-server.use(accounts_controller);
-server.use(books_controller);
-server.use(collections_controller);
-server.use(conversations_controller);
-server.use(notifications_controller);
-server.use(sessions_controller);
-server.use(search_controller);
+server.use('/accounts', accounts_controller);
+server.use('/books', books_controller);
+server.use('/collections', collections_controller);
+server.use('/conversations', conversations_controller);
+server.use('/notifications', notifications_controller);
+server.use('/sessions', sessions_controller);
+server.use('/search', search_controller);
 
 // Some legacy controllers added for in-class assignments.
 // TODO: these should be removed at some point

@@ -11,21 +11,21 @@ const unimplemented = (req, res) => {
 
 router.use(connect_db);
 
-router.get('/api/books', at_least(SL.admin), unimplemented);
+router.get('/', at_least(SL.admin), unimplemented);
 
 // Add a "kind" of book to the database. Recognize a new book within the
 // system without necessarily listing it
-router.post('/api/books', at_least(SL.admin), unimplemented);
-router.patch('/api/books/:book_id', at_least(SL.admin), unimplemented);
-router.delete('/api/books/:book_id', at_least(SL.admin), unimplemented);
+router.post('/', at_least(SL.admin), unimplemented);
+router.patch('/:book_id', at_least(SL.admin), unimplemented);
+router.delete('/:book_id', at_least(SL.admin), unimplemented);
 
-router.get('/api/books/:id', at_least(SL.unauthenticated), unimplemented);
+router.get('/:book_id', at_least(SL.unauthenticated), unimplemented);
 
 // Add an "instance" of a book to the database. The book is recognized, and
 // a regular person publishes their willingness to distribute their personal
 // copy
-router.get('/api/books/:id/share', at_least(SL.authenticated), unimplemented);
+router.get('/:book_id/share', at_least(SL.authenticated), unimplemented);
 
-router.get('/api/books/:id/request', at_least(SL.authenticated), unimplemented);
+router.get('/:book_id/request', at_least(SL.authenticated), unimplemented);
 
 export default router;

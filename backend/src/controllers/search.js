@@ -15,7 +15,7 @@ router.use(connect_db);
 
 // TODO: unimplemented (this needs to be fixed so this comment exists for ease
 // of grepping
-router.get("/api/search", (req, res) => {
+router.get("/", (req, res) => {
 	res.send(example.filter(book => {
 		if(req.query.q == null || !req.query.q.trim()) return "";
 		return book.title.toLowerCase().includes(req.query.q.toLowerCase()) || book.description.toLowerCase().includes(req.query.q.toLowerCase());
