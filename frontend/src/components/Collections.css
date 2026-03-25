@@ -1,0 +1,18 @@
+.home1 { 
+    display: flex; 
+    margin-top: 20px; 
+} 
+
+.optionsList { 
+    display: flex; 
+    flex-direction: row; 
+    list-style: none; 
+    justify-content: center; 
+    align-items: center; 
+    margin-top: 20px; 
+    gap: 100px; 
+}
+
+.option { 
+    font-size: x-large; 
+}

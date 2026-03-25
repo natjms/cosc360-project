@@ -1,6 +1,4 @@
-
-
-  // 1. Build heade
+// 1. Build heade
   const headers = {
     "Content-Type": "application/json",
   };
@@ -10,6 +8,8 @@
   if (userId) {
     headers["X-User-Id"] = userId;   // e.g. "a1b2c3d4-..."
   }
+
+  
 
   // 3. Fire the actual fetch
   const response = await fetch(url, {
