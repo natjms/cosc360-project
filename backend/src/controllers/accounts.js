@@ -1,5 +1,6 @@
 import express from 'express';
 import { SL, at_least } from '#src/authentication.js';
+import { connect_db } from '#src/db/connection.js';
 
 const router = express.Router();
 
@@ -7,6 +8,8 @@ const unimplemented = (req, res) => {
 	res.status(500);
 	res.send({ error: 'UNIMPLEMENTED' });
 }
+
+router.use(connect_db);
 
 // Get all accounts as a list
 router.get('/api/accounts', at_least(SL.admin), unimplemented);

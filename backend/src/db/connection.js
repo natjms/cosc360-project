@@ -11,6 +11,14 @@ export async function getDatabaseConnection() {
 }
 
 /**
+ * Adds a DB connection to req.conn for use later
+ */
+export async function connect_db(req, res, next) {
+	req.conn = await getDatabaseConnection();
+	next();
+}
+
+/**
  * This convenience function takes either a string of an instance of ObjectId.
  * If it's a string, it returns the corresponding ObjectId. Otherwise, it
  * returns the argument. This is a convenience function that lets functions take
