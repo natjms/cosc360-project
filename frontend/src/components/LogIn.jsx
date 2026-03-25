@@ -2,6 +2,7 @@ import './LogIn.css'
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react'
 
+
 export default function Login(props) { 
     const navigate = useNavigate();
     const [password, setPassword] = useState("")
@@ -12,43 +13,51 @@ export default function Login(props) {
          navigate('/signup'); 
     };
 
+    const [emailError, setEmailError] = useState("");
+    const [passwordError, setPasswordError] = useState("");
+    
      const handleSubmit = async(e) => {
          e.preventDefault() 
-         if(!email.trim() || !password.trim()) return; 
 
-         try { 
-          const response = await fetch("http://localhost:3000/api/user", { 
-            method: "POST", 
-            headers: { 
+        let hasError = false;
+
+        const emailReg = /^(.+)@([^\.].*)\.([a-z]{2,})$/;
+        const passReg = /^[a-zA-Z]\w{8,16}$/;
+
+        if (!emailReg.test(email)) {
+            {/*if pattern does not match */ }
+            setEmailError("Enter a valid email");
+            hasError = true;
+        }
+
+        if (!passReg.test(password)) {
+            setPasswordError("Enter a password between 9 and 17 characters");
+            hasError = true;
+        }
+
+        if (!hasError) {
+            alert("Form submitted successfully");
+        }
+
+        if(!hasError) { 
+            fetch("http://localhost:3000/api/user", { 
+              method: "POST", 
+              headers: { 
               "Content-Type": "application/json"
-            },
+              },
             body: JSON.stringify({email, password})
      })
 
+            .then((response) => response.json())
+            .then((data) => { 
+                console.log(data); 
+            })
+            .catch((error) => { 
+                console.log(error)
+            })   
 
-        if(!response.ok) { 
-          throw new Error("Error"); 
-        }
-          const data = await response.json(); 
-          console.log(data)
-          const stat = document.getElementById("response")
-
-          if(data.success) { 
-            setIsSubmitting(true);
-            console.log("Login successful")
-            navigate('/');
-          } else { 
-            console.log("Login unsuccessful")
-            stat.textContent = "Successful"
-          }
-        } catch(error) { 
-            console.log("error logging in")
-          } finally { 
-            setIsSubmitting(false); 
-          }
-
-    };
-
+    }
+     }
 
     return (
         <>
@@ -81,6 +90,7 @@ export default function Login(props) {
              </form>
              </div>
              <p>No Account?</p>
+             <p>{emailError}</p>
              <button onClick={handleSignup}>Signup</button>
         </div>
         </>

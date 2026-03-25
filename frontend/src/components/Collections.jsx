@@ -2,8 +2,12 @@ import Navbar from "./Navbar";
 import SearchBarNavigator from "./SearchBarNavigator";
 import logo from "../assets/logo.jpg";
 import './Collections.css'
+import { useCallback } from "react";
+
 
 function Collections() {
+
+
     return (
       <>
         <header className="site-header">
