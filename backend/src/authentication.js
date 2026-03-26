@@ -1,3 +1,6 @@
+import * as sessions from '#src/db/sessions.js';
+import * as accounts from '#src/db/accounts.js';
+
 /**
  * Each security level corresponds to the extent to which a person has the
  * right to use a part of the website. We typically think of a person needing
@@ -17,14 +20,72 @@ export const SL = Object.freeze({
 	 */
 	authenticated: 1,
 
-	/* "admin": The person has the "admin" role and is thus entitled to do
-	 * anything
+	/* "admin": The person with the username admin
 	 */
 	admin: 3
 });
 
 export function at_least(minimum_level) {
-	return (req, res, next) => {
-		throw Error('TODO');
+	return async (req, res, next) => {
+		if (minimum_level <= SL.unauthenticated) {
+			// Nothing to do
+			next();
+			return;
+		}
+
+		const auth_header = req.get('Authorization');
+
+		if (auth_header === undefined) {
+			// There was no auth header provided, thus the person is unauthorized.
+			// Because of the earlier check we know the requirement is for them
+			// to be at least authorized, so we should throw an error
+			res.status(401);
+			res.send({error: 'You must be logged in to do this'});
+			return;
+		}
+
+		const [auth_scheme, session_token] = auth_header.split(' ');
+
+		if (auth_scheme !== 'Basic') {
+			res.status(400);
+			res.send({error: 'Unsupported authorization scheme'});
+			return;
+		}
+
+		const session = await sessions.getSessionByToken(req.conn, session_token);
+
+		if (session === null) {
+			res.status(401);
+			res.send({error: 'Your session does not exist. Please log in again'});
+			return;
+		}
+
+		if (session.expires < Math.floor(Date.now()/1000)) {
+			// The session expiry time is in the past, so we can complain and
+			// delete the session
+			await sessions.deleteSession(req.conn, session_token);
+			res.status(401);
+			res.send({error: 'Your session has expired. Please log in again'});
+			return;
+		}
+
+		const account = await accounts.getAccountById(req.conn, session.account_id);
+
+		if (account === null) {
+			await sessions.deleteSession(req.conn, session_token);
+			res.status(401);
+			res.send({error: 'Your account no longer exists. Please create a new one to continue'});
+			return;
+		}
+
+		// Protect admin routes
+		if (minimum_level >= SL.admin && account.username !== 'admin') {
+			res.status(403);
+			res.send({error: 'You aren\'t allowed to do this'});
+			return;
+		}
+
+		res.account = account;
+		next();
 	};
 }
