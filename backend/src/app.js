@@ -11,7 +11,6 @@ import conversations_controller from './controllers/conversations.js';
 import notifications_controller from './controllers/notifications.js';
 import sessions_controller from './controllers/sessions.js';
 import search_controller from './controllers/search.js';
-import register_controller from './controllers/register.js';
 
 import dotenv from 'dotenv';
 dotenv.config();
