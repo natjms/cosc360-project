@@ -10,6 +10,7 @@ function Signup() {
   const [country, setCountry] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [image, setImage] = useState(null);
   
 
   const [firstNameError, setFirstNameError] = useState("");
@@ -25,18 +26,18 @@ function Signup() {
     };
 
   function handleFirstNameChange(e) {
-        setEmail(e.target.value);
-        setEmailError("");
+        setFirstName(e.target.value);
+        setFirstNameError("");
     }
 
     function handleLastNameChange(e) {
-        setPassword(e.target.value);
-        setPasswordError("");
+        setLastName(e.target.value);
+        setLastNameError("");
     }
 
     function handleAddressChange(e) {
-        setCountry(e.target.value);
-        setCountryError("");
+        setAddress(e.target.value);
+        setAddressError("");
     }
 
     function handleCountryChange(e) {
@@ -63,17 +64,17 @@ function Signup() {
         const passReg = /^[a-zA-Z]\w{8,16}$/;
 
         if (firstName === "") {
-            setCountryError("Select a country");
+            setFirstNameError("Fill in first name");
             hasError = true;
         }
 
         if (lastName === "") {
-            setCountryError("Select a country");
+            setLastNameError("Fill in last name");
             hasError = true;
         }
 
         if (address === "") {
-            setCountryError("Select a country");
+            setAddressError("Fill in address");
             hasError = true;
         }
 
@@ -104,9 +105,14 @@ function Signup() {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
+                    name: firstName,
+                    last: lastName,
+                    country: country,
+                    address: address,
                     email: email,
                     password: password,
-                    country: country
+                    image: image
+                    
                 })
             })
                 .then((response) => response.json())
@@ -123,6 +129,7 @@ function Signup() {
         <div className = "window">
           <button className = "close" onClick ={handleClose}>Close</button>
           <div className = "overlay" onClick = {(e) => e.stopPropagation()}>
+            <form onSubmit={validateForm}>
             <div className = "content">
               <h2 className="title">SIGN UP</h2>
                 <div>
@@ -172,13 +179,29 @@ function Signup() {
                     <span>{passwordError}</span>
                 </div>
 
-                  <img src = "src/user.png" alt = "user" className = "profileImage"></img>
-                  <button className = "profileButton">Add Profile Image</button>
+
+        <div>
+          
+          <img src = "src/user.png" alt = "user" className = "profileImage"></img>
+          <button className = "profileButton">Add Profile Image</button>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={(e) => setImage(e.target.files[0])} 
+            required
+          />
+        </div>
+
+                  
+                 
+                  
                   <button className = "submit">Submit</button>
               </div>
+            </form>
              </div>
              
         </div>
+        
     );
 }
 

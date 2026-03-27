@@ -16,9 +16,12 @@ import register_controller from './controllers/register.js';
 import dotenv from 'dotenv';
 dotenv.config();
 
+
 const server = express();
+server.use(cors());
 const port = 3000;
-server.use(express.json());
+server.use(express.json())
+
 
 server.use('/api/accounts', accounts_controller);
 server.use('/api/books', books_controller);
@@ -35,6 +38,8 @@ server.get('/api', (req, res) => {
 });
 
 server.get('/api/book', bookGet);
+
+server.use("/images", express.static("images"));
 
 server.post("/api/user",
 	async function(req, res){

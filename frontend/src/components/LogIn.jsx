@@ -7,17 +7,27 @@ export default function Login(props) {
     const navigate = useNavigate();
     const [password, setPassword] = useState("")
     const [email, setEmail] = useState("")
-    const [isSubmitting, setIsSubmitting] = useState(false)
-
-     const handleSignup = () => {
-         navigate('/signup'); 
-    };
-
     const [emailError, setEmailError] = useState("");
     const [passwordError, setPasswordError] = useState("");
-    
-     const handleSubmit = async(e) => {
-         e.preventDefault() 
+
+    const handleSignup = () => {
+         navigate('/signup'); 
+    }
+   
+
+    function handleEmailChange(e) {
+        setEmail(e.target.value);
+        setEmailError("");
+    }
+
+    function handlePasswordChange(e) {
+        setPassword(e.target.value);
+        setPasswordError("");
+    }
+
+
+    function validateForm(e) {
+        e.preventDefault();
 
         let hasError = false;
 
@@ -57,15 +67,16 @@ export default function Login(props) {
             })   
 
     }
-     }
+}
 
     return (
         <>
         <div className = "window" onClick = {props.toggle}>
             <button className = "close" onClick = {props.toggle}>Close</button>
           <div className = "overlay" onClick = {(e) => e.stopPropagation()}>
-            <form className = "content" onSubmit ={handleSubmit}>
+            <form className = "content" onSubmit={validateForm} onClick={(e) => e.stopPropagation()}>
               <h2 className="title">LOG IN</h2>
+              <div className = {emailError ? "control error" : "control"}>
                   <label htmlFor = "email">EMAIL</label> 
                   <input 
                     type ="text" 
@@ -73,9 +84,12 @@ export default function Login(props) {
                     id = "email" 
                     placeholder = "Enter an email"
                     value={email}
-                    onChange={(e) => setEmail(e.target.value)}>
+                    onChange={handleEmailChange}>
                     </input>
+                    <span>{emailError}</span>
+                </div>
 
+                <div className ={passwordError ? "control error" : "control"}>
                   <label htmlFor = "Password">PASSWORD</label> 
                   <input 
                     type ="password" 
@@ -83,8 +97,10 @@ export default function Login(props) {
                     id = "password" 
                     placeholder = "Enter a password"
                     value={password}
-                    onChange={(e) => setPassword(e.target.value)}>
+                    onChange= {handlePasswordChange}>
                     </input> 
+                    <span>{passwordError}</span>
+                </div>
                   <button className = "submit" type = "submit">Submit</button>
                   <p id = "response" style = {{marginLeft: "20px"}}></p>
              </form>

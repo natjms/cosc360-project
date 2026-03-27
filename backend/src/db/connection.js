@@ -7,7 +7,7 @@ export async function getDatabaseConnection() {
 	}
 	const client = new mongodb.MongoClient(process.env.MONGODB_URI);
 	await client.connect();
-	return client.db('backend');
+	return client.db('myAppDB');
 }
 
 /**
