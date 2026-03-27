@@ -1,6 +1,6 @@
 import express from 'express';
 import { SL, at_least } from '#src/authentication.js';
-import { connect_db } from '#src/db/connection.js';
+import { connect_db, DBError } from '#src/db/connection.js';
 
 import * as accounts from '#src/db/accounts.js';
 
@@ -20,12 +20,8 @@ router.post('/', at_least(SL.unauthenticated), async (req, res) => {
 		const accountId = await accounts.createAccount(req.conn, req.body);
 		res.status(201).send({ id: accountId });
 	} catch (e) {
-		if (e.issues?.length > 0) {
-			res.status(400);
-			res.send({
-				error: e.message,
-				issues: e.issues,
-			});
+		if (e instanceof DBError) {
+			res.status(400).send(e.sendable());
 			return;
 		} else {
 			console.error(e);
