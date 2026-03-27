@@ -85,7 +85,8 @@ export function at_least(minimum_level) {
 			return;
 		}
 
-		res.account = account;
+		req.account = account;
+		req.session = session;
 		next();
 	};
 }
