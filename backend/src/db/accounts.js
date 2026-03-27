@@ -2,7 +2,7 @@ import { randomBytes } from 'node:crypto';
 import bcrypt from 'bcrypt';
 
 import { missingKeys } from '#src/validation.js';
-import { objectId, assertUniqueness } from '#src/db/connection.js';
+import { objectId, assertUniqueness, DBError } from '#src/db/connection.js';
 
 /*
 {
@@ -72,9 +72,7 @@ export function getAccountByCredential(connection, username_or_email) {
 export async function createAccount(connection, account) {
 	const validation_issues = validateAccount(account);
 	if (validation_issues.length > 0) {
-		let error = new Error('Invalid account');
-		error.issues = validation_issues;
-		throw error;
+		throw new DBError('Invalid account', validation_issues);
 	}
 
 	await assertUniqueness(connection, 'accounts', 'username', account.username);

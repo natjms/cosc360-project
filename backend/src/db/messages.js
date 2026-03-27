@@ -1,4 +1,4 @@
-import { objectId } from '#src/db/connection.js';
+import { objectId, DBError } from '#src/db/connection.js';
 import * as conversations from '#src/db/conversations.js';
 import * as accounts from '#src/db/accounts.js';
 
@@ -14,12 +14,12 @@ import * as accounts from '#src/db/accounts.js';
 export async function sendMessage(connection, conversation_id, sender_id, content) {
 	const sender = await accounts.getAccountById(connection, sender_id);
 	if (sender === null) {
-		throw new Error(`Non-existant account ${sender_id} cannot send a message`);
+		throw new DBError(`Non-existant account ${sender_id} cannot send a message`);
 	}
 
 	const conversation = conversations.getConversationById(conn, conversation_id);
 	if (conversation === null) {
-		throw new Error(`Messages cannot be sent in non-existant conversation ${conversation_id}`);
+		throw new DBError(`Messages cannot be sent in non-existant conversation ${conversation_id}`);
 	}
 
 	const result = await connection

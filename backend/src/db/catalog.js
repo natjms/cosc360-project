@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 
 import { missingKeys } from '#src/validation.js';
-import { objectId, assertUniqueness } from '#src/db/connection.js';
+import { objectId, assertUniqueness, DBError } from '#src/db/connection.js';
 
 /*
 {
@@ -45,9 +45,7 @@ export function validateCatalogEntry(entry) {
 export async function createCatalogEntry(connection, entry) {
 	const validation_issues = validateCatalogEntry(entry);
 	if (validation_issues.length > 0) {
-		let error = new Error('Invalid catalog entry');
-		error.issues = validation_issues;
-		throw error;
+		throw new DBError('Invalid catalog entry', validation_issues);
 	}
 
 	await assertUniqueness(connection, 'catalog', 'isbn', entry.isbn);

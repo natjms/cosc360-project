@@ -1,4 +1,4 @@
-import { objectId } from '#src/db/connection.js';
+import { objectId, DBError } from '#src/db/connection.js';
 import * as catalog from '#src/db/catalog.js';
 import * as accounts from '#src/db/accounts.js';
 
@@ -12,12 +12,12 @@ import * as accounts from '#src/db/accounts.js';
 export async function createBook(connection, possessor_account_id, entry_id) {
 	const possessor_account = await accounts.getAccountById(connection, possessor_account_id);
 	if (possessor_account === null) {
-		throw new Error(`Possessor ${possessor_account_id} does not exist`);
+		throw new DBError(`Possessor ${possessor_account_id} does not exist`);
 	}
 
 	const entry = await catalog.getCatalogEntryById(connection, entry_id);
 	if (entry === null) {
-		throw new Error(`Catalog entry ${entry_id} does not exist`);
+		throw new DBError(`Catalog entry ${entry_id} does not exist`);
 	}
 
 	const result = await connection

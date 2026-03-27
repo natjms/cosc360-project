@@ -1,4 +1,4 @@
-import { objectId } from '#src/db/connection.js';
+import { objectId, DBError } from '#src/db/connection.js';
 import * as accounts from '#src/db/accounts.js';
 
 /*
@@ -16,7 +16,7 @@ import * as accounts from '#src/db/accounts.js';
 export async function sendNotification(connection, account_id, subject, content) {
 	const account = await accounts.getAccountById(connection, account_id);
 	if (account === null) {
-		throw new Error(`Cannot notify non-existant account ${account_id}`);
+		throw new DBError(`Cannot notify non-existant account ${account_id}`);
 	}
 
 	const result = await connection
@@ -46,7 +46,7 @@ export async function getNotificationById(connection, notification_id) {
 export async function getNotifications(connection, account_id) {
 	const account = await accounts.getAccountById(connection, account_id);
 	if (account === null) {
-		throw new Error(`Cannot get notifications for non-existant account ${account_id}`);
+		throw new DBError(`Cannot get notifications for non-existant account ${account_id}`);
 	}
 	
 	return connection
@@ -61,7 +61,7 @@ export async function getNotifications(connection, account_id) {
 export async function getUnreadNotifications(connection, account_id) {
 	const account = await accounts.getAccountById(connection, account_id);
 	if (account === null) {
-		throw new Error(`Cannot get notifications for non-existant account ${account_id}`);
+		throw new DBError(`Cannot get notifications for non-existant account ${account_id}`);
 	}
 	
 	return connection
@@ -76,7 +76,7 @@ export async function getUnreadNotifications(connection, account_id) {
 export async function markNotificationRead(connection, notification_id) {
 	const notification = getNotificationById(connection, notification_id);
 	if (notification === null) {
-		throw new Error(`Cannot mark non-existant notification ${notification_id} read`);
+		throw new DBError(`Cannot mark non-existant notification ${notification_id} read`);
 	}
 	
 	return connection
@@ -94,7 +94,7 @@ export async function markNotificationRead(connection, notification_id) {
 export async function markAllNotificationsRead(connection, account_id) {
 	const account = await accounts.getAccountById(connection, account_id);
 	if (account === null) {
-		throw new Error(`Cannot mark notifications read for non-existant account ${account_id}`);
+		throw new DBError(`Cannot mark notifications read for non-existant account ${account_id}`);
 	}
 	
 	return connection
@@ -112,7 +112,7 @@ export async function markAllNotificationsRead(connection, account_id) {
 export async function dismissNotification(connection, notification_id) {
 	const notification = getNotificationById(connection, notification_id);
 	if (notification === null) {
-		throw new Error(`Cannot dismiss non-existant notification ${notification_id}`);
+		throw new DBError(`Cannot dismiss non-existant notification ${notification_id}`);
 	}
 	
 	return connection
@@ -127,7 +127,7 @@ export async function dismissNotification(connection, notification_id) {
 export async function dismissAllNotifications(connection, account_id) {
 	const account = await accounts.getAccountById(connection, account_id);
 	if (account === null) {
-		throw new Error(`Cannot dismiss all notifications for non-existant account ${account_id}`);
+		throw new DBError(`Cannot dismiss all notifications for non-existant account ${account_id}`);
 	}
 	
 	return connection
