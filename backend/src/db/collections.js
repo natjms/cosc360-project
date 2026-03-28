@@ -1,5 +1,5 @@
 import { missingKeys } from '#src/validation.js';
-import { objectId } from '#src/db/connection.js';
+import { objectId, DBError } from '#src/db/connection.js';
 import * as catalog from '#src/db/catalog.js';
 
 /*
@@ -37,9 +37,7 @@ export function validateCollection(collection) {
 export async function createCollection(connection, owner_account_id, collection) {
 	const validation_issues = validateCollection(collection);
 	if (validation_issues.length > 0) {
-		let error = new Error('Invalid collection');
-		error.issues = validation_issues;
-		throw error;
+		throw new DBError('Invalid collection', validation_issues);
 	}
 
 	collection.list = [];
@@ -76,7 +74,7 @@ export async function entryIsInCollection(connection, collection_id, entry_id) {
 export async function addEntryToCollection(connection, collection_id, entry_id) {
 	const entry = await catalog.getCatalogEntryById(connection, entry_id);
 	if (entry === null) {
-		throw new Error(`Entry with id ${entry_id} does not exist`);
+		throw new DBError(`Entry with id ${entry_id} does not exist`);
 	}
 
 	if (await entryIsInCollection(connection, collection_id, entry_id)) {

@@ -1,5 +1,23 @@
 import mongodb from 'mongodb';
 
+export class DBError extends Error {
+	constructor(message, issues=[]) {
+		super(message);
+		this.name = 'DBError';
+		this.issues = issues;
+	}
+
+	sendable() {
+		let response = {error: this.message};
+
+		if (this.issues.length > 0) {
+			response.issues = this.issues;
+		}
+
+		return response;
+	}
+}
+
 export async function getDatabaseConnection() {
 	if (!process.env.MONGODB_URI) {
 		console.log('Error: MONGODB_URI not specified in .env file');
@@ -36,6 +54,6 @@ export async function assertUniqueness(connection, collection, field, value) {
 	const result = await connection.collection(collection).findOne({[field]: value})
 
 	if (result !== null) {
-		throw new Error(`Uniqueness constraint on ${field} violated`);
+		throw new DBError(`Uniqueness constraint on ${field} violated`);
 	}
 }

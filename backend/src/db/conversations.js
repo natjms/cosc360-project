@@ -1,4 +1,4 @@
-import { objectId } from '#src/db/connection.js';
+import { objectId, DBError } from '#src/db/connection.js';
 import * as accounts from '#src/db/accounts.js';
 import * as books from '#src/db/books.js';
 
@@ -22,17 +22,17 @@ export async function startConversation(
 ) {
 	const initiator_account = await accounts.getAccountById(connection, initiator_account_id);
 	if (initiator_account === null) {
-		throw new Error(`Non-existant account ${initiator_account_id} cannot initiate a conversation`);
+		throw new DBError(`Non-existant account ${initiator_account_id} cannot initiate a conversation`);
 	}
 
 	const recipient_account = await accounts.getAccountById(connection, recipient_account_id);
 	if (recipient_account === null) {
-		throw new Error(`Non-existant account ${recipient_account_id} cannot receive messages`);
+		throw new DBError(`Non-existant account ${recipient_account_id} cannot receive messages`);
 	}
 
 	const book = await books.getBookById(connection, context_book_id);
 	if (book === null) {
-		throw new Error(`Non-existant book ${context_book_id} cannot be the context of a conversation`);
+		throw new DBError(`Non-existant book ${context_book_id} cannot be the context of a conversation`);
 	}
 
 	const result = await connection
