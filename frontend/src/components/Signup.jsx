@@ -20,6 +20,7 @@ function Signup() {
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   
+  
 
   const handleClose = () => {
          navigate('/'); 
@@ -98,29 +99,32 @@ function Signup() {
             alert("Form submitted successfully");
         }
 
+
         if (!hasError) {
-            fetch("http://localhost:3000/api/register", {
+            fetch("http://localhost:3000/api/accounts", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
-                    name: firstName,
+                    username: firstName,
+                    email: email,
+                    password_plaintext: password,
                     last: lastName,
                     country: country,
                     address: address,
-                    email: email,
-                    password: password,
                     image: image
                     
                 })
             })
-                .then((response) => response.json())
-                .then((data) => {
+                .then(async(response) => { 
+                    const data = await response.json();
+                
+                    if(!response.ok) { 
+                        console.error(data);
+                        return;
+                    }
                     console.log(data);
-                })
-                .catch((error) => {
-                    console.log(error);
                 });
         }
     }
@@ -187,8 +191,8 @@ function Signup() {
           <input
             type="file"
             accept="image/*"
-            onChange={(e) => setImage(e.target.files[0])} 
-            required
+           /* onChange={(e) => setImage(e.target.files[0])} 
+            required*/
           />
         </div>
 
