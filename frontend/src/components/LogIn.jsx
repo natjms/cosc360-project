@@ -14,7 +14,6 @@ export default function Login(props) {
          navigate('/signup'); 
     }
    
-
     function handleEmailChange(e) {
         setEmail(e.target.value);
         setEmailError("");
@@ -26,7 +25,7 @@ export default function Login(props) {
     }
 
 
-    function validateForm(e) {
+    async function validateForm(e) {
         e.preventDefault();
 
         let hasError = false;
@@ -45,36 +44,44 @@ export default function Login(props) {
             hasError = true;
         }
 
-        if (!hasError) {
-            alert("Form submitted successfully");
-        }
+        if (hasError) return; 
 
-        if(!hasError) { 
-            fetch("http://localhost:3000/api/user", { 
+        console.log("information loading");
+    
+
+        try { 
+        const response = await fetch("http://localhost:3000/api/sessions/login", { 
               method: "POST", 
               headers: { 
               "Content-Type": "application/json"
               },
-            body: JSON.stringify({email, password})
+            body: JSON.stringify({
+                credential: email,
+                password_plaintext: password,
+            })
      })
 
-            .then((response) => response.json())
-            .then((data) => { 
-                console.log(data); 
-            })
-            .catch((error) => { 
-                console.log(error)
-            })   
+       await response.json(); 
+            
+            if(!response.ok) { 
+                throw new Error("Invalid credentials")
+            } else { 
+                alert("login successful");
+                navigate('/Home'); 
+            }
 
+        }   catch(error) { 
+                console.error("Network or server error", error)
+            }
     }
-}
+
 
     return (
         <>
         <div className = "window" onClick = {props.toggle}>
             <button className = "close" onClick = {props.toggle}>Close</button>
           <div className = "overlay" onClick = {(e) => e.stopPropagation()}>
-            <form className = "content" onSubmit={validateForm} onClick={(e) => e.stopPropagation()}>
+            <form className = "content" onSubmit={validateForm}>
               <h2 className="title">LOG IN</h2>
               <div className = {emailError ? "control error" : "control"}>
                   <label htmlFor = "email">EMAIL</label> 
