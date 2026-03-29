@@ -6,7 +6,8 @@ import { useNavigate } from 'react-router-dom';
 
 function Navbar() {
 
-    const [seen, setSeen] = useState(false)
+    const [seen, setSeen] = useState(false);
+    const navigate = useNavigate();
 
     function togglePop() { 
         setSeen(!seen); 
@@ -20,6 +21,10 @@ function Navbar() {
         navigate('/Collections')
     }
 
+    const handleAddBook = () => {
+        navigate('/add');
+    }
+
     return (
         <>
         <nav className="main-nav">
@@ -28,6 +33,8 @@ function Navbar() {
                 <li><a href="/collections" onClick = {handleCollections}>Collections</a></li>
                 <li><a href="/genres">Genres</a></li>
                 <li><a href= "/about" onClick={handleAbout}>About</a></li>
+
+                <li><a href="/add" onClick={handleAddBook} style={{color: '#28a745', fontWeight: 'bold'}}> + Add a Book</a></li>
                 <li> 
 	    	    <button onClick={togglePop}>Login</button>
                     {seen && <Login toggle={togglePop} />}

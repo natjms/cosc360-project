@@ -1,6 +1,7 @@
 import express from 'express';
 import { SL, at_least } from '#src/authentication.js';
 import { connect_db } from '#src/db/connection.js';
+import * as dbBooks from '#src/db/books.js';
 
 const router = express.Router();
 
@@ -15,7 +16,18 @@ router.get('/', at_least(SL.admin), unimplemented);
 
 // Add a "kind" of book to the database. Recognize a new book within the
 // system without necessarily listing it
-router.post('/', at_least(SL.admin), unimplemented);
+router.post('/', at_least(SL.unauthenticated), async (req, res) => {
+    try {
+        const connection = req.conn;
+        const { title, author, description} = req.body;
+
+        const newId = await dbBooks.createBook(connection, title, author, description);
+
+        res.status(201).send({message: "Book added to your collection!", id: newId});
+    } catch(err){
+        res.status(400).send({error: err.message});
+    }
+});
 router.patch('/:book_id', at_least(SL.admin), unimplemented);
 router.delete('/:book_id', at_least(SL.admin), unimplemented);
 
