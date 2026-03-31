@@ -38,6 +38,14 @@ export function validateAccount(account) {
 	return issues;
 }
 
+export function getAllAccounts(connection) {
+	return connection
+		.collection('accounts')
+		.find()
+		.project({password_hash: 0})
+		.toArray();
+}
+
 export function getAccountById(connection, account_id) {
 	return connection.
 		collection('accounts')
