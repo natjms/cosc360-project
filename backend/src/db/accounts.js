@@ -64,6 +64,12 @@ export function getAccountByEmail(connection, email) {
 		.findOne({ email, });
 }
 
+export function deleteAccount(connection, account_id) {
+	return connection.
+		collection('accounts')
+		.deleteOne({ _id: objectId(account_id) });
+}
+
 export function getAccountByCredential(connection, username_or_email) {
 	// Emails are significantly more complicated than "contains an at sign"
 	// but at signs are disallowed in usernames, and (for all intensive purposes
