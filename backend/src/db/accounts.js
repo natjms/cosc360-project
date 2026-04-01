@@ -160,3 +160,20 @@ export async function verifyPassword(connection, account_id, password_to_test, a
 
 	return bcrypt.compare(password_to_test, account.password_hash);
 }
+
+/**
+ * Partial match against account usernames, in case that was something you
+ * wanted to do for, say, lab 8 related purposes
+ */
+export function getAccountByPartialMatch(connection, query) {
+	// This guarantees the regex is safe
+	if (!/^[a-zA-Z0-9]+$/.test(query)) {
+		throw new DBError('Invalid username');
+	}
+
+	return connection
+		.collection('accounts')
+		.find({ username: new RegExp(`${query}`, 'i') })
+		.project({ password_hash: 0, email: 0 })
+		.toArray();
+}
