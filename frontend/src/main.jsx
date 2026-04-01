@@ -9,6 +9,7 @@ import SearchResults from './SearchResults.jsx'
 import About from './components/About'; 
 import Collections from './components/Collections'; 
 import MyAccount from './components/MyAccount';
+import Admin from './Admin.jsx';
 
 
 createRoot(document.getElementById('root')).render(
@@ -21,6 +22,9 @@ createRoot(document.getElementById('root')).render(
         <Route path = '/about' element = {<About />} />
         <Route path = '/collections' element = {<Collections/>} />
         <Route path = '/myaccount' element = {<MyAccount/>} />
+
+		{ /* TODO only allow this route to exist if the user is an admin */ }
+        <Route path = '/admin' element = {<Admin/>} />
       </Routes>
     </BrowserRouter>
   </StrictMode>,
