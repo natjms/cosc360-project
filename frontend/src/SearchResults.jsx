@@ -10,7 +10,20 @@ export default function SearchResults() {
 	const [newQuery, setNewQuery] = useState('');
 
 	useEffect(() => {
-		fetch(`/api/search?q=${encodeURIComponent(search_params.get('q'))}`)
+
+		const token = localStorage.getItem('token');
+
+		if(!token || token.trim() === ''){
+			setLoading(false);
+			return;
+		}
+
+		fetch(`/api/accounts?q=${encodeURIComponent(search_params.get('q'))}`, {
+			method: "GET",
+			headers: {
+				'Authorization': `Basic ${token}`
+			}
+		})
 			.then(response => response.json())
 			.then(items => {
 				setSearchResults(items);
@@ -18,6 +31,7 @@ export default function SearchResults() {
 			})
 	}, [search_params]);
 
+	console.log(search_results)
 	const changeHandler = (e) => {
 		setNewQuery(e.target.value);
 	};
@@ -39,9 +53,9 @@ export default function SearchResults() {
 						search_results.map(((result, i) =>
 							<li key={i}>
 								<article>
-									<h2>{result.title}</h2>
+									<h2>{result.username}</h2>
 									<p>
-										{result.description}
+										{result.city}
 									</p>
 								</article>
 							</li>
