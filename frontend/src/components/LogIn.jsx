@@ -1,6 +1,7 @@
 import './LogIn.css'
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react'
+import MyAccount from './MyAccount.jsx'
 
 
 export default function Login(props) { 
@@ -61,13 +62,14 @@ export default function Login(props) {
             })
      })
 
-       await response.json(); 
+       const data = await response.json(); 
             
             if(!response.ok) { 
                 throw new Error("Invalid credentials")
             } else { 
                 alert("login successful");
-                navigate('/Home'); 
+                localStorage.setItem('token', data.token)
+                navigate('/myaccount'); 
             }
 
         }   catch(error) { 

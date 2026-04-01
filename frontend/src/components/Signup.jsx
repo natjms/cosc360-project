@@ -112,7 +112,7 @@ function Signup() {
                     password_plaintext: password,
                     last: lastName,
                     country: country,
-                    address: address,
+                    city: address,
                     image: image
                     
                 })
