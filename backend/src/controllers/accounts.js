@@ -18,9 +18,24 @@ const unimplemented = (req, res) => {
 router.use(connect_db);
 
 // Get all accounts as a list. Returns an array of accounts
-router.get('/', at_least(SL.admin), async (req, res) => {
-	const all_accounts = await accounts.getAllAccounts(req.conn);
-	res.status(200).send(all_accounts);
+router.get('/', at_least(SL.authenticated), async (req, res) => {
+	if (req.query?.q === '' || !req.query?.q) {
+		if (req.account.username !== 'admin') {
+			// In general, we shouldn't send a complete list of all users
+			res.status(400).send({error: 'Please enter a search query'});
+		} else {
+			// We're willing to give the admin a complete list of accounts for
+			// e.g. the admin dashboard
+			const all_accounts = await accounts.getAllAccounts(req.conn);
+			res.status(200).send(all_accounts);
+		}
+	} else{
+		// Partial match with given query
+		const found_accounts =
+			await accounts.getAccountByPartialMatch(req.conn, req.query.q);
+
+		res.status(200).send(found_accounts);
+	}
 });
 
 // Register a new account
