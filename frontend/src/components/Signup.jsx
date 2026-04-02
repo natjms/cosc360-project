@@ -119,6 +119,7 @@ function Signup() {
             })
                 .then(async(response) => { 
                     const data = await response.json();
+                    navigate('/')
                 
                     if(!response.ok) { 
                         console.error(data);

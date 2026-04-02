@@ -1,17 +1,45 @@
 import { useEffect } from 'react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import App from './Profile.jsx'
 
 function MyAccount() {
+  const navigate = useNavigate();
   const [user, setUser] = useState(null);
-  const [error, setError] = useState('');
   const [email, setEmail] = useState("");
+  const [city, setCity] = useState("");
+  const [username, setUsername] = useState("");
+  const [visibleBox, setVisibleBox] = useState(false)
 
+   function handleEmailChange(e) {
+    if(e != null)
+        setEmail(e.target.value); 
+    }
 
-  useEffect(() => {
-    
-    async function getUserInfo() {
+    function handleUsernameChange(e) {
+      if(e != null)
+        setUsername(e.target.value); 
+    }
+
+    function handleCityChange(e) {
+      if(e != null)
+        setCity(e.target.value); 
+    }
+
+    function updateInfo() { 
+        setVisibleBox(true)
+    }
+
+    function handleBack() { 
+      navigate('/profile')
+    }
+
+ useEffect(() => {
+
+    const getUserInfo = async () => { 
+
       const token = localStorage.getItem('token');
+      console.log(token);
 
        if (!token || token.trim() === '') {
         setError("Not logged in");
@@ -19,15 +47,15 @@ function MyAccount() {
         return;
       }
 
-      const res = await fetch('http://localhost:3000/api/accounts/current-user', {
+      const res = await fetch('/api/accounts/current-user', {
         method: "GET",
         headers: { 
             'Content-Type': 'application/json',
-            'Authorization': `Basic $(token)`
+            'Authorization': `Basic ${token}`
         }
       });
 
-      const data = await res.json();
+      const data =  await res.json();
 
       if (!res.ok) {
         setError(data.error || 'Failed to get user');
@@ -35,34 +63,106 @@ function MyAccount() {
       }
 
       setUser(data);
+    
     }
-
     getUserInfo();
   }, []);
 
 
+function handleDelete() { 
+  fetch(`/api/accounts/${user._id}`, {
+        method: "DELETE",
+        headers: { 
+            'Content-Type': 'application/json',
+            'Authorization': `Basic ${localStorage.getItem('token')}`,
+          },
+        })
+
+        alert("Account has been deleted")
+        navigate('/profile')
+    }
+
+
+async function validateForm(e) {
+    e.preventDefault()
+
+  try { 
+  const response = await fetch(`/api/accounts/${user._id}`, {
+        method: "PATCH",
+        headers: { 
+            'Content-Type': 'application/json',
+            'Authorization': `Basic ${localStorage.getItem('token')}`,
+        
+         
+          },
+          body: JSON.stringify({
+                    email: email,
+                    username: username, 
+                    city: city
+                  }),
+        })
+          
+            if(!response.ok) { 
+                throw new Error("invalid email")
+            } 
+            
+            const data = await response.json(); 
+            
+            alert("successfully updated")
+            navigate('/')
+          }catch(error) { 
+            console.log("error")
+          }
+  
+  }
+  
+
   return (
     <>
-    <form>
-    <div>
-      <h2>My Account</h2>
-      <p><strong>Username:</strong> {user?.username}</p>
-      <input type = "text" placeholder = "ailishc8"></input>
-      <p><strong>Email:</strong> {user?.email}</p>
-      <input type="text" placeholder = "ailishc8@gmail.com" />
-                
-      <p><strong>City:</strong> {user?.city}</p>
-      <input type = "text" placeholder = "Kelowna"></input>
-    </div>
+    <button onClick = {handleBack}>Back</button>
+    <h2>My Account</h2> 
+    <button onClick = {handleDelete} type="button">Delete Account</button>
     <br></br>
-    <button className = "submit">Update</button>
-    <button type="button" style={{ marginLeft: '10px'}}>
-          Delete Account
-        </button>
+    <button onClick={updateInfo} className = "button" style = {{marginLeft: "0"}}>Update Information</button>
+
+    <form action='#'>
+    <div>
+      <p><strong>Current Username:</strong> {user?.username}</p>
+
+       {visibleBox &&
+      <>
+      <p><strong>Update Username:</strong></p>
+      <input type="text" placeholder = "Enter new username if applicable" value = {username} onChange = {handleUsernameChange} style = {{width: "200px"}}/>    
+      </>
+      }
+      
+      <hr></hr>
+      
+      <p><strong>Current Email:</strong> {user?.email}</p>
+      
+      {visibleBox &&
+      <>
+      <p><strong>Update Email:</strong></p>
+      <input type="text" placeholder = "Enter new email if applicable" value = {email} onChange = {handleEmailChange} style = {{width: "200px"}}/>    
+      </>
+      }
+      <hr></hr>
+      <p><strong>Current City:</strong> {user?.city}</p>
+
+       {visibleBox &&
+      <>
+      <p><strong>Update City:</strong></p>
+      <input type="text" placeholder = "Enter new city if applicable" value = {city} onChange = {handleCityChange} style = {{width: "200px"}}/>    
+      </>
+      }
+    </div>
+     
+    <br></br>
+    <button onClick={validateForm} className = "submit" style = {{marginLeft: 0, width: "100px", height: "40px"}}>Submit</button>
     </form>
     </>
   );
-}
 
+}
 
 export default MyAccount;

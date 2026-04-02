@@ -21,7 +21,7 @@ function Navbar() {
         navigate('/Collections')
     }
 
-    const handleAccount = () => { 
+    const handleProfile = () => { 
         navigate('/MyAccount')
     }
 
@@ -33,7 +33,7 @@ function Navbar() {
                 <li><a href="/collections" onClick = {handleCollections}>Collections</a></li>
                 <li><a href="/genres">Genres</a></li>
                 <li><a href= "/about" onClick={handleAbout}>About</a></li>
-                <li><a href = "/myaccount" onClick = {handleAccount}>My Account</a></li>
+                <li><a href = "/profile" onClick = {handleProfile}>Profile</a></li>
                 <li> 
 	    	    <button onClick={togglePop}>Login</button>
                     {seen && <Login toggle={togglePop} />} 
