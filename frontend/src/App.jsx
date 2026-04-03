@@ -22,7 +22,6 @@ function App() {
                 <h2>Welcome to the Virtual Library</h2>
                 <p>Explore our collection of books, genres, and more!</p>
             </main>
-	    
 			<MessageBubble
 				message='This is a test message. Explicabo et dolores consequatur voluptas assumenda optio. Quia inventore natus ipsum. Distinctio sunt provident culpa enim mollitia dicta ut. Mollitia corrupti vel est aliquam eveniet nisi maiores.'
 				alignment='left'

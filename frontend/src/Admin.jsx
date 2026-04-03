@@ -20,8 +20,9 @@ export default function Admin(props) {
 	}, []);
 
 	return <>
+		<h1> Accounts </h1>
 		{ accounts !== null ?
-			<ul>
+			<ul>	
 				{ accounts.map((account, i) =>
 					<li key={i}>{account.username}</li>)
 				}
