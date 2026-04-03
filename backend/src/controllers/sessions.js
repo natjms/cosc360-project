@@ -72,4 +72,5 @@ router.get('/logout', at_least(SL.authenticated), async (req, res) => {
 	res.send();
 });
 
+
 export default router;

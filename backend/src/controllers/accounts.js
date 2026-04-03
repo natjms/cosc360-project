@@ -44,6 +44,26 @@ router.post('/', at_least(SL.unauthenticated), async (req, res) => {
 	res.status(201).send({ id: accountId });
 });
 
+router.get('/current-user', at_least(SL.authenticated), async (req, res) => {
+	try {
+        const account = await accounts.getAccountById(req.conn, req.account._id);
+            if(!account) { 
+                res.status(404);
+                res.send({ error: "Account not found"});
+                return;
+            }
+
+        const {_id, username, email, password_plaintext, city } = account;
+        res.json({ _id, username, email, password_plaintext, city});
+        
+    } catch (err) {
+        console.error(err);
+        res.status(500);
+        res.send("Server error");
+        }
+    });
+
+
 router.get('/:identifier', at_least(SL.unauthenticated), async (req, res) => {
 	// Maybe we got a username
 	let account = await accounts.getAccountByUsername(req.conn, req.params.identifier);
@@ -78,9 +98,14 @@ router.patch('/:account_id', at_least(SL.authenticated), async (req, res) => {
 		res.status(403).send({'error': 'You can only update your own account'});
 		return;
 	}
-
-	const current_account = await accounts.getAccountById(req.conn, req.params.account_id);
-	await accounts.updateAccount(req.conn, req.params.account_id, req.body);
+	 const updates = {};
+	 	console.log("username", req.body.username)
+  		if (req.body.username !== "") updates.username = req.body.username;
+		console.log("email", req.body.email)
+  		if (req.body.email !== "") updates.email = req.body.email;
+		console.log("city", req.body.city)
+  		if (req.body.city !== "") updates.city = req.body.city;
+	await accounts.updateAccount(req.conn, req.params.account_id, updates);
 	res.status(204).send();
 });
 

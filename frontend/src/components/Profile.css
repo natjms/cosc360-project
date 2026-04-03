@@ -1,0 +1,53 @@
+
+.blip { 
+    display: flex; 
+    background-color: #FFE797;  
+    height: 700px; 
+    text-align: center; 
+    justify-content: center; 
+    margin: 0; 
+}
+
+.images { 
+    display: flex; 
+    flex-direction: column;
+    gap: 20px; 
+    margin: 30px; 
+}
+
+.wrapper { 
+    display: flex; 
+    align-items: center; 
+}
+
+.one, .three { 
+    justify-content: flex-start; 
+}
+
+.two { 
+    justify-content: flex-end; 
+}
+
+.stacked-img, .exchange-img, .read-img { 
+    height: auto; 
+    width: 30%;
+    margin: 20px; 
+    border-radius: 20px; 
+}
+
+.words { 
+    text-align: center; 
+}
+
+.paragraph { 
+    background-color: #84994F; 
+    display: flex; 
+    flex-direction: column; 
+    justify-content: center; 
+    align-items: center; 
+}
+
+.aboutpara { 
+    padding-left: 150px; 
+    padding-right: 150px; 
+}
