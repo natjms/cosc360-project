@@ -4,18 +4,16 @@ import { useState } from 'react'
 
 function Signup() {
   const navigate = useNavigate();
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [address, setAddress] = useState("")
+  const [username, setUsername] = useState("");
+  const [city, setCity] = useState("")
   const [country, setCountry] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [image, setImage] = useState(null);
   
 
-  const [firstNameError, setFirstNameError] = useState("");
-  const [lastNameError, setLastNameError] = useState("");
-  const [addressError, setAddressError] = useState("");
+  const [usernameError, setUsernameError] = useState("");
+  const [cityError, setCityError] = useState("");
   const [countryError, setCountryError] = useState("");
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
@@ -26,19 +24,14 @@ function Signup() {
          navigate('/'); 
     };
 
-  function handleFirstNameChange(e) {
-        setFirstName(e.target.value);
+  function handleChangeUsername(e) {
+        setUsername(e.target.value);
         setFirstNameError("");
     }
 
-    function handleLastNameChange(e) {
-        setLastName(e.target.value);
-        setLastNameError("");
-    }
-
-    function handleAddressChange(e) {
-        setAddress(e.target.value);
-        setAddressError("");
+    function handleCityChange(e) {
+        setCity(e.target.value);
+        setCityError("");
     }
 
     function handleCountryChange(e) {
@@ -64,18 +57,13 @@ function Signup() {
         const emailReg = /^(.+)@([^\.].*)\.([a-z]{2,})$/;
         const passReg = /^[a-zA-Z]\w{8,16}$/;
 
-        if (firstName === "") {
-            setFirstNameError("Fill in first name");
+        if (username === "") {
+            setFirstNameError("Fill in username");
             hasError = true;
         }
 
-        if (lastName === "") {
-            setLastNameError("Fill in last name");
-            hasError = true;
-        }
-
-        if (address === "") {
-            setAddressError("Fill in address");
+        if (city === "") {
+            setCityError("Fill in city");
             hasError = true;
         }
 
@@ -95,9 +83,6 @@ function Signup() {
             hasError = true;
         }
 
-        if (!hasError) {
-            alert("Form submitted successfully");
-        }
 
 
         if (!hasError) {
@@ -107,14 +92,12 @@ function Signup() {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
-                    username: firstName,
+                    username: username,
                     email: email,
                     password_plaintext: password,
-                    last: lastName,
                     country: country,
-                    city: address,
+                    city: city,
                     image: image
-                    
                 })
             })
                 .then(async(response) => { 
@@ -122,6 +105,7 @@ function Signup() {
                 
                     if(!response.ok) { 
                         console.error(data);
+			alert("Submission error: server returned response " + response.status)
                         return;
                     }
                     console.log(data);
@@ -136,19 +120,15 @@ function Signup() {
             <form onSubmit={validateForm}>
             <div className = "content">
               <h2 className="title">SIGN UP</h2>
-                <div>
-                  <label htmlFor = "lastName">LAST NAME</label> 
-                  <input type ="text" name = "lastName" id = "lastName" placeholder = "Enter last name" onChange = {handleLastNameChange}></input> 
-                </div>   
-
-                <div>  
-                  <label htmlFor = "firstName">FIRST NAME</label> 
-                  <input type ="text" name = "firstName" id = "firstName" placeholder = "Enter first name" onChange = {handleFirstNameChange}></input> 
+                <div className="control">  
+                  <label htmlFor = "username">Username</label> 
+                  <input type ="text" name = "username" id = "username" placeholder = "Username" onChange = {handleChangeUsername}></input> 
                 </div> 
 
-                <div> 
-                  <label htmlFor = "Address">Address</label> 
-                  <input type ="text" name = "address" id = "address" placeholder = "Address, Postal Code" onChange = {handleAddressChange}></input> 
+                <div className="control"> 
+
+                  <label htmlFor = "City">City</label> 
+                  <input type ="text" name = "city" id = "city" placeholder = "Kelowna" onChange = {handleCityChange}></input> 
                 </div>    
                   
                   <div className={countryError ? "control error" : "control"}>
@@ -158,9 +138,9 @@ function Signup() {
                         <option value="1">Canada</option>
                         <option value="2">USA</option>
                         <option value="3">UK</option>
-                        <option value="4">Nigeria</option>
+                        <option value="4">Other</option>
                     </select>
-                    <span>{countryError}</span>
+                    <span className = "errorMsg">{countryError}</span>
                 </div>
 
                 <div className={emailError ? "control error" : "control"}>
@@ -169,8 +149,9 @@ function Signup() {
                         type="text"
                         value={email}
                         onChange={handleEmailChange}
+	    		placeholder="johndoe@example.com"
                     />
-                    <span>{emailError}</span>
+                    <span className = "errorMsg">{emailError}</span>
                 </div>
 
                 <div className={passwordError ? "control error" : "control"}>
@@ -180,22 +161,19 @@ function Signup() {
                         value={password}
                         onChange={handlePasswordChange}
                     />
-                    <span>{passwordError}</span>
+                    <span className = "errorMsg">{passwordError}</span>
                 </div>
 
 
         <div>
-          
-          <img src = "src/user.png" alt = "user" className = "profileImage"></img>
-          <button className = "profileButton">Add Profile Image</button>
+	    <label>Profile Picture</label>
+	    {image === null ? "" : <img src = "src/user.png" className = "profileImage"></img>}
           <input
             type="file"
             accept="image/*"
-           /* onChange={(e) => setImage(e.target.files[0])} 
-            required*/
+            onChange={(e) => setImage(e.target.files[0])} 
           />
         </div>
-
                   <button className = "submit">Submit</button>
               </div>
             </form>
