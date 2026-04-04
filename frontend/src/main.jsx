@@ -1,5 +1,4 @@
-import React from 'react';
-import { StrictMode } from 'react'
+import React from 'react'; import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
@@ -11,6 +10,10 @@ import Collections from './components/Collections';
 import MyAccount from './components/MyAccount';
 import Admin from './Admin.jsx';
 import Profile from './components/Profile'; 
+import Catalog from './components/Catalog'; 
+import User from './components/User';
+import PageNotFound from './components/PageNotFound';
+import './default.css';
 
 
 createRoot(document.getElementById('root')).render(
@@ -24,9 +27,12 @@ createRoot(document.getElementById('root')).render(
         <Route path = '/collections' element = {<Collections/>} />
         <Route path = '/profile' element = {<Profile/>} />
         <Route path = '/myaccount' element = {<MyAccount/>} />
-
+	<Route path = '/catalog/:isbn' element = {<Catalog/>} />
+	<Route path = '/user/:username' element = {<User/>} />
 		{ /* TODO only allow this route to exist if the user is an admin */ }
         <Route path = '/admin' element = {<Admin/>} />
+	<Route path="*" element={<PageNotFound />} /> 
+
       </Routes>
     </BrowserRouter>
   </StrictMode>,

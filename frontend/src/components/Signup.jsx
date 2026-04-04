@@ -119,21 +119,21 @@ function Signup() {
           <button className = "close" onClick ={handleClose}>Close</button>
           <div className = "overlay" onClick = {(e) => e.stopPropagation()}>
             <form onSubmit={validateForm}>
-            <div className = "content">
               <h2 className="title">SIGN UP</h2>
+            <div className = "content">
                 <div className="control">  
-                  <label htmlFor = "username">Username</label> 
+                  <h3> <label htmlFor = "username">Username</label> </h3>
                   <input type ="text" name = "username" id = "username" placeholder = "Username" onChange = {handleChangeUsername}></input> 
                 </div> 
 
                 <div className="control"> 
 
-                  <label htmlFor = "City">City</label> 
+                  <h3> <label htmlFor = "City">City</label> </h3>
                   <input type ="text" name = "city" id = "city" placeholder = "Kelowna" onChange = {handleCityChange}></input> 
                 </div>    
                   
                   <div className={countryError ? "control error" : "control"}>
-                    <label>Country:</label>
+                    <h3><label>Country:</label></h3>
                     <select value={country} onChange={handleCountryChange}>
                         <option value="">Select a country</option>
                         <option value="1">Canada</option>
@@ -145,7 +145,7 @@ function Signup() {
                 </div>
 
                 <div className={emailError ? "control error" : "control"}>
-                    <label>Email:</label>
+                    <h3><label>Email:</label></h3>
                     <input
                         type="text"
                         value={email}
@@ -156,7 +156,7 @@ function Signup() {
                 </div>
 
                 <div className={passwordError ? "control error" : "control"}>
-                    <label>Password:</label>
+                    <h3><label>Password:</label></h3>
                     <input
                         type="password"
                         value={password}
@@ -167,7 +167,7 @@ function Signup() {
 
 
         <div>
-	    <label>Profile Picture</label>
+	    <h3><label>Profile Picture</label></h3>
 	    {image === null ? "" : <img src = "src/user.png" className = "profileImage"></img>}
           <input
             type="file"

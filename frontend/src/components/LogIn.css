@@ -17,11 +17,11 @@
   display: flex; 
   flex-direction: column; 
   justify-content: center; 
-  height: 70%;
+  height: 60%;
   width: 70%;
   background-color: white; 
   border-radius: 20px; 
-  border: 2px black solid; 
+  border: 3px black solid; 
 }
 
 .close { 
@@ -58,33 +58,9 @@ label, #email, #password {
 }
 
 
-label, #firstName, #lastName, #address, #address1{ 
-  margin-left: 50px; 
-  width: 70%; 
-  margin-bottom: 5px;
-  border-color: black; 
-  border-width: 1px;
-  height: 20px; 
+h3{
+	margin-bottom: 0px;
 }
-
-.profileImage { 
-  margin-top: 10px;
-  margin-left: 160px;
-  width: 10%;
-  height: 10%; 
-}
-
-.profileButton { 
-  width: 40%;
-  background-color: #FCB53B; 
-  color: black; 
-  margin-top: 5px; 
-  margin-left: 100px; 
-  margin-bottom: 20px;
-  height: 35px; 
-}
-
-
 
 
 
