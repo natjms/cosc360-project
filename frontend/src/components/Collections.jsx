@@ -2,11 +2,21 @@ import Navbar from "./Navbar";
 import SearchBarNavigator from "./SearchBarNavigator";
 import logo from "../assets/logo.jpg";
 import './Collections.css'
-import { useCallback } from "react";
+import { useState } from 'react'
+import { useEffect } from 'react'
 
 
 function Collections() {
 
+  const [book, getBook] = useState([]); 
+
+  useEffect(() => { 
+    books()
+  }, [])
+
+  const books = async () => { 
+    
+  }
 
     return (
       <>

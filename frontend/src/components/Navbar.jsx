@@ -1,6 +1,7 @@
 import Login from './LogIn.jsx'
 import About from './About.jsx'
 import Collections from './Collections.jsx'
+import MyAccount from './MyAccount.jsx'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 
@@ -21,9 +22,15 @@ function Navbar() {
         navigate('/Collections')
     }
 
+
     const handleAddBook = () => {
         navigate('/add');
-    }
+    };
+
+    const handleProfile = () => { 
+        navigate('/MyAccount')
+
+    };
 
     return (
         <>
@@ -35,15 +42,17 @@ function Navbar() {
                 <li><a href= "/about" onClick={handleAbout}>About</a></li>
 
                 <li><a href="/add" onClick={handleAddBook} style={{color: '#28a745', fontWeight: 'bold'}}> + Add a Book</a></li>
+                <li><a href = "/profile" onClick = {handleProfile}>Profile</a></li>
                 <li> 
 	    	    <button onClick={togglePop}>Login</button>
-                    {seen && <Login toggle={togglePop} />}
-	    	</li>
+                    {seen && <Login toggle={togglePop} />} 
+	    	    </li>
             </ul>
         </nav>
 
         </>
     );
-}
+
+    }
 
 export default Navbar;

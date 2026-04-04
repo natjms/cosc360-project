@@ -9,6 +9,10 @@ import SearchResults from './SearchResults.jsx'
 import About from './components/About'; 
 import Collections from './components/Collections'; 
 import AddBookPage from './AddBookPage.jsx';
+import MyAccount from './components/MyAccount';
+import Admin from './Admin.jsx';
+import Profile from './components/Profile'; 
+
 
 
 createRoot(document.getElementById('root')).render(
@@ -19,8 +23,13 @@ createRoot(document.getElementById('root')).render(
         <Route path = "/signup" element = {<Signup />} />
         <Route path = "/search" element = {<SearchResults />} />
         <Route path = '/about' element = {<About />} />
-        <Route path = '/collections' element = {<Collections/>} />
+        <Route path = '/collections' element = {<Collections/>}/>
         <Route path="/add" element={<AddBookPage/>}/>
+        <Route path = '/profile' element = {<Profile/>} />
+        <Route path = '/myaccount' element = {<MyAccount/>} />
+
+		{ /* TODO only allow this route to exist if the user is an admin */ }
+        <Route path = '/admin' element = {<Admin/>} />
       </Routes>
     </BrowserRouter>
   </StrictMode>,

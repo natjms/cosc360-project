@@ -4,13 +4,32 @@ export default function AddBook({onBookAdded}) {
     const [title, setTitle] = useState('');
     const [author, setAuthor] = useState('');
     const [description, setDescription] = useState('');
+    const [isbn, setIsbn] = useState('');
+    const [cover, setCover] = useState('');
     const [status, setStatus] = useState('');
+
+    //helper to convert file to base64 str
+    const handleFileChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setCover(reader.result.split(',')[1]); 
+            };
+            reader.readAsDataURL(file);
+        }
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log("Submit button clicked!");
 
-        const newBook = { title, author, description};
+        const newEntry = { 
+            title, 
+            author, 
+            description, 
+            isbn, 
+            cover 
+        };
 
         try {
             const response = await fetch('http://localhost:3000/api/books', {
@@ -18,32 +37,31 @@ export default function AddBook({onBookAdded}) {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(newBook),
+                body: JSON.stringify(newEntry),
             });
 
             if(response.ok){
                 const result = await response.json();
-                setStatus(`Success! Book created with ID: ${result.id}`);
-
+                setStatus(`Success! Catalog entry created with ID: ${result.id}`);
                 if(onBookAdded) onBookAdded();
 
                 setTitle('');
                 setAuthor('');
                 setDescription('');
+                setIsbn('');
+                setCover('');
             } else{
-                setStatus('Failed to save book.');
                 const errorData = await response.json();
-                console.error("Server says data is bad:", errorData);
+                setStatus(`Failed: ${errorData.error || 'Server rejected data'}`);
             }
         } catch(error){
-            console.error("Error:", error );
             setStatus('Server error. Is the backend running?');
         }
     };
 
     return (
         <div style={{ padding: '20px', border: '1px solid #ccc', borderRadius: '8px'}}>
-            <h3>Add a new book</h3>
+            <h3>Add Book to Catalog</h3>
             <form onSubmit={handleSubmit}>
                 <div>
                     <label>Title:</label><br/>
@@ -54,10 +72,20 @@ export default function AddBook({onBookAdded}) {
                     <input value={author} onChange={(e) => setAuthor(e.target.value)} required />
                 </div>
                 <div>
+                    <label>ISBN (10 or 13 digits):</label><br/>
+                    <input value={isbn} onChange={(e) => setIsbn(e.target.value)} required placeholder="e.g. 0-123456789" />
+                </div>
+                <div>
+                </div>
+                <div>
                     <label>Description:</label><br/>
                     <textarea value={description} onChange={(e) => setDescription(e.target.value)}/>
                 </div>
-                <button type="submit" style={{ marginTop: '10px'}}>Add Book</button>
+                <div>
+                    <label>Cover Image:</label><br/>
+                    <input type="file" accept="image/*" onChange={handleFileChange} required />
+                </div>
+                <button type="submit" style={{ marginTop: '10px'}}>Create Catalog Entry</button>
             </form>
 
             {status && <p style={{ color: 'blue'}}>{status}</p>}

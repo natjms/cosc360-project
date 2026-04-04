@@ -22,7 +22,7 @@ export function validateAccount(account) {
 	const issue_count = 0;
 	const issues = [];
 
-	if (missingKeys(account, ['username', 'email', 'password_plaintext']).length != 0) {
+	if (missingKeys(account, ['username', 'email', 'password_plaintext', 'city', 'country']).length != 0) {
 		issues.push('Missing required keys');
 	}
 
@@ -36,6 +36,14 @@ export function validateAccount(account) {
 	}
 
 	return issues;
+}
+
+export function getAllAccounts(connection) {
+	return connection
+		.collection('accounts')
+		.find()
+		.project({password_hash: 0})
+		.toArray();
 }
 
 export function getAccountById(connection, account_id) {
@@ -54,6 +62,12 @@ export function getAccountByEmail(connection, email) {
 	return connection.
 		collection('accounts')
 		.findOne({ email, });
+}
+
+export function deleteAccount(connection, account_id) {
+	return connection.
+		collection('accounts')
+		.deleteOne({ _id: objectId(account_id) });
 }
 
 export function getAccountByCredential(connection, username_or_email) {
@@ -80,6 +94,7 @@ export async function createAccount(connection, account) {
 
 	account.password_hash = await bcrypt.hash(account.password_plaintext, 10);
 	delete account.password_plaintext;
+	account.joinDate = Date.now();
 	
 	const result = await connection
 		.collection('accounts')
@@ -95,7 +110,7 @@ export async function updateAccount(connection, account_id, account_patch) {
 	// Only set the properties if they're explicitly declared in the patch;
 	// otherwise we run the risk of accidentally setting a field to undefined
 	// or null
-	for (let key of ['username', 'email', 'password_plaintext']) {
+	for (let key of ['username', 'email', 'password_plaintext', 'city', 'country']) {
 		if (Object.hasOwn(account_patch, key)) {
 			account[key] = account_patch[key];
 		}
@@ -144,4 +159,21 @@ export async function verifyPassword(connection, account_id, password_to_test, a
 	}
 
 	return bcrypt.compare(password_to_test, account.password_hash);
+}
+
+/**
+ * Partial match against account usernames, in case that was something you
+ * wanted to do for, say, lab 8 related purposes
+ */
+export function getAccountByPartialMatch(connection, query) {
+	// This guarantees the regex is safe
+	if (!/^[a-zA-Z0-9]+$/.test(query)) {
+		throw new DBError('Invalid username');
+	}
+
+	return connection
+		.collection('accounts')
+		.find({ username: new RegExp(`${query}`, 'i') })
+		.project({ password_hash: 0, email: 0 })
+		.toArray();
 }

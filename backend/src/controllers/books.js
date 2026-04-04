@@ -1,7 +1,7 @@
 import express from 'express';
 import { SL, at_least } from '#src/authentication.js';
 import { connect_db } from '#src/db/connection.js';
-import * as dbBooks from '#src/db/books.js';
+import * as dbCatalog from '#src/db/catalog.js';
 
 const router = express.Router();
 
@@ -12,6 +12,18 @@ const unimplemented = (req, res) => {
 
 router.use(connect_db);
 
+// searching
+router.get('/search', at_least(SL.unauthenticated), async (req, res) => {
+    try {
+        const connection = req.conn;
+        const query = req.query.q || "";
+        const results = await dbCatalog.getCatalogEntriesByPartialMatch(connection, query);
+        res.send(results);
+    } catch (err) {
+        res.status(500).send({ error: "Search failed: " + err.message });
+    }
+});
+
 router.get('/', at_least(SL.admin), unimplemented);
 
 // Add a "kind" of book to the database. Recognize a new book within the
@@ -19,17 +31,30 @@ router.get('/', at_least(SL.admin), unimplemented);
 router.post('/', at_least(SL.unauthenticated), async (req, res) => {
     try {
         const connection = req.conn;
-        const { title, author, description} = req.body;
+        const {title, author, description, isbn, cover} = req.body;
 
-        const newId = await dbBooks.createBook(connection, title, author, description);
+        const newId = await dbCatalog.createCatalogEntry(connection, { title, author, description, isbn, cover
+        });
 
-        res.status(201).send({message: "Book added to your collection!", id: newId});
+        res.status(201).send({message: "Book added to catalog!", id: newId});
     } catch(err){
         res.status(400).send({error: err.message});
     }
 });
 router.patch('/:book_id', at_least(SL.admin), unimplemented);
-router.delete('/:book_id', at_least(SL.admin), unimplemented);
+
+//router.delete('/:book_id', at_least(SL.admin), unimplemented) - unauthenticated for testing
+router.delete('/:book_id', at_least(SL.unauthenticated), async(req, res) =>{
+    try {
+        const connection = req.conn;
+        const result = await dbCatalog.deleteCatalogEntry(connection, req.params.book_id);
+
+        if (result.deletedCount === 0) return res.status(404).send({ error: "Not found"});
+        res.send({ message: "Catalog entry deleted"});
+    } catch (err){
+        res.status(500).send({ error: err.message});
+    }
+});
 
 router.get('/:book_id', at_least(SL.unauthenticated), unimplemented);
 

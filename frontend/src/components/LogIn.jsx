@@ -61,13 +61,13 @@ export default function Login(props) {
             })
      })
 
-       await response.json(); 
+       const data = await response.json(); 
             
             if(!response.ok) { 
                 throw new Error("Invalid credentials")
             } else { 
                 alert("login successful");
-                navigate('/Home'); 
+                localStorage.setItem('token', data.token) 
             }
 
         }   catch(error) { 

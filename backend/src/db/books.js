@@ -9,14 +9,25 @@ import * as accounts from '#src/db/accounts.js';
 }
 */
 
-export async function createBook(connection, title, author, description) {
-    const result = await connection.collection('books').insertOne({
-        title: title,
-        author: author,
-        description: description
-    })
+export async function createBook(connection, possessor_account_id, entry_id) {
+	const possessor_account = await accounts.getAccountById(connection, possessor_account_id);
+	if (possessor_account === null) {
+		throw new DBError(`Possessor ${possessor_account_id} does not exist`);
+	}
 
-    return result.insertedId;
+	const entry = await catalog.getCatalogEntryById(connection, entry_id);
+	if (entry === null) {
+		throw new DBError(`Catalog entry ${entry_id} does not exist`);
+	}
+
+	const result = await connection
+		.collection('books')
+		.insertOne({
+			possessor: objectId(possessor_account_id),
+			catalog_entry: objectId(entry_id)
+		});
+
+	return result.insertedId;
 }
 
 export async function deleteBook(connection, book_id) {
