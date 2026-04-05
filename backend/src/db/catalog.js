@@ -21,7 +21,7 @@ export function validateCatalogEntry(entry) {
 	const issue_count = 0;
 	const issues = [];
 
-	if (missingKeys(entry, ['isbn', 'title', 'description', 'cover']).length != 0) {
+	if (missingKeys(entry, ['isbn', 'title', 'description', 'cover', 'genre']).length != 0) {
 		issues.push('Missing required keys');
 	}
 
@@ -32,6 +32,7 @@ export function validateCatalogEntry(entry) {
 	
 	if (!typeof(entry.title) === 'string') issues.push('title must be a string');
 	if (!typeof(entry.description) === 'string') issues.push('description must be a string');
+	if (!typeof(entry.genre) === 'string') issues.push('genre must be a string')
 
 	return issues;
 }

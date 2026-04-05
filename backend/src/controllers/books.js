@@ -31,9 +31,9 @@ router.get('/', at_least(SL.admin), unimplemented);
 router.post('/', at_least(SL.unauthenticated), async (req, res) => {
     try {
         const connection = req.conn;
-        const {title, author, description, isbn, cover} = req.body;
+        const {title, author, description, isbn, cover, genre} = req.body;
 
-        const newId = await dbCatalog.createCatalogEntry(connection, { title, author, description, isbn, cover
+        const newId = await dbCatalog.createCatalogEntry(connection, { title, author, description, isbn, cover, genre
         });
 
         res.status(201).send({message: "Book added to catalog!", id: newId});
