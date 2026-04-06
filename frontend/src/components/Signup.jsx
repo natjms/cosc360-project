@@ -168,13 +168,8 @@ function Signup() {
 
 
         <div>
-<<<<<<< HEAD
-	    <label>Profile Picture</label>
-	    {image && <img src={URL.createObjectURL(image)} className="profileImage" alt="preview" />}
-=======
 	    <h3><label>Profile Picture</label></h3>
 	    {image === null ? "" : <img src = "src/user.png" className = "profileImage"></img>}
->>>>>>> b3813796e20cbdde6823c2a41ad1d233fd940f79
           <input
             type="file"
             accept="image/*"

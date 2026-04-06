@@ -108,13 +108,8 @@ export default function Login(props) {
                     </input> 
                     <span>{passwordError}</span>
                 </div>
-<<<<<<< HEAD
-                  <button className = "submit" type = "submit">Log In</button>
-                  <p id = "response" style = {{marginLeft: "20px"}}></p>
-=======
                   <button className = "submit" type = "submit">Submit</button>
                   <p id = "response"></p>
->>>>>>> b3813796e20cbdde6823c2a41ad1d233fd940f79
              </form>
              </div>
              <h3>No Account?</h3>

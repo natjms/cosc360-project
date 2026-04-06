@@ -25,7 +25,7 @@ router.get('/search', at_least(SL.unauthenticated), async (req, res) => {
     }
 });
 
-//router get all books to display
+//router get all books to display in genres
 router.get('/public', async (req, res) => {
     try {
         const connection = req.conn;
