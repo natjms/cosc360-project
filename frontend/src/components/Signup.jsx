@@ -11,8 +11,7 @@ function Signup() {
   const [password, setPassword] = useState("");
   const [image, setImage] = useState(null);
   
-
-  const [usernameError, setUsernameError] = useState("");
+  const [firstName, setFirstNameError] = useState("");
   const [cityError, setCityError] = useState("");
   const [countryError, setCountryError] = useState("");
   const [emailError, setEmailError] = useState("");
@@ -84,35 +83,37 @@ function Signup() {
         }
 
 
+        const formData = new FormData();
+            formData.append("username", username);
+            formData.append("email", email);
+            formData.append("password_plaintext", password);
+            formData.append("country", country);
+            formData.append("city", city);
+            
+            if (image) 
+                formData.append("image", image);
 
-        if (!hasError) {
-            fetch("http://localhost:3000/api/accounts", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    username: username,
-                    email: email,
-                    password_plaintext: password,
-                    country: country,
-                    city: city,
-                    image: image
-                })
-            })
-                .then(async(response) => { 
-                    const data = await response.json();
-                    navigate('/')
-                
-                    if(!response.ok) { 
-                        console.error(data);
-			alert("Submission error: server returned response " + response.status)
-                        return;
-                    }
-                    console.log(data);
-                });
+        fetch("http://localhost:3000/api/accounts", {
+            method: "POST",
+            body: formData 
+        })
+        
+        .then(async (response) => {
+        const data = await response.json();
+        if (!response.ok) {
+            alert("Error: " + data.error);
+        return;
         }
-    }
+
+        console.log("Account created:", data);
+        navigate('/'); 
+    })
+        .catch((err) => {
+            console.error("Fetch error:", err);
+            alert("Network or server error");
+    });
+
+}
 
     return (
         <div className = "window">
@@ -168,7 +169,7 @@ function Signup() {
 
         <div>
 	    <label>Profile Picture</label>
-	    {image === null ? "" : <img src = "src/user.png" className = "profileImage"></img>}
+	    {image && <img src={URL.createObjectURL(image)} className="profileImage" alt="preview" />}
           <input
             type="file"
             accept="image/*"
