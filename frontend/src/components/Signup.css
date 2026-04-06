@@ -12,11 +12,11 @@
   display: flex; 
   flex-direction: column; 
   justify-content: center; 
-  height: 80%;
+  height: 85%;
   width: 90%;
   background-color: white; 
   border-radius: 20px; 
-  border: 2px black solid; 
+  border: 3px black solid; 
 }
 
 .close { 
@@ -27,6 +27,9 @@
 .content { 
   display: flex; 
   flex-direction: column;   
+  max-height: 60vh;
+  overflow: auto;
+  scroll: hidden;
 }
 
 .title {
@@ -39,18 +42,17 @@ label, #email, #password, #username, #city, #country{
   margin-bottom: 5px;
   border-color: black; 
   border-width: 1px;
-  height: 20px; 
 }
 
 .submit { 
   width: 28%;
   background-color: black; 
   color: white; 
-  margin-top: 10%; 
+  margin-top: 5%; 
   margin-left: 20px; 
   height: 25px; 
   text-align: center;
-  justify-content: center;
+  justify-content: right;
 }
 
 .profileImage { 
@@ -77,4 +79,8 @@ input, select{
 	 color: red;
 	 margin-left: 20px;
 }
+h1 h3{
+	margin-top: 5px;
+	margin-bottom: 5px;
 
+}

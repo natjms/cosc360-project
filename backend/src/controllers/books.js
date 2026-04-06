@@ -2,6 +2,7 @@ import express from 'express';
 import { SL, at_least } from '#src/authentication.js';
 import { connect_db } from '#src/db/connection.js';
 import * as dbCatalog from '#src/db/catalog.js';
+import { getBookById, createBook } from '#src/db/books.js';
 
 const router = express.Router();
 
@@ -43,20 +44,13 @@ router.post('/', at_least(SL.unauthenticated), async (req, res) => {
 });
 router.patch('/:book_id', at_least(SL.admin), unimplemented);
 
-//router.delete('/:book_id', at_least(SL.admin), unimplemented) - unauthenticated for testing
-router.delete('/:book_id', at_least(SL.unauthenticated), async(req, res) =>{
-    try {
-        const connection = req.conn;
-        const result = await dbCatalog.deleteCatalogEntry(connection, req.params.book_id);
+router.delete('/:book_id', at_least(SL.admin), unimplemented);
 
-        if (result.deletedCount === 0) return res.status(404).send({ error: "Not found"});
-        res.send({ message: "Catalog entry deleted"});
-    } catch (err){
-        res.status(500).send({ error: err.message});
-    }
+router.get('/:book_id', at_least(SL.unauthenticated), async (req, res) => {
+
+	let data = getBookById(req.conn, req.params.book_id);
+	res.status(200).send(data);
 });
-
-router.get('/:book_id', at_least(SL.unauthenticated), unimplemented);
 
 // Add an "instance" of a book to the database. The book is recognized, and
 // a regular person publishes their willingness to distribute their personal

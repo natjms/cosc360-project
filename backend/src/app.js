@@ -22,6 +22,7 @@ server.use(cors());
 const port = 3000;
 server.use(express.json())
 
+server.use("/images", express.static("images"));
 
 server.use('/api/accounts', accounts_controller);
 server.use('/api/books', books_controller);
@@ -34,22 +35,6 @@ server.use('/api/stats', statsRouter)
 
 // Some legacy controllers added for in-class assignments.
 // TODO: these should be removed at some point
-server.get('/api', (req, res) => {
-  res.send('Hello World!');
-});
-
-server.get('/api/book', bookGet);
-
-server.use("/images", express.static("images"));
-
-server.post("/api/user",
-	async function(req, res){
-		const db = await getDatabaseConnection();
-		let collection = await db.collection("users");
-		let newDocument = req.body;
-		let result = await collection.insertOne(newDocument);
-		res.status(201).send(result);
-	});
 
 server.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
