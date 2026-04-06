@@ -1,7 +1,6 @@
 import { useEffect } from 'react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import App from './Profile.jsx'
 
 function MyAccount() {
   const navigate = useNavigate();
@@ -9,6 +8,8 @@ function MyAccount() {
   const [email, setEmail] = useState("");
   const [city, setCity] = useState("");
   const [username, setUsername] = useState("");
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [visibleBox, setVisibleBox] = useState(false)
 
    function handleEmailChange(e) {
@@ -39,7 +40,6 @@ function MyAccount() {
     const getUserInfo = async () => { 
 
       const token = localStorage.getItem('token');
-      console.log(token);
 
        if (!token || token.trim() === '') {
         setError("Not logged in");
@@ -47,6 +47,7 @@ function MyAccount() {
         return;
       }
 
+      try { 
       const res = await fetch('/api/accounts/current-user', {
         method: "GET",
         headers: { 
@@ -56,20 +57,22 @@ function MyAccount() {
       });
 
       const data =  await res.json();
+      setUser(data);
 
       if (!res.ok) {
         setError(data.error || 'Failed to get user');
         return;
       }
-
-      setUser(data);
+    } catch(error) { 
+                console.error("Network or server error", error)
+            }
     
     }
     getUserInfo();
   }, []);
 
 
-function handleDelete() { 
+async function handleDelete() { 
   fetch(`/api/accounts/${user._id}`, {
         method: "DELETE",
         headers: { 
@@ -104,12 +107,13 @@ async function validateForm(e) {
           
             if(!response.ok) { 
                 throw new Error("invalid email")
-            } 
+            } else { 
             
             const data = await response.json(); 
             
             alert("successfully updated")
-            navigate('/')
+            navigate('/profile')
+            }
           }catch(error) { 
             console.log("error")
           }

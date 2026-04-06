@@ -25,7 +25,17 @@ router.get('/search', at_least(SL.unauthenticated), async (req, res) => {
     }
 });
 
-router.get('/', at_least(SL.admin), unimplemented);
+//router get all books to display in genres
+router.get('/public', async (req, res) => {
+    try {
+        const connection = req.conn;
+        const allBooks = await dbCatalog.getAllCatalogEntries(connection); 
+        res.send(allBooks);
+    
+    } catch (err) {
+        res.status(500).send({error: err.message });
+    }
+});
 
 // Add a "kind" of book to the database. Recognize a new book within the
 // system without necessarily listing it
@@ -46,11 +56,7 @@ router.patch('/:book_id', at_least(SL.admin), unimplemented);
 
 router.delete('/:book_id', at_least(SL.admin), unimplemented);
 
-router.get('/:book_id', at_least(SL.unauthenticated), async (req, res) => {
-
-	let data = getBookById(req.conn, req.params.book_id);
-	res.status(200).send(data);
-});
+router.get('/:book_id', at_least(SL.unauthenticated), unimplemented);
 
 // Add an "instance" of a book to the database. The book is recognized, and
 // a regular person publishes their willingness to distribute their personal

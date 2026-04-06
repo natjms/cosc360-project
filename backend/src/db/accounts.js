@@ -95,6 +95,10 @@ export async function createAccount(connection, account) {
 	account.password_hash = await bcrypt.hash(account.password_plaintext, 10);
 	delete account.password_plaintext;
 	account.joinDate = Date.now();
+
+	if (account.imagePath) {
+    	account.imagePath = account.imagePath; 
+	}
 	
 	const result = await connection
 		.collection('accounts')

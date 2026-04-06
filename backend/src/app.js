@@ -1,4 +1,6 @@
 import express from 'express';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import { getDatabaseConnection } from './db/connection.js';
 import bookGet from './books/books.js';
 import example from './books/example.json' with { type: "json" };
@@ -16,6 +18,9 @@ import statsRouter from './controllers/stats.js';
 import dotenv from 'dotenv';
 dotenv.config();
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const imagesPath = path.join(__dirname, 'images');
 
 const server = express();
 server.use(cors());
@@ -32,9 +37,24 @@ server.use('/api/notifications', notifications_controller);
 server.use('/api/sessions', sessions_controller);
 server.use('/api/search', search_controller);
 server.use('/api/stats', statsRouter)
+server.use('/images', express.static(imagesPath));
 
 // Some legacy controllers added for in-class assignments.
 // TODO: these should be removed at some point
+server.get('/api', (req, res) => {
+  res.send('Hello World!');
+});
+
+server.get('/api/book', bookGet);
+
+server.post("/api/user",
+	async function(req, res){
+		const db = await getDatabaseConnection();
+		let collection = await db.collection("users");
+		let newDocument = req.body;
+		let result = await collection.insertOne(newDocument);
+		res.status(201).send(result);
+	});
 
 server.listen(port, () => {
   console.log(`Example app listening on port ${port}`);

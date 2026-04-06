@@ -14,8 +14,8 @@ import Profile from './components/Profile';
 import Catalog from './components/Catalog'; 
 import User from './components/User';
 import PageNotFound from './components/PageNotFound';
+import Genres from './components/Genres'; 
 import './default.css';
-
 
 
 createRoot(document.getElementById('root')).render(
@@ -30,6 +30,7 @@ createRoot(document.getElementById('root')).render(
         <Route path="/add" element={<AddBookPage/>}/>
         <Route path = '/profile' element = {<Profile/>} />
         <Route path = '/myaccount' element = {<MyAccount/>} />
+        <Route path = '/genres' element = {<Genres/>} />
 	<Route path = '/catalog/:isbn' element = {<Catalog/>} />
 	<Route path = '/user/:username' element = {<User/>} />
 		{ /* TODO only allow this route to exist if the user is an admin */ }
