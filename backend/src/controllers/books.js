@@ -2,6 +2,7 @@ import express from 'express';
 import { SL, at_least } from '#src/authentication.js';
 import { connect_db } from '#src/db/connection.js';
 import * as dbCatalog from '#src/db/catalog.js';
+import { getBookById, createBook } from '#src/db/books.js';
 
 const router = express.Router();
 
@@ -24,7 +25,17 @@ router.get('/search', at_least(SL.unauthenticated), async (req, res) => {
     }
 });
 
-router.get('/', at_least(SL.admin), unimplemented);
+//router get all books to display
+router.get('/public', async (req, res) => {
+    try {
+        const connection = req.conn;
+        const allBooks = await dbCatalog.getAllCatalogEntries(connection); 
+        res.send(allBooks);
+    
+    } catch (err) {
+        res.status(500).send({error: err.message });
+    }
+});
 
 // Add a "kind" of book to the database. Recognize a new book within the
 // system without necessarily listing it

@@ -84,7 +84,7 @@ export default function Login(props) {
             <form className = "content" onSubmit={validateForm}>
               <h2 className="title">LOG IN</h2>
               <div className = {emailError ? "control error" : "control"}>
-                  <label htmlFor = "email">EMAIL</label> 
+                  <h3> <label htmlFor = "email">EMAIL</label> </h3>
                   <input 
                     type ="text" 
                     name = "email" 
@@ -97,7 +97,7 @@ export default function Login(props) {
                 </div>
 
                 <div className ={passwordError ? "control error" : "control"}>
-                  <label htmlFor = "Password">PASSWORD</label> 
+                  <h3><label htmlFor = "Password">PASSWORD</label> </h3>
                   <input 
                     type ="password" 
                     name = "password" 
@@ -108,11 +108,16 @@ export default function Login(props) {
                     </input> 
                     <span>{passwordError}</span>
                 </div>
+<<<<<<< HEAD
                   <button className = "submit" type = "submit">Log In</button>
                   <p id = "response" style = {{marginLeft: "20px"}}></p>
+=======
+                  <button className = "submit" type = "submit">Submit</button>
+                  <p id = "response"></p>
+>>>>>>> b3813796e20cbdde6823c2a41ad1d233fd940f79
              </form>
              </div>
-             <p>No Account?</p>
+             <h3>No Account?</h3>
              <p>{emailError}</p>
              <button onClick={handleSignup}>Signup</button>
         </div>
