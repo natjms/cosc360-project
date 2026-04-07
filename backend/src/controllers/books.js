@@ -42,9 +42,9 @@ router.get('/public', async (req, res) => {
 router.post('/', at_least(SL.unauthenticated), async (req, res) => {
     try {
         const connection = req.conn;
-        const {title, author, description, isbn, cover} = req.body;
+        const {title, author, description, isbn, cover, genre} = req.body;
 
-        const newId = await dbCatalog.createCatalogEntry(connection, { title, author, description, isbn, cover
+        const newId = await dbCatalog.createCatalogEntry(connection, { title, author, description, isbn, cover, genre
         });
 
         res.status(201).send({message: "Book added to catalog!", id: newId});
@@ -54,18 +54,7 @@ router.post('/', at_least(SL.unauthenticated), async (req, res) => {
 });
 router.patch('/:book_id', at_least(SL.admin), unimplemented);
 
-//router.delete('/:book_id', at_least(SL.admin), unimplemented) - unauthenticated for testing
-router.delete('/:book_id', at_least(SL.unauthenticated), async(req, res) =>{
-    try {
-        const connection = req.conn;
-        const result = await dbCatalog.deleteCatalogEntry(connection, req.params.book_id);
-
-        if (result.deletedCount === 0) return res.status(404).send({ error: "Not found"});
-        res.send({ message: "Catalog entry deleted"});
-    } catch (err){
-        res.status(500).send({ error: err.message});
-    }
-});
+router.delete('/:book_id', at_least(SL.admin), unimplemented);
 
 router.get('/:book_id', at_least(SL.unauthenticated), unimplemented);
 

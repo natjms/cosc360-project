@@ -41,7 +41,7 @@ function Navbar() {
                 <li><a href="/genres">Genres</a></li>
                 <li><a href= "/about" onClick={handleAbout}>About</a></li>
 
-                <li><a href="/add" onClick={handleAddBook} style={{color: '#28a745', fontWeight: 'bold'}}> + Add a Book</a></li>
+                <li><a href="/add" onClick={handleAddBook} style={{color: '#B45253', fontWeight: 'bold'}}> + Add a Book</a></li>
                 <li><a href = "/profile" onClick = {handleProfile}>Profile</a></li>
                 <li> 
 	    	    <button onClick={togglePop}>Login</button>

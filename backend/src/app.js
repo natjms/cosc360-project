@@ -13,6 +13,7 @@ import conversations_controller from './controllers/conversations.js';
 import notifications_controller from './controllers/notifications.js';
 import sessions_controller from './controllers/sessions.js';
 import search_controller from './controllers/search.js';
+import statsRouter from './controllers/stats.js';
 
 import dotenv from 'dotenv';
 dotenv.config();
@@ -35,6 +36,7 @@ server.use('/api/conversations', conversations_controller);
 server.use('/api/notifications', notifications_controller);
 server.use('/api/sessions', sessions_controller);
 server.use('/api/search', search_controller);
+server.use('/api/stats', statsRouter)
 server.use('/images', express.static(imagesPath));
 
 // Some legacy controllers added for in-class assignments.

@@ -6,6 +6,7 @@ export default function AddBook({onBookAdded}) {
     const [description, setDescription] = useState('');
     const [isbn, setIsbn] = useState('');
     const [cover, setCover] = useState('');
+    const [genre, setGenre] = useState('');
     const [status, setStatus] = useState('');
 
     //helper to convert file to base64 str
@@ -28,7 +29,8 @@ export default function AddBook({onBookAdded}) {
             author, 
             description, 
             isbn, 
-            cover 
+            cover,
+            genre 
         };
 
         try {
@@ -50,6 +52,7 @@ export default function AddBook({onBookAdded}) {
                 setDescription('');
                 setIsbn('');
                 setCover('');
+                setGenre('');
             } else{
                 const errorData = await response.json();
                 setStatus(`Failed: ${errorData.error || 'Server rejected data'}`);
@@ -84,6 +87,10 @@ export default function AddBook({onBookAdded}) {
                 <div>
                     <label>Cover Image:</label><br/>
                     <input type="file" accept="image/*" onChange={handleFileChange} required />
+                </div>
+                <div>
+                    <label>Genre:</label><br/>
+                    <input value={genre} onChange={(e) => setGenre(e.target.value)} required />
                 </div>
                 <button type="submit" style={{ marginTop: '10px'}}>Create Catalog Entry</button>
             </form>
