@@ -94,7 +94,6 @@ export function getCatalogEntriesByPartialMatch(connection, query) {
 
 export async function getAllCatalogEntries(connection) {
     const result = await connection.collection('catalog').find({}).toArray();
-	console.log("result: ", result)
     return result;
 }
 
