@@ -111,6 +111,15 @@ export function getCollectionsFromOwner(connection, account_id) {
 		.toArray();
 }
 
+export async function getEntriesInCollection(connection, collection_id) {
+	const entry_ids = (await getCollectionById(connection, collection_id)).list;
+
+	return connection
+		.collection('catalog')
+		.find({ _id: { '$in': entry_ids } })
+		.toArray();
+}
+
 export function deleteCollection(connection, collection_id) {
 	return connection
 		.collection('collections')
