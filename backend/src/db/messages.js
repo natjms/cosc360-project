@@ -17,7 +17,7 @@ export async function sendMessage(connection, conversation_id, sender_id, conten
 		throw new DBError(`Non-existant account ${sender_id} cannot send a message`);
 	}
 
-	const conversation = conversations.getConversationById(connection, conversation_id);
+	const conversation = await conversations.getConversationById(connection, conversation_id);
 	if (conversation === null) {
 		throw new DBError(`Messages cannot be sent in non-existant conversation ${conversation_id}`);
 	}
