@@ -18,14 +18,19 @@ export class DBError extends Error {
 	}
 }
 
-export async function getDatabaseConnection() {
+export async function getDatabaseConnection(options={}) {
 	if (!process.env.MONGODB_URI) {
 		console.log('Error: MONGODB_URI not specified in .env file');
 		return false;
 	}
 	const client = new mongodb.MongoClient(process.env.MONGODB_URI);
 	await client.connect();
-	return client.db('myAppDB');
+
+	if (!options.yield_client) {
+		return client.db(database_name);
+	} else {
+		return client;
+	}
 }
 
 /**
