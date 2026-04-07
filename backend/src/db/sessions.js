@@ -23,14 +23,14 @@ export function getSessionByToken(connection, session_token) {
 /**
  * Create a new session, given an account ID. Returns the session token
  */
-export function createSession(connection, account_id) {
+export async function createSession(connection, account_id) {
 	if (!process.env.SESSION_LIFESPAN_SECONDS) {
 		throw new Error('SESSION_LIFESPAN_SECONDS not specified in .env file');
 	}
 
 	const session_token = Buffer.from(randomBytes(256)).toString('hex');
 
-	connection
+	await connection
 		.collection('sessions')
 		.insertOne({
 			account_id: objectId(account_id),
