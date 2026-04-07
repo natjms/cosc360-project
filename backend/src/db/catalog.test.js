@@ -15,6 +15,7 @@ const entry = {
 	title: 'The Society of the Spectacle',
 	description: 'Longer book description',
 	author: 'Guy Debord',
+	genre: 'Non-fiction',
 	cover,
 };
 

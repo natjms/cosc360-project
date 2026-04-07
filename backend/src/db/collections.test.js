@@ -24,6 +24,7 @@ const setup = async () => {
 		title: 'The Society of the Spectacle',
 		description: 'Longer book description',
 		author: 'Guy Debord',
+		genre: 'Non-fiction',
 		cover: 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAD0lEQVQIHQEEAP'
 			 + 'v/AAAAAAAEAAEvUrSNAAAAAElFTkSuQmCC',
 	});
