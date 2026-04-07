@@ -119,3 +119,9 @@ export async function markConversationUnread(connection, conversation_id, messag
 			}}
 		);
 }
+
+export function deleteConversation(connection, conversation_id) {
+	return connection
+		.collection('conversations')
+		.deleteOne({ _id: objectId(conversation_id) });
+}
