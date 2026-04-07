@@ -14,7 +14,7 @@ function Genres() {
 
   const fetchBooks = async () => {
     try {
-      const response = await fetch("http://localhost:3000/api/books/public", {
+      const response = await fetch("/api/books/public", {
         method: "GET",
         headers: {
           'Content-Type': 'application/json',

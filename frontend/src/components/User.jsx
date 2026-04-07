@@ -27,6 +27,9 @@ function User(){
 		);
 	}
 	let comp = [];
+
+
+
 	for(let i = 0; i < 8; i++){
 		comp.push(
 		<BookItem
@@ -51,7 +54,7 @@ return (
 				.join(" ")}
 		</h2>
 		</div>
-		<h1>Activity </h1>
+		<h1>Shared Books</h1>
 		<div className="books-list">
 		{comp}
 		</div>

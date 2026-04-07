@@ -4,7 +4,8 @@
 	height: 50vh;
 	display: block;
 	align-items: center;
-	border-radius: 3px;
+	border-radius: 20px;
+	border: 3px black solid;
 	margin-top: 1%;
 	justify-content: center;
 	padding-top: 10px;

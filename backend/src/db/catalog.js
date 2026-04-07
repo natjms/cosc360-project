@@ -64,6 +64,12 @@ export function getCatalogEntryById(connection, entry_id) {
 		.findOne({ _id: objectId(entry_id) });
 }
 
+export function getCatalogEntryByISBN(connection, isbn) {
+	return connection
+		.collection('catalog')
+		.findOne({ isbn, });
+}
+
 export function deleteCatalogEntry(connection, entry_id) {
 	return connection
 		.collection('catalog')

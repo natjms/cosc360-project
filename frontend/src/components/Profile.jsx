@@ -98,19 +98,8 @@ function Profile() {
 
     return (
       <>
-        <header className="site-header">
-            <div className="logo">
-                <img src={logo} alt="Library logo" className="logo-img" />
-                <h1>Virtual Library</h1>
-            </div>
 
-            <div className="header-right">
-                <SearchBarNavigator />
-                <Navbar />
-            </div>
-        </header>
-    
-        <div style = {{alignItems: "center", margin: "20px"}}>
+              <div style = {{alignItems: "center", margin: "20px"}}>
         <a href = "/myaccount" onClick = {handleAccount} style = {{textAlign: "center", backgroundColor: "#B45253", color: "white", textDecoration: "none"}}>Edit Account</a>
         </div>
 

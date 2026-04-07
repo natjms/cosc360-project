@@ -1,0 +1,18 @@
+.container{
+	display: flex;
+	justify-content: center;
+	height: 80vh;
+}
+
+.book{
+	display: block;
+	text-align: center;
+	justify-content: center;
+	align-items: center;
+	background-color: #FFE797;
+	color: white;
+	width: 60vw;
+	border: 3px black solid;
+	border-radius: 30px;
+	
+}

@@ -56,13 +56,49 @@ router.patch('/:book_id', at_least(SL.admin), unimplemented);
 
 router.delete('/:book_id', at_least(SL.admin), unimplemented);
 
-router.get('/:book_id', at_least(SL.unauthenticated), unimplemented);
+router.get('/:isbn', at_least(SL.unauthenticated), async (req, res) => {
+	try{
+		const book = await dbCatalog.getCatalogEntryByISBN(req.conn, req.params.isbn);
+		res.status(200).send(book);
+	}
+	catch(err){
+		res.status(400).send({error: err.message});
+	}
+});
 
 // Add an "instance" of a book to the database. The book is recognized, and
 // a regular person publishes their willingness to distribute their personal
 // copy
-router.get('/:book_id/share', at_least(SL.authenticated), unimplemented);
+router.get('/:isbn/share', at_least(SL.authenticated), async (req, res) => {
+	try{
+		const { possessor_id, isbn } = req.body;
+		const id = createBook(req.conn, posessor_id, isbn);
+        	res.status(201).send({id: id});
+	}
+	catch(err){
+        	res.status(400).send({error: err.message});
+	}
+});
 
-router.get('/:book_id/request', at_least(SL.authenticated), unimplemented);
+//TODO auth should be for book's owner , rather than any user
+// this probably means passing along token 
+//
+//
+/*
+ *if (req.account.username !== 'admin' && !req.account._id.equals(req.params.account_id)) {
+		res.status(403).send({'error': 'You can only update your own account'});
+		return;
+	}
+	*/
+router.get('/:book_id/request', at_least(SL.authenticated), async (req, res) => {
+	try{
+	const { book_id, receiver_account_id } = req.body;
+		transferBook(req.conn, book_id, receiver_account_id);
+        	res.status(204).send();
+	}
+	catch(err){
+        	res.status(400).send({error: err.message});
+	}
+});
 
 export default router;
