@@ -27,7 +27,7 @@ export async function getDatabaseConnection(options={}) {
 	await client.connect();
 
 	if (!options.yield_client) {
-		return client.db(database_name);
+		return client.db(); //removed database_name argument to use default database specified in URI
 	} else {
 		return client;
 	}
