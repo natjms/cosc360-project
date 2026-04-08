@@ -1,4 +1,5 @@
 import mongodb from 'mongodb';
+import { ObjectId } from 'mongodb';
 
 export class DBError extends Error {
 	constructor(message, issues=[]) {
@@ -55,10 +56,14 @@ export function objectId(id) {
 	}
 }
 
-export async function assertUniqueness(connection, collection, field, value) {
-	const result = await connection.collection(collection).findOne({[field]: value})
+export async function assertUniqueness(connection, collection, field, value, currentUserId) {
+  if (!value) return;
 
-	if (result !== null) {
-		throw new DBError(`Uniqueness constraint on ${field} violated`);
-	}
+  const result = await connection.collection(collection).findOne({ [field]: value });
+  if (!result) return; 
+
+  const userIdObj = typeof currentUserId === 'string' ? new ObjectId(currentUserId) : currentUserId;
+  if (result._id.equals(userIdObj)) return; 
+
+  throw new DBError(`Uniqueness constraint on ${field} violated`);
 }
