@@ -2,8 +2,6 @@ import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { getDatabaseConnection } from './db/connection.js';
-import bookGet from './books/books.js';
-import example from './books/example.json' with { type: "json" };
 import cors from 'cors';
 
 import accounts_controller from './controllers/accounts.js';
@@ -39,22 +37,9 @@ server.use('/api/search', search_controller);
 server.use('/api/stats', statsRouter)
 server.use('/images', express.static(imagesPath));
 
-// Some legacy controllers added for in-class assignments.
-// TODO: these should be removed at some point
 server.get('/api', (req, res) => {
   res.send('Hello World!');
 });
-
-server.get('/api/book', bookGet);
-
-server.post("/api/user",
-	async function(req, res){
-		const db = await getDatabaseConnection();
-		let collection = await db.collection("users");
-		let newDocument = req.body;
-		let result = await collection.insertOne(newDocument);
-		res.status(201).send(result);
-	});
 
 server.listen(port, () => {
   console.log(`Example app listening on port ${port}`);

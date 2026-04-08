@@ -1,5 +1,5 @@
 import express from 'express';
-import { SL, at_least } from '#src/authentication.js';
+import { SL, at_least } from '#src/middleware/authentication.js';
 import { connect_db } from '#src/db/connection.js';
 import * as dbCatalog from '#src/db/catalog.js';
 import { getBookById, createBook } from '#src/db/books.js';

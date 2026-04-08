@@ -1,5 +1,5 @@
 import express from 'express';
-import { SL, at_least } from '#src/authentication.js';
+import { SL, at_least } from '#src/middleware/authentication.js';
 import { connect_db, DBError } from '#src/db/connection.js';
 
 import mongodb from 'mongodb';

@@ -1,8 +1,6 @@
 import express from 'express';
-import { SL, at_least } from '#src/authentication.js';
+import { SL, at_least } from '#src/middleware/authentication.js';
 import { connect_db } from '#src/db/connection.js';
-
-import example from '#src/books/example.json' with { type: "json" };
 
 const router = express.Router();
 
