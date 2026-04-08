@@ -10,6 +10,7 @@ import { objectId, assertUniqueness, DBError } from '#src/db/connection.js';
 	username: Name used on the website
 	email: account's email address
 	password_hash: bcrypt hash of the password
+	disabled: True if the user cannot log in or do anything
 }
 */
 
@@ -99,6 +100,8 @@ export async function createAccount(connection, account) {
 	if (account.imagePath) {
     	account.imagePath = account.imagePath; 
 	}
+
+	account.disabled = false;
 	
 	const result = await connection
 		.collection('accounts')
@@ -145,6 +148,22 @@ export async function updateAccount(connection, account_id, account_patch) {
 			{ '$set': account }
 		);
 }
+
+/**
+ * If the account is not disabled, disable it. If it is disabled, un-disable it
+ * If your account has been disabled, it's preserved, but it cannot do anything
+ * and you cannot log in.
+ */
+export async function toggleAccountDisabled(connection, account_id) {
+	const account = await getAccountById(connection, account_id);
+	return connection
+		.collection('accounts')
+		.updateOne(
+			{ _id: objectId(account_id) },
+			{ '$set': { disabled: !account.disabled } }
+		);
+}
+
 
 /**
  * Given an account ObjectID and a plaintext password, return a promise that
