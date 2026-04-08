@@ -7,7 +7,7 @@ export default function BookItem({title,image,description,author}){
 		<div className="book-item">
 			<h2> {title} </h2>
 			<div className = "cover">
-			<img src={image ? image : noCover} />
+			<img src={image ? "data:image/gif;base64," + image : noCover} />
 			</div>
 			<h3> by {author} </h3>
 			<h3> {description} </h3>

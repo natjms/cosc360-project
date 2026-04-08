@@ -2,6 +2,7 @@ import {useEffect, useState} from 'react';
 import { useParams } from 'react-router';
 import BookItem from './BookItem';
 import './ShareBook.css';
+import Header from './Header';
 
 /* this will be a pop up on the user page. let the user share a book from their personal collection. will add it to their user page + the database */
 
@@ -26,11 +27,10 @@ export default function ShareBook(){
 	let comp = [];
 	for(let i in bookList){
 		let book = bookList[i];
-
       		const token = localStorage.getItem('token');
+
 		comp.push(
 			<a key={book.isbn} onClick={ async function(){
-				console.log(book.isbn);	
 				const res = await fetch('/api/books/' + book.isbn + '/share', {
 			headers: {
             			'Content-Type': 'application/json',
@@ -39,21 +39,24 @@ export default function ShareBook(){
 			method: "POST",
 			}
 		);
-			alert("");
-			}}>);
+			alert("Book added to collection");
+			}}>
 		<BookItem
 		title={book.title}
 		author={book.author}
+		image={book.cover}
 		description={book.description}
 		key={book.isbn}/> </a>);
 	}
 
 	if(!bookList) {return <p>loading...</p>;}
-	return <div className="view">
+		return <>
+		<Header />
 		<h1>select a book</h1>
+	<div className="view">
 		<div className="largelist">
 		{comp}
 		</div>
-		</div>
+		</div></>
 }
 

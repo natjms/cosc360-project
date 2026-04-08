@@ -10,15 +10,26 @@ import BookItem from './BookItem';
 function User(){
 	
 	const [user, setUser] = useState(null);
+	const [holdings, setHoldings] = useState(null);
 
 	const params = useParams();
 
 	useEffect(() => {
-		const res = fetch('/api/accounts/' + params.username)
-		.then((res) => res.json())
-		.then((data) => setUser(data))
-		.catch((err) => console.error(err));
-	},[]);
+	const fetchData = async () => {
+    		try {
+      			const res = await fetch('/api/accounts/' + params.username);
+      			const userData = await res.json();
+      			setUser(userData);
+
+      			const res2 = await fetch('/api/accounts/' + userData._id + '/holdings');
+      			const holdingsData = await res2.json();
+      			setHoldings(holdingsData);
+    		} catch (err) {
+      			console.error(err);
+    		}
+	}
+	fetchData();
+	},[params.username]);
 	//first load, return blank page until load 
 	if(!user) {return <p>loading...</p>;}
 	if(!user.username ){
@@ -27,16 +38,20 @@ function User(){
 		);
 	}
 	let comp = [];
-
-
-
-	for(let i = 0; i < 8; i++){
-		comp.push(
-		<BookItem
-		title="Frankenstein"
-		author="Mary Shelley"
-		/>);
+	for(let i in holdings){
+		let book = holdings[i].catalog_entry;
+		console.log(book);
+		comp.push(<BookItem
+		title={book.title}
+		author={book.author}
+		image={book.cover}
+		description={book.description}
+		key={book.isbn}/>
+		);
 	}
+			
+	
+	
 
 return (
 	<div>
@@ -55,7 +70,8 @@ return (
 		</h2>
 		</div>
 		<h1>Shared Books</h1>
-		<div className="books-list">
+		
+		<div className="books-list sect">
 		{comp}
 		</div>
 
