@@ -1,6 +1,8 @@
 backend/.env
 frontend/.env
 
+backend/images
+
 # Logs
 logs
 *.log
