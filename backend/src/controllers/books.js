@@ -54,7 +54,14 @@ router.post('/', at_least(SL.unauthenticated), async (req, res) => {
 });
 router.patch('/:book_id', at_least(SL.admin), unimplemented);
 
-router.delete('/:book_id', at_least(SL.admin), unimplemented);
+router.delete('/:book_id', at_least(SL.admin), async (req, res) => {
+	try{
+		dbCatalog.deleteCatalogEntry(req.conn, req.params.book_id);
+	}
+	catch(err){
+		res.status(400).send({error: err.message});
+	}
+});
 
 router.get('/:isbn', at_least(SL.unauthenticated), async (req, res) => {
 	try{

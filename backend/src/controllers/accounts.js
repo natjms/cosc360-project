@@ -173,7 +173,7 @@ router.get('/:account_id/holdings', at_least(SL.unauthenticated), async (req, re
 	// Populate the catalog_entry property with the actual catalog entries
 	for (const book_index in possessed_books) {
 		possessed_books[book_index].catalog_entry =
-			catalog.getCatalogEntryById(req.conn, possessed_books[book_index].catalog_entry);
+			await catalog.getCatalogEntryById(req.conn, possessed_books[book_index].catalog_entry);
 	}
 
 	res.status(200).send(possessed_books);
