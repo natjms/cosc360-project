@@ -1,0 +1,39 @@
+.home1 { 
+    display: flex; 
+    flex-direction: row; 
+}
+
+.stafftitle { 
+  margin: 20px; 
+}
+
+.staffpicks { 
+  margin-top: 50px; 
+}
+
+.staffpicks li {
+  margin-bottom: 60px; 
+}
+
+.featuredBooks { 
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: auto; 
+    gap: 10px; 
+    padding: 10px;
+}
+
+.book1, .book2, .book3 {
+  text-align: center; 
+  font-size: 18px;
+}
+
+.books1, .books2 { 
+  padding-left: 150px;
+  padding-right: 150px; 
+}
+
+.books3 {  
+  padding-left: 400px; 
+  padding-right: 400px; 
+}
