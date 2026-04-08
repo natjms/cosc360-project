@@ -1,4 +1,4 @@
-import { missingKeys } from '#src/validation.js';
+import { missingKeys, clean_string } from '#src/validation.js';
 import { objectId, DBError } from '#src/db/connection.js';
 import * as catalog from '#src/db/catalog.js';
 
@@ -131,12 +131,13 @@ export function deleteCollection(connection, collection_id) {
  * title and description
  */
 export function getCollectionsByPartialMatch(connection, query) {
+	const clean_query = clean_string(query);
 	return connection
 		.collection('collections')
 		.find({
 			'$or': [
-				{ title: new RegExp(`${query}`, 'i'), },
-				{ description: new RegExp(`${query}`, 'i'), }
+				{ title: new RegExp(`${clean_query}`, 'i'), },
+				{ description: new RegExp(`${clean_query}`, 'i'), }
 			]
 		})
 		.toArray();

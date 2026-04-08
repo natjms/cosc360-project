@@ -1,6 +1,7 @@
+
 import fs from 'node:fs';
 
-import { missingKeys } from '#src/validation.js';
+import { missingKeys, clean_string } from '#src/validation.js';
 import { objectId, assertUniqueness, DBError } from '#src/db/connection.js';
 
 /*
@@ -81,12 +82,13 @@ export function deleteCatalogEntry(connection, entry_id) {
  * title and description
  */
 export function getCatalogEntriesByPartialMatch(connection, query) {
+	const clean_query = clean_string(query);
 	return connection
 		.collection('catalog')
 		.find({
 			'$or': [
-				{ title: new RegExp(`${query}`, 'i'), },
-				{ description: new RegExp(`${query}`, 'i'), }
+				{ title: new RegExp(`${clean_query}`, 'i'), },
+				{ description: new RegExp(`${clean_query}`, 'i'), }
 			]
 		})
 		.toArray();
