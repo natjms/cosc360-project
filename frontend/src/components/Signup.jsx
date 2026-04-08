@@ -111,7 +111,7 @@ function Signup() {
             if (image) 
                 formData.append("image", image);
 
-        fetch("http://localhost:3000/api/accounts", {
+        fetch("/api/accounts", {
             method: "POST",
             body: formData 
         })

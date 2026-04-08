@@ -33,7 +33,7 @@ export default function Admin(props) {
 				setAccounts(await result.json());
 			}
 
-            const statsRes = await fetch('http://localhost:3000/api/stats/catalog');
+            const statsRes = await fetch('/api/stats/catalog');
             if (statsRes.ok){
                 const statsData = await statsRes.json();
                 setGenreStats(statsData.map((item, index) => ({...item, fill: COLORS[index % COLORS.length]
@@ -116,7 +116,7 @@ export default function Admin(props) {
             });
             if(res.ok){
                 setCatalog(catalog.filter(book => book._id !== id));
-                const statsRes = await fetch('http://localhost:3000/api/stats/catalog');
+                const statsRes = await fetch('/api/stats/catalog');
                 if(statsRes.ok) setGenreStats(await statsRes.json());
             }
         } catch(err) { setError('Failed to delete book');}
