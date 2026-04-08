@@ -22,7 +22,7 @@ router.use(connect_db);
 // Multer setup 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "images/"); //no error and file is accepted
+    cb(null, "/uploaded_images/"); //no error and file is accepted
   },
   filename: function (req, file, cb) {
     const uniqueName = Date.now() + path.extname(file.originalname);

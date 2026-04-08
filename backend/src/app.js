@@ -27,8 +27,6 @@ server.use(cors());
 const port = 3000;
 server.use(express.json())
 
-server.use("/images", express.static("images"));
-
 server.use('/api/accounts', accounts_controller);
 server.use('/api/books', books_controller);
 server.use('/api/collections', collections_controller);
@@ -37,7 +35,7 @@ server.use('/api/notifications', notifications_controller);
 server.use('/api/sessions', sessions_controller);
 server.use('/api/search', search_controller);
 server.use('/api/stats', statsRouter)
-server.use('/images', express.static(imagesPath));
+server.use('/api/images', express.static('/uploaded_images/'));
 
 // Some legacy controllers added for in-class assignments.
 // TODO: these should be removed at some point
