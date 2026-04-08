@@ -50,7 +50,7 @@ export default function Login(props) {
     
 
         try { 
-        const response = await fetch("http://localhost:3000/api/sessions/login", { 
+        const response = await fetch("/api/sessions/login", {
               method: "POST", 
               headers: { 
               "Content-Type": "application/json"

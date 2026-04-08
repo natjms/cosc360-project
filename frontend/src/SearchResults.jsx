@@ -11,7 +11,7 @@ export default function SearchResults() {
 
 	const refreshSearch = () => {
         const query = search_params.get('q') || '';
-        fetch(`http://localhost:3000/api/books/search?q=${encodeURIComponent(query)}`)
+        fetch(`/api/books/search?q=${encodeURIComponent(query)}`)
             .then(res => res.json())
             .then(data => {
                 console.log("Books found:", data);
@@ -28,7 +28,7 @@ export default function SearchResults() {
         if (!window.confirm("Are you sure you want to delete this catalog entry?")) return;
 
         try {
-            const response = await fetch(`http://localhost:3000/api/books/${id}`, {
+            const response = await fetch(`/api/books/${id}`, {
                 method: 'DELETE'
             });
             
