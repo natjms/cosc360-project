@@ -10,6 +10,7 @@ function Signup() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [image, setImage] = useState(null);
+  const [confirm_password, setConfirm_password] = useState(""); 
   
   const [firstName, setFirstNameError] = useState("");
   const [cityError, setCityError] = useState("");
@@ -46,6 +47,12 @@ function Signup() {
     function handlePasswordChange(e) {
         setPassword(e.target.value);
         setPasswordError("");
+    }
+
+    function handlePasswordConfirm(e) { 
+        setConfirm_password(e.target.value); 
+        setPasswordError(""); 
+        
     }
 
     function validateForm(e) {
@@ -89,6 +96,7 @@ function Signup() {
             formData.append("password_plaintext", password);
             formData.append("country", country);
             formData.append("city", city);
+            formData.append("passwordConfirm", confirm_password); 
             
             if (image) 
                 formData.append("image", image);
@@ -164,9 +172,18 @@ function Signup() {
                         onChange={handlePasswordChange}
                     />
                     <span className = "errorMsg">{passwordError}</span>
+
                 </div>
 
-
+                <div className={passwordError ? "control error" : "control"}>
+                    <h3><label>Confirm Password:</label></h3>
+                    <input 
+                        type="password" 
+                        value = {confirm_password} 
+                        onChange = {handlePasswordConfirm}
+                    /> 
+                    <span className = "errorMsg">{passwordError}</span>
+                </div>
         <div>
 	    <h3><label>Profile Picture</label></h3>
 	    {image === null ? "" : <img src = "src/user.png" className = "profileImage"></img>}

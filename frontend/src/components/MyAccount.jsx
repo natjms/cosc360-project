@@ -8,6 +8,8 @@ function MyAccount() {
   const [email, setEmail] = useState("");
   const [city, setCity] = useState("");
   const [username, setUsername] = useState("");
+  const [country, setCountry] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const [visibleBox, setVisibleBox] = useState(false)
@@ -25,6 +27,16 @@ function MyAccount() {
     function handleCityChange(e) {
       if(e != null)
         setCity(e.target.value); 
+    }
+
+    function handleCountryChange(e) {
+      if(e != null)
+        setCountry(e.target.value); 
+    }
+
+    function handlePasswordChange(e) {
+      if(e != null)
+        setPassword(e.target.value); 
     }
 
     function updateInfo() { 
@@ -101,7 +113,9 @@ async function validateForm(e) {
           body: JSON.stringify({
                     email: email,
                     username: username, 
-                    city: city
+                    city: city,
+                    country: country,
+                    password: password
                   }),
         })
           
@@ -150,6 +164,8 @@ async function validateForm(e) {
       <input type="text" placeholder = "Enter new email if applicable" value = {email} onChange = {handleEmailChange} style = {{width: "200px"}}/>    
       </>
       }
+
+
       <hr></hr>
       <p><strong>Current City:</strong> {user?.city}</p>
 
@@ -159,6 +175,28 @@ async function validateForm(e) {
       <input type="text" placeholder = "Enter new city if applicable" value = {city} onChange = {handleCityChange} style = {{width: "200px"}}/>    
       </>
       }
+
+
+      <hr></hr>
+      <p><strong>Current Country:</strong>{user?.country}</p>
+
+        {visibleBox &&
+      <>
+
+      <p><strong>Update Country:</strong></p>
+      <input type="text" placeholder = "Enter new country if applicable" value = {country} onChange = {handleCountryChange} style = {{width: "200px"}}/>    
+      </>
+      }
+
+        {visibleBox &&
+      <>
+
+      <p><strong>Update Password:</strong></p>
+      <input type="password" placeholder = "Enter new password if applicable" value = {password} onChange = {handlePasswordChange} style = {{width: "200px"}}/>    
+      </>
+
+      }
+
     </div>
      
     <br></br>
@@ -168,5 +206,7 @@ async function validateForm(e) {
   );
 
 }
+
+
 
 export default MyAccount;
