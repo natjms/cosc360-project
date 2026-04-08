@@ -3,6 +3,7 @@ import "./BookItem.css";
 
 export default function BookItem({title,image,description,author}){
 	return( 
+		<div className="center">
 		<div className="book-item">
 			<h2> {title} </h2>
 			<div className = "cover">
@@ -10,6 +11,7 @@ export default function BookItem({title,image,description,author}){
 			</div>
 			<h3> by {author} </h3>
 			<h3> {description} </h3>
+		</div>
 		</div>
 	);
 }

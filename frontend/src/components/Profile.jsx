@@ -62,7 +62,6 @@ function Profile() {
           throw new Error("Failed to fetch image");
         const userData = await response.json();
         const imageData = userData.imagePath
-        console.log(imageData);
         setImage(`http://localhost:3000${imageData}`);
         setUsername(userData.username); //need to set to uppercase
         setCity(userData.city); //need to set to uppercase

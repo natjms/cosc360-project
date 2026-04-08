@@ -1,0 +1,10 @@
+.view{
+	width: 80%;
+	height: 80%;
+}
+
+.largelist{
+	height: 30vw;
+	background: grey;
+	overflow: auto;
+}
