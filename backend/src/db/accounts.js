@@ -114,7 +114,7 @@ export async function updateAccount(connection, account_id, account_patch) {
 	// Only set the properties if they're explicitly declared in the patch;
 	// otherwise we run the risk of accidentally setting a field to undefined
 	// or null
-	for (let key of ['username', 'email', 'password_plaintext', 'city', 'country']) {
+	for (let key of ['username', 'email', 'password', 'city', 'country']) {
 		if (Object.hasOwn(account_patch, key)) {
 			account[key] = account_patch[key];
 		}

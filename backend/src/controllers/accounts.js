@@ -80,11 +80,12 @@ router.get('/current-user', at_least(SL.authenticated), async (req, res) => {
                 return;
             }
 
-        const {_id, username, email, password_plaintext, city } = account;
-        res.json({ _id, username, email, password_plaintext, city});
+        const {_id, username, email, password, city, country } = account;
+        res.json({ _id, username, email, password, city, country });
         
     } catch (err) {
         console.error(err);
+		console.error("ERROR");
         res.status(500);
         res.send("Server error");
         }
@@ -126,14 +127,19 @@ router.patch('/:account_id', at_least(SL.authenticated), async (req, res) => {
 		return;
 	}
 	 const updates = {};
-	 	console.log("username", req.body.username)
-  		if (req.body.username !== "") updates.username = req.body.username;
-		console.log("email", req.body.email)
-  		if (req.body.email !== "") updates.email = req.body.email;
-		console.log("city", req.body.city)
-  		if (req.body.city !== "") updates.city = req.body.city;
+	if (req.body.username && req.body.username !== req.account.username)
+		 updates.username = req.body.username;
+	if (req.body.email && req.body.email !== req.account.email) 
+		updates.email = req.body.email;
+	if (req.body.city && req.body.city !== req.account.city) 
+		updates.city = req.body.city;
+	if (req.body.country && req.body.country !== req.account.country) 
+		updates.country = req.body.country;
+	if (req.body.password) 
+		updates.password = req.body.password;
+
 	await accounts.updateAccount(req.conn, req.params.account_id, updates);
-	res.status(204).send();
+	res.status(200).json({ success: true });
 });
 
 router.delete('/:account_id', at_least(SL.authenticated), async (req, res) => {
