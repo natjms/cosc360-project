@@ -1,10 +1,29 @@
 services:
   mongo:
+    container_name: library-mongo
     image: mongo:7
-    ports:
-      - "27017:27017"
     volumes:
       - mongo_data:/data/db
+  frontend:
+    container_name: library-frontend
+    image: node:lts-alpine
+    ports:
+      - "5173:5173"
+    command: ['npm', 'run', 'dev', '--prefix', '/frontend']
+    volumes:
+      - type: bind
+        source: ./frontend
+        target: /frontend
+  backend:
+    container_name: library-backend
+    image: node:lts-alpine
+    command: ['npm', 'run', 'dev', '--prefix', '/backend']
+    volumes:
+      - type: bind
+        source: ./backend
+        target: /backend
+      - uploaded_images:/uploaded_images/
 
 volumes:
   mongo_data:
+  uploaded_images:
