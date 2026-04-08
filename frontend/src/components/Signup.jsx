@@ -10,13 +10,14 @@ function Signup() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [image, setImage] = useState(null);
-  const [confirm_password, setConfirm_password] = useState(""); 
+  const [confirmPassword, setConfirmPassword] = useState("");  
   
   const [firstName, setFirstNameError] = useState("");
   const [cityError, setCityError] = useState("");
   const [countryError, setCountryError] = useState("");
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
+  const [confirmError, setConfirmError] = useState(""); 
   
   
 
@@ -49,11 +50,12 @@ function Signup() {
         setPasswordError("");
     }
 
-    function handlePasswordConfirm(e) { 
-        setConfirm_password(e.target.value); 
-        setPasswordError(""); 
-        
+    function handlePasswordConfirm(e) {
+        setConfirmPassword(e.target.value);
+        setConfirmError("");
     }
+
+    
 
     function validateForm(e) {
         e.preventDefault();
@@ -78,6 +80,12 @@ function Signup() {
             hasError = true;
         }
 
+        if (password !== confirmPassword) { 
+            setConfirmError("Passwords do not match");
+            hasError = true; 
+        }
+
+
         if (!emailReg.test(email)) {
             {/*if pattern does not match */ }
             setEmailError("Enter a valid email");
@@ -89,14 +97,16 @@ function Signup() {
             hasError = true;
         }
 
+        if(hasError) { 
+            return;
+        }
 
         const formData = new FormData();
             formData.append("username", username);
             formData.append("email", email);
             formData.append("password_plaintext", password);
             formData.append("country", country);
-            formData.append("city", city);
-            formData.append("passwordConfirm", confirm_password); 
+            formData.append("city", city); 
             
             if (image) 
                 formData.append("image", image);
@@ -112,8 +122,7 @@ function Signup() {
             alert("Error: " + data.error);
         return;
         }
-
-        console.log("Account created:", data);
+        alert("Sign up successful")
         navigate('/'); 
     })
         .catch((err) => {
@@ -179,10 +188,10 @@ function Signup() {
                     <h3><label>Confirm Password:</label></h3>
                     <input 
                         type="password" 
-                        value = {confirm_password} 
-                        onChange = {handlePasswordConfirm}
+                        value = {confirmPassword} 
+                        onChange = {handlePasswordConfirm} 
                     /> 
-                    <span className = "errorMsg">{passwordError}</span>
+                    <span className = "errorMsg">{confirmError}</span>
                 </div>
         <div>
 	    <h3><label>Profile Picture</label></h3>
