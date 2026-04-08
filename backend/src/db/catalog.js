@@ -21,7 +21,7 @@ export function validateCatalogEntry(entry) {
 	const issue_count = 0;
 	const issues = [];
 
-	if (missingKeys(entry, ['isbn', 'title', 'description', 'cover', 'genre']).length != 0) {
+	if (missingKeys(entry, ['isbn', 'title', 'author', 'description', 'cover', 'genre']).length != 0) {
 		issues.push('Missing required keys');
 	}
 
