@@ -69,11 +69,10 @@ router.get('/:isbn', at_least(SL.unauthenticated), async (req, res) => {
 // Add an "instance" of a book to the database. The book is recognized, and
 // a regular person publishes their willingness to distribute their personal
 // copy
-router.get('/:isbn/share', at_least(SL.authenticated), async (req, res) => {
+router.post('/:isbn/share', at_least(SL.authenticated), async (req, res) => {
 	try{
-		const { possessor_id, isbn } = req.body;
-		const id = createBook(req.conn, posessor_id, isbn);
-        	res.status(201).send({id: id});
+		const id = createBook(req.conn, req.account._id, req.params.isbn);
+        	res.status(201).send({'id': id});
 	}
 	catch(err){
         	res.status(400).send({error: err.message});

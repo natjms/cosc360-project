@@ -7,3 +7,20 @@ h1, h2, h3{
 body{
 	font-family: "Verdana", sans-serif;
 }
+
+.books-list{
+	display: flex;
+	justify-content: center;
+	gap: 10%;
+	max-height: 40vh;
+	background-color: lightgray;
+	overflow: scroll;
+	flex-wrap: wrap;
+	margin-bottom: 5%;
+}
+
+.center{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
