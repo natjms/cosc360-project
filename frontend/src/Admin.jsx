@@ -12,6 +12,8 @@ export default function Admin(props) {
     const [loading, setLoading] = useState(true);
     const [catalog, setCatalog] = useState([]);
     const [catalogSearch, setCatalogSearch] = useState('');
+    const [isAdmin, setIsAdmin] = useState(false);
+    const [accessDenied, setAccessDenied] = useState(false);
 
     const COLORS = ['#B45253', '#15753d', '#FFBB28', '#FF8042', '#AF19FF'];
 
@@ -50,8 +52,43 @@ export default function Admin(props) {
         }
     };
 
-    useEffect(() => { fetchData();
-	}, []);
+    useEffect(() => {
+        const checkAdminAccess = async () => {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                setAccessDenied(true);
+                setLoading(false);
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/accounts/current-user', {
+                    headers: {
+                        'Authorization': `Basic ${token}`,
+                    },
+                });
+
+                if (response.ok) {
+                    const user = await response.json();
+                    if (user.username === 'admin') {
+                        setIsAdmin(true);
+                        await fetchData(); 
+                    } else {
+                        setAccessDenied(true);
+                    }
+                } else {
+                    setAccessDenied(true);
+                }
+            } catch (err) {
+                console.error('Error checking admin access:', err);
+                setAccessDenied(true);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        checkAdminAccess();
+    }, []);
 
     const handleDeleteUser = async (id, username) => {
         if(!window.confirm(`Delete user "${username}"?`)) return;
@@ -84,6 +121,19 @@ export default function Admin(props) {
             }
         } catch(err) { setError('Failed to delete book');}
     };
+
+    if (loading) {
+        return <div>Loading...</div>;
+    }
+
+    if (accessDenied) {
+        return (
+            <div style={{ padding: '20px', textAlign: 'center' }}>
+                <h2>Access Denied</h2>
+                <p>You are not logged in as an admin. Please log in with admin credentials to access this page.</p>
+            </div>
+        );
+    }
 
 	return (
         <div className="admin-container">
