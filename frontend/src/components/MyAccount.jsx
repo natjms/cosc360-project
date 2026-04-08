@@ -9,7 +9,7 @@ function MyAccount() {
   const [city, setCity] = useState("");
   const [username, setUsername] = useState("");
   const [country, setCountry] = useState("");
-  const [password, setPassword] = useState("");
+  const [password_plaintext, setPassword_plaintext] = useState("");
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const [visibleBox, setVisibleBox] = useState(false)
@@ -36,7 +36,7 @@ function MyAccount() {
 
     function handlePasswordChange(e) {
       if(e != null)
-        setPassword(e.target.value); 
+        setPassword_plaintext(e.target.value); 
     }
 
     function updateInfo() { 
@@ -69,6 +69,7 @@ function MyAccount() {
       });
 
       const data =  await res.json();
+      console.log(data);
       setUser(data);
 
       if (!res.ok) {
@@ -115,7 +116,7 @@ async function validateForm(e) {
                     username: username, 
                     city: city,
                     country: country,
-                    password: password
+                    password_plaintext: password_plaintext
                   }),
         })
           
@@ -192,7 +193,7 @@ async function validateForm(e) {
       <>
 
       <p><strong>Update Password:</strong></p>
-      <input type="password" placeholder = "Enter new password if applicable" value = {password} onChange = {handlePasswordChange} style = {{width: "200px"}}/>    
+      <input type="password" placeholder = "Enter new password if applicable" value = {password_plaintext} onChange = {handlePasswordChange} style = {{width: "200px"}}/>    
       </>
 
       }
