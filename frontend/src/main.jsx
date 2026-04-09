@@ -18,6 +18,45 @@ import Genres from './components/Genres';
 import ShareBook from './components/ShareBook';
 import './default.css';
 
+/**
+ * EXTREMELY CURSED rewriting the window.fetch function. Why? This is probably
+ * the most straightforward to implement interceptors for the JavaScript fetch
+ * API, and monkey-patching the window object is somehow more safe and reliable
+ * than implementing a new interface.
+ */
+
+const fetchInterceptors = [
+	// Handle interactions from a disabled account
+	async (options, response) => {
+		if (options?.headers?.Authorization && response.status === 403) {
+			const json_data = await response.json();
+			if (json_data.code === 'DISABLED') {
+				// The account has been disabled
+				alert('Your account has been disabled. You will now be logged out');
+
+				// Log out the user
+				localStorage.removeItem('token');
+				localStorage.removeItem('account_id');
+
+				// Get them out of here, from where ever they are. We can't really
+				// use react-router at this level
+				location.href = '/';
+			}
+		}
+	}
+];
+
+window.vanillaFetch = window.fetch;
+const { fetch: vanillaFetch } = window;
+window.fetch = async function(resource, options) {
+	const response = await vanillaFetch(resource, options);
+
+	for (const interceptor of fetchInterceptors) {
+		await interceptor(options, response.clone());
+	}
+
+	return response;
+}
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
