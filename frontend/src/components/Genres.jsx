@@ -63,6 +63,7 @@ function Genres() {
         <ul>
           {books.map(book => (
             <li key={book._id}>
+			  <img src={book.cover} alt={`Cover of ${book.title}`} />
               <strong>{book.title}</strong> by {book.author} <br/>
               ISBN: {book.isbn} <br/>
               {book.description && <em>{book.description}</em>}

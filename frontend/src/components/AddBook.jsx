@@ -15,7 +15,7 @@ export default function AddBook({onBookAdded}) {
         if (file) {
             const reader = new FileReader();
             reader.onloadend = () => {
-                setCover(reader.result.split(',')[1]); 
+                setCover(reader.result);
             };
             reader.readAsDataURL(file);
         }
