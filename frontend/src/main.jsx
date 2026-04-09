@@ -1,22 +1,27 @@
 import React from 'react'; import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
+import { useEffect, useState } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
 import App from './App.jsx'
 import Signup from './components/Signup';
 import SearchResults from './SearchResults.jsx'
-import About from './components/About'; 
-import Collections from './components/Collections'; 
+import About from './components/About';
+import Collections from './components/Collections';
 import Conversations from './Conversations.jsx';
 import AddBookPage from './AddBookPage.jsx';
 import MyAccount from './components/MyAccount';
 import Admin from './Admin.jsx';
-import Profile from './components/Profile'; 
-import Catalog from './components/Catalog'; 
+import LoginPage from './LoginPage.jsx';
+import Profile from './components/Profile';
+import Catalog from './components/Catalog';
 import User from './components/User';
 import PageNotFound from './components/PageNotFound';
-import Genres from './components/Genres'; 
+import Genres from './components/Genres';
 import ShareBook from './components/ShareBook';
+
+import { Navigate } from 'react-router-dom';
+
 import './default.css';
 
 /**
@@ -59,27 +64,66 @@ window.fetch = async function(resource, options) {
 	return response;
 }
 
+const LoginGatedPage= ({children}) => {
+	if (localStorage.getItem('account_id') && localStorage.getItem('token')) {
+		return children;
+	} else {
+		return <Navigate to='/login' replace />;
+	}
+};
+
+const AdminGatedPage = ({children}) => {
+	const [is_admin, setIsAdmin] = useState(null);
+	useEffect(() => {
+		(async () => {
+			if (!localStorage.getItem('token')) {
+				setIsAdmin(false);
+				return;
+			}
+
+			const response = await fetch('/api/accounts/current-user', {
+				headers: {
+					'Content-Type': 'application/json',
+					'Authorization': `Basic ${localStorage.getItem('token')}`
+				}
+			});
+
+			const account = await response.json();
+
+			setIsAdmin(await account.username === 'admin');
+		})();
+	}, []);
+	if (is_admin === null) {
+		return <p>Loading...</p>;
+	} else if (is_admin === false) {
+		return <PageNotFound />
+	} else {
+		return children;
+	}
+};
+
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<App />} />
         <Route path = "/signup" element = {<Signup />} />
+        <Route path = "/login" element = {<LoginPage />} />
         <Route path = "/search" element = {<SearchResults />} />
         <Route path = '/about' element = {<About />} />
         <Route path = '/collections' element = {<Collections/>}/>
-        <Route path = '/conversations' element = {<Conversations/>}/>
-        <Route path="/add" element={<AddBookPage/>}/>
-        <Route path = '/profile' element = {<Profile/>} />
-        <Route path = '/myaccount' element = {<MyAccount/>} />
         <Route path = '/genres' element = {<Genres/>} />
-	<Route path = '/catalog/:isbn' element = {<Catalog/>} />
-	<Route path = '/user/:username' element = {<User/>} />
-	<Route path = '/sharebook/' element = {<ShareBook/>} />
-		{ /* TODO only allow this route to exist if the user is an admin */ }
-        <Route path = '/admin' element = {<Admin/>} />
-	<Route path="*" element={<PageNotFound />} /> 
+		<Route path = '/catalog/:isbn' element = {<Catalog/>} />
+		<Route path = '/user/:username' element = {<User/>} />
 
+        <Route path = '/conversations' element = {<LoginGatedPage><Conversations/></LoginGatedPage>}/>
+        <Route path="/add" element={<LoginGatedPage><AddBookPage/></LoginGatedPage>}/>
+        <Route path = '/profile' element = {<LoginGatedPage><Profile/></LoginGatedPage>} />
+        <Route path = '/myaccount' element = {<LoginGatedPage><MyAccount/></LoginGatedPage>} />
+        <Route path = '/sharebook/' element = {<LoginGatedPage><ShareBook/></LoginGatedPage>} />
+        <Route path = '/admin' element = {<AdminGatedPage><Admin/></AdminGatedPage>} />
+
+        <Route path="*" element={<PageNotFound />} />
       </Routes>
     </BrowserRouter>
   </StrictMode>,
