@@ -78,6 +78,16 @@ export function at_least(minimum_level) {
 			return;
 		}
 
+		if (account.disabled) {
+			await sessions.deleteSession(req.conn, session_token);
+			res.status(403);
+			res.send({
+				error: 'Your account has been disabled',
+				code: 'DISABLED',
+			});
+			return;
+		}
+
 		// Protect admin routes
 		if (minimum_level >= SL.admin && account.username !== 'admin') {
 			res.status(403);
