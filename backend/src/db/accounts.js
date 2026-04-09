@@ -1,7 +1,7 @@
 import { randomBytes } from 'node:crypto';
 import bcrypt from 'bcrypt';
 
-import { missingKeys } from '#src/validation.js';
+import { missingKeys, clean_string } from '#src/validation.js';
 import { objectId, assertUniqueness, DBError } from '#src/db/connection.js';
 
 /*
@@ -188,15 +188,12 @@ export async function verifyPassword(connection, account_id, password_to_test, a
  * Partial match against account usernames, in case that was something you
  * wanted to do for, say, lab 8 related purposes
  */
-export function getAccountByPartialMatch(connection, query) {
-	// This guarantees the regex is safe
-	if (!/^[a-zA-Z0-9]+$/.test(query)) {
-		throw new DBError('Invalid username');
-	}
+export function getAccountsByPartialMatch(connection, query) {
+	const clean_query = clean_string(query);
 
 	return connection
 		.collection('accounts')
-		.find({ username: new RegExp(`${query}`, 'i') })
+		.find({ username: new RegExp(`${clean_query}`, 'i') })
 		.project({ password_hash: 0, email: 0 })
 		.toArray();
 }
