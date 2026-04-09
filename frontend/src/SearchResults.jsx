@@ -2,6 +2,23 @@ import { useSearchParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 
 import SearchBar from './components/SearchBar.jsx';
+import './SearchResults.css';
+
+const AccountResult = ({account}) => (
+    <article className='account-result-container'>
+        <img src={`/api${account.imagePath}`} alt={`${account.username}'s profile photo`}/>
+        <div>
+            <p className='account-result-username'>{account.username}</p>
+            <p className='account-result-location'>{account.city}, {account.country}</p>
+        </div>
+    </article>
+);
+
+const CollectionResult = ({collection}) => (
+    <article className='collection-result-container'>
+        <p className='collection-result-title'>{collection.title}</p>
+    </article>
+);
 
 const CatalogEntryResult = ({entry}) => {
 	return (
@@ -47,7 +64,6 @@ export default function SearchResults() {
         fetch(`/api/search/?q=${encodeURIComponent(query)}`)
             .then(res => res.json())
             .then(data => {
-                console.log("Books found:", data);
                 setSearchResults(data);
             })
             .catch(err => console.error("Search failed:", err));
@@ -64,10 +80,9 @@ export default function SearchResults() {
             const response = await fetch(`/api/books/${id}`, {
                 method: 'DELETE'
             });
-            
             if (response.ok) {
                 alert("Deleted successfully!");
-                refreshSearch(); 
+                refreshSearch();
             } else {
                 alert("Failed to delete.");
             }
@@ -92,20 +107,47 @@ export default function SearchResults() {
 			<hr style={{ margin: '20px 0'}}/>
             { search_results !== null ?
                 <>
+                    <h3>Book Catalog</h3>
                     { search_results.catalog.length > 0 ?
                         <ul style={{ listStyle: 'none', padding: 0}}>
                             { search_results.catalog.map((e) => (
-                                   <li key={e._id}
+                               <li key={e._id}
                                     style={{
-                                        marginBottom: '30px',
                                         borderBottom: '1px solid #eee',
-                                        paddingBottom: '20px'
                                     }}>
                                     <CatalogEntryResult entry={e} />
                                 </li>
                             ))}
                         </ul>
                         : <p>No books found</p>
+                    }
+                    <h3>Accounts</h3>
+                    { search_results.accounts.length > 0 ?
+                        <ul style={{ listStyle: 'none', padding: 0}}>
+                            { search_results.accounts.map((a) => (
+                                <li key={a._id}
+                                    style={{
+                                        borderBottom: '1px solid #eee',
+                                    }}>
+                                        <AccountResult account={a} />
+                                </li>
+                            ))}
+                        </ul>
+                        : <p>No accounts found</p>
+                    }
+                    <h3>Collections</h3>
+                    { search_results.collections.length > 0 ?
+                        <ul style={{ listStyle: 'none', padding: 0}}>
+                            { search_results.collections.map((c) => (
+                                <li key={c._id}
+                                    style={{
+                                        borderBottom: '1px solid #eee',
+                                    }}>
+                                        <CollectionResult account={c} />
+                                </li>
+                            ))}
+                        </ul>
+                        : <p>No collections found</p>
                     }
                 </>
                 : <p>Loading results...</p>
