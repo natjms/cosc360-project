@@ -7,6 +7,7 @@ import Signup from './components/Signup';
 import SearchResults from './SearchResults.jsx'
 import About from './components/About'; 
 import Collections from './components/Collections'; 
+import Conversations from './Conversations.jsx';
 import AddBookPage from './AddBookPage.jsx';
 import MyAccount from './components/MyAccount';
 import Admin from './Admin.jsx';
@@ -67,6 +68,7 @@ createRoot(document.getElementById('root')).render(
         <Route path = "/search" element = {<SearchResults />} />
         <Route path = '/about' element = {<About />} />
         <Route path = '/collections' element = {<Collections/>}/>
+        <Route path = '/conversations' element = {<Conversations/>}/>
         <Route path="/add" element={<AddBookPage/>}/>
         <Route path = '/profile' element = {<Profile/>} />
         <Route path = '/myaccount' element = {<MyAccount/>} />
