@@ -44,6 +44,13 @@ router.post('/', at_least(SL.unauthenticated), async (req, res) => {
         const connection = req.conn;
         const {title, author, description, isbn, cover, genre} = req.body;
 
+        const type = cover.match(/^data:(\w+\/\w+)/)[1];
+        console.log(type);
+        if (!['image/png', 'image/jpeg', 'image/webp'].includes(type)) {
+            res.status(400).send({error: 'Invalid file type'});
+            return;
+        }
+
         const newId = await dbCatalog.createCatalogEntry(connection, { title, author, description, isbn, cover, genre
         });
 
