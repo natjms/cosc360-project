@@ -1,0 +1,56 @@
+body {
+	padding: 0;
+	margin: 0;
+}
+
+.conversations-page-container {
+	display: flex;
+	flex-direction: row;
+	width: 100%;
+}
+
+.conversations-sidebar {
+	width: 38.197%;
+	background-color: antiquewhite;
+}
+
+.conversations-message-window {
+	width: 61.803%;
+	background-color: lightblue;
+}
+
+.conversation-tab-list {
+	padding-left: 0;
+	list-style: none;
+}
+
+.conversation-tab {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	padding-left: 1em;
+	cursor: pointer;
+}
+
+.conversation-tab-thumbnail {
+	object-fit: cover;
+	width: 50px;
+	height: 50px;
+	border-radius: 100%;
+	margin-right: 1em;
+}
+
+.conversation-window-header {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	padding: 1em;
+}
+
+.conversation-window-header > img {
+	object-fit: cover;
+	margin-right: 1em;
+	width: 5em;
+	height: 5em;
+	border-radius: 100%;
+}
