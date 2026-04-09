@@ -8,7 +8,6 @@ export default function Login(props) {
     const [password, setPassword] = useState("")
     const [email, setEmail] = useState("")
     const [emailError, setEmailError] = useState("");
-    const [passwordError, setPasswordError] = useState("");
 
     const handleSignup = () => {
          navigate('/signup'); 
@@ -21,7 +20,6 @@ export default function Login(props) {
 
     function handlePasswordChange(e) {
         setPassword(e.target.value);
-        setPasswordError("");
     }
 
 
@@ -31,16 +29,10 @@ export default function Login(props) {
         let hasError = false;
 
         const emailReg = /^(.+)@([^\.].*)\.([a-z]{2,})$/;
-        const passReg = /^[a-zA-Z]\w{8,16}$/;
 
         if (!emailReg.test(email)) {
             {/*if pattern does not match */ }
             setEmailError("Enter a valid email");
-            hasError = true;
-        }
-
-        if (!passReg.test(password)) {
-            setPasswordError("Enter a password between 9 and 17 characters");
             hasError = true;
         }
 
@@ -97,7 +89,7 @@ export default function Login(props) {
                     <span>{emailError}</span>
                 </div>
 
-                <div className ={passwordError ? "control error" : "control"}>
+                <div className="control">
                   <h3><label htmlFor = "Password">PASSWORD</label> </h3>
                   <input 
                     type ="password" 
@@ -107,7 +99,6 @@ export default function Login(props) {
                     value={password}
                     onChange= {handlePasswordChange}>
                     </input> 
-                    <span>{passwordError}</span>
                 </div>
                   <button className = "submit" type = "submit">Submit</button>
                   <p id = "response"></p>
