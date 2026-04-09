@@ -27,13 +27,13 @@ import './default.css';
  */
 
 const fetchInterceptors = [
-	// Handle interactions from a disabled account
+	// Handle interactions from accounts that can no longer act
 	async (options, response) => {
-		if (options?.headers?.Authorization && response.status === 403) {
+		if (options?.headers?.Authorization && (response.status === 403 || response.status === 401)) {
 			const json_data = await response.json();
-			if (json_data.code === 'DISABLED') {
-				// The account has been disabled
-				alert('Your account has been disabled. You will now be logged out');
+			const log_out_codes = ['ACCOUNT_DISABLED', 'ACCOUNT_DELETED', 'SESSION_EXPIRED', 'SESSION_GONE'];
+			if (log_out_codes.includes(json_data.code)) {
+				alert(json_data.error);
 
 				// Log out the user
 				localStorage.removeItem('token');

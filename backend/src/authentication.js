@@ -56,16 +56,22 @@ export function at_least(minimum_level) {
 
 		if (session === null) {
 			res.status(401);
-			res.send({error: 'Your session does not exist. Please log in again'});
+			res.send({
+				error: 'Your session does not exist. Please log in again',
+				code: 'SESSION_GONE',
+			});
 			return;
 		}
 
-		if (session.expires < Math.floor(Date.now()/1000)) {
+		if (Number(session.expires) < Math.floor(Date.now()/1000)) {
 			// The session expiry time is in the past, so we can complain and
 			// delete the session
 			await sessions.deleteSession(req.conn, session_token);
 			res.status(401);
-			res.send({error: 'Your session has expired. Please log in again'});
+			res.send({
+				error: 'Your session has expired. Please log in again',
+				code:'SESSION_EXPIRED',
+			});
 			return;
 		}
 
@@ -74,7 +80,10 @@ export function at_least(minimum_level) {
 		if (account === null) {
 			await sessions.deleteSession(req.conn, session_token);
 			res.status(401);
-			res.send({error: 'Your account no longer exists. Please create a new one to continue'});
+			res.send({
+				error: 'Your account no longer exists. Please create a new one to continue',
+				code: 'ACCOUNT_DELETED',
+			});
 			return;
 		}
 
@@ -82,8 +91,8 @@ export function at_least(minimum_level) {
 			await sessions.deleteSession(req.conn, session_token);
 			res.status(403);
 			res.send({
-				error: 'Your account has been disabled',
-				code: 'DISABLED',
+				error: 'Your account has been disabled. You will now be logged out',
+				code: 'ACCOUNT_DISABLED',
 			});
 			return;
 		}
