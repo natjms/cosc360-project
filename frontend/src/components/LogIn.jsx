@@ -67,7 +67,8 @@ export default function Login(props) {
                 throw new Error("Invalid credentials")
             } else { 
                 alert("login successful");
-                localStorage.setItem('token', data.token) 
+                localStorage.setItem('token', data.token);
+                localStorage.setItem('account_id', data.account_id);
             }
 
         }   catch(error) { 

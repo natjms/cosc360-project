@@ -49,7 +49,7 @@ router.post('/login', at_least(SL.unauthenticated), async (req, res) => {
 			const session_token = await sessions.createSession(req.conn, account._id);
 
 			res.status(201);
-			res.send({ token: session_token });
+			res.send({ token: session_token, account_id: account._id });
 			return;
 		} else {
 			res.status(401);
