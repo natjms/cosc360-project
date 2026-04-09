@@ -40,6 +40,11 @@ router.post('/login', at_least(SL.unauthenticated), async (req, res) => {
 			return;
 		}
 
+		if (account.disabled) {
+			res.status(403).send({error: 'Your account has been disabled, and you may not log in'});
+			return;
+		}
+
 		if (await accounts.verifyPassword(req.conn, account._id, password_plaintext, account)) {
 			const session_token = await sessions.createSession(req.conn, account._id);
 
