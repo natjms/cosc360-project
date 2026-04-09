@@ -1,5 +1,5 @@
 import './LogIn.css'
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Navigate } from 'react-router-dom';
 import { useState } from 'react'
 
 
@@ -9,6 +9,10 @@ export default function Login(props) {
     const [email, setEmail] = useState("")
     const [emailError, setEmailError] = useState("");
     const [login_error, setLoginError] = useState(null);
+
+	if (localStorage.getItem('token')) {
+		return <Navigate to='/' replace />;
+	}
 
     const handleSignup = () => {
          navigate('/signup'); 
