@@ -1,6 +1,6 @@
 import express from 'express';
 import { SL, at_least } from '#src/authentication.js';
-import { connect_db, objectId } from '#src/db/connection.js';
+import { connect_db, objectId, DBError } from '#src/db/connection.js';
 
 import * as accounts from '#src/db/accounts.js';
 import * as books from '#src/db/books.js';
@@ -10,11 +10,14 @@ import * as messages from '#src/db/messages.js';
 
 const router = express.Router();
 
-const populate = async conversation => {
-	conversation.initator = await accounts.getAccountById(req.conn, conversation.initiator);
-	conversation.recipient = await accounts.getAccountById(req.conn, conversation.recipient);
-	conversation.last_message = await messages.getMessageById(req.conn, conversation.last_message);
-	conversation.context = await books.getBookById(req.conn, conversation.context);
+const populate = async (req, c) => {
+	c.initiator = await accounts.getAccountById(req.conn, c.initiator);
+	c.recipient = await accounts.getAccountById(req.conn, c.recipient);
+	c.last_message = await messages.getMessageById(req.conn, c.last_message);
+	c.context = await books.getBookById(req.conn, c.context);
+	c.context.catalog_entry = await catalog.getCatalogEntryById(req.conn, c.context.catalog_entry);
+
+	return c;
 };
 
 router.use(connect_db);
@@ -26,11 +29,16 @@ router.get('/:account_id', at_least(SL.authenticated), async (req, res) => {
 		return;
 	}
 
-	let conversation_list = await conversations.getConversations(req.conn, req.account._id);
+	let conversation_list;
+	if (!req.query.complete) {
+		conversation_list = await conversations.getConversations(req.conn, req.account._id);
+	} else {
+		conversation_list = await conversations.getCompleteConversations(req.conn, req.account._id);
+	}
 
 	// cursed manual ObjectID population
 	for (const i in conversation_list) {
-		conversation_list[i] = await populate(new_conversation);
+		conversation_list[i] = await populate(req, conversation_list[i]);
 	}
 
 	res.status(200).send(conversation_list);
@@ -45,7 +53,7 @@ router.post('/:account_id', at_least(SL.authenticated), async (req, res) => {
 	let new_conversation =
 		await conversations.getConversationById(req.conn, new_conversation_id);
 	
-	new_conversation = await populate(new_conversation);
+	new_conversation = await populate(req, new_conversation);
 	res.status(201).send(new_conversation);
 });
 
@@ -66,11 +74,11 @@ router.get('/:account_id/:conversation_id', at_least(SL.authenticated), async (r
 		return;
 	}
 
-	conversation = await populate(conversation);
+	conversation = await populate(req, conversation);
 
 	// Add messages
-	let messages = await messages.getMessagesInConversation(req.conn, conversation._id);
-	conversation.messages = messages;
+	let conversation_messages = await messages.getMessagesInConversation(req.conn, conversation._id);
+	conversation.messages = conversation_messages;
 
 	await conversations.markConversationRead(req.conn, conversation._id);
 
@@ -94,8 +102,7 @@ router.patch('/:account_id/:conversation_id/complete', at_least(SL.authenticated
 	}
 
 	await conversations.markConversationComplete(req.conn, conversation._id);
-	res.status(204);
-	
+	res.status(204).send();
 });
 
 // Send message to someone in a particular conversation
