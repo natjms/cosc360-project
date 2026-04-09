@@ -61,9 +61,10 @@ export default function Login(props) {
             if(!response.ok) { 
                 setLoginError(data.error);
             } else { 
-                alert("login successful");
                 localStorage.setItem('token', data.token);
                 localStorage.setItem('account_id', data.account_id);
+
+                navigate('/profile');
             }
 
         }   catch(error) { 
