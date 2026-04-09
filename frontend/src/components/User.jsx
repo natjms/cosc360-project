@@ -11,6 +11,7 @@ function User(){
 	
 	const [user, setUser] = useState(null);
 	const [holdings, setHoldings] = useState(null);
+	const [isThisUser, setIsThisUser] = useState(false);
 
 	const params = useParams();
 
@@ -24,6 +25,19 @@ function User(){
       			const res2 = await fetch('/api/accounts/' + userData._id + '/holdings');
       			const holdingsData = await res2.json();
       			setHoldings(holdingsData);
+			let response = await fetch('/api/accounts/current-user', {
+          			method: "GET",
+          			headers: {
+            				'Content-Type': 'application/json',
+            				'Authorization': `Basic ${localStorage.getItem('token')}`
+          			}
+        		});
+			const loggedInUser = await response.json();
+			if(userData.username == loggedInUser.username){
+				setIsThisUser(true);	
+			}
+
+			
     		} catch (err) {
       			console.error(err);
     		}
@@ -56,11 +70,13 @@ function User(){
 return (
 	<div>
 		<Header />
+		{isThisUser ? 
+        <a href = "/myaccount" style = {{textAlign: "center", backgroundColor: "#B45253", color: "white", textDecoration: "none"}}>Edit Account</a> : ""}
 		<div className="user-banner">
 		<h1>{user.username}</h1>
-			<img src={user.profilePicture}></img>
+			<img src={"http://localhost:3000"+user.imagePath}></img>
 
-		<h2>(number of books)</h2>
+		<h2>{comp.length} books</h2>
 		<h2>{user.city}, {user.country}</h2>
 		<h2>joined {Date(user.joinDate)
 				.toString()
