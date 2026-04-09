@@ -1,7 +1,8 @@
 backend/.env
-frontend/.env
-
 backend/images
+
+frontend/.env
+frontend/.vite
 
 # Logs
 logs
