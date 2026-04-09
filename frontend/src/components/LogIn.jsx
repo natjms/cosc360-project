@@ -8,6 +8,7 @@ export default function Login(props) {
     const [password, setPassword] = useState("")
     const [email, setEmail] = useState("")
     const [emailError, setEmailError] = useState("");
+    const [login_error, setLoginError] = useState(null);
 
     const handleSignup = () => {
          navigate('/signup'); 
@@ -16,10 +17,12 @@ export default function Login(props) {
     function handleEmailChange(e) {
         setEmail(e.target.value);
         setEmailError("");
+        setLoginError(null);
     }
 
     function handlePasswordChange(e) {
         setPassword(e.target.value);
+        setLoginError(null);
     }
 
 
@@ -56,7 +59,7 @@ export default function Login(props) {
        const data = await response.json(); 
             
             if(!response.ok) { 
-                throw new Error("Invalid credentials")
+                setLoginError(data.error);
             } else { 
                 alert("login successful");
                 localStorage.setItem('token', data.token);
@@ -86,7 +89,7 @@ export default function Login(props) {
                     value={email}
                     onChange={handleEmailChange}>
                     </input>
-                    <span>{emailError}</span>
+                    <p className='login-error'>{emailError}</p>
                 </div>
 
                 <div className="control">
@@ -100,12 +103,14 @@ export default function Login(props) {
                     onChange= {handlePasswordChange}>
                     </input> 
                 </div>
+                  { login_error &&
+                    <p className='login-error'>{login_error}</p>
+				  }
                   <button className = "submit" type = "submit">Submit</button>
                   <p id = "response"></p>
              </form>
              </div>
              <h3>No Account?</h3>
-             <p>{emailError}</p>
              <button onClick={handleSignup}>Signup</button>
         </div>
         </>
