@@ -41,7 +41,7 @@ function Home() {
                 <p style={{ color: 'red' }}>{errorMessage}</p>
             }
             <div className = "home1">
-                <div style = {{backgroundColor: "#B45253",
+                <div style = {{
                     width: "60%",
                 }}>
                     <h2 className = "stafftitle">Staff Picks</h2>
@@ -66,7 +66,7 @@ function Home() {
                 A GATEWAY TO A NEW WORLD, STORIES, AND LIMITLESS IMAGINATION
             </h2>
 
-       <img src = {library} alt = "Library" className = "libraryBox" style = {{width: "100%"}}/>
+       <img src = {library} alt = "Library" className = "libraryBox"/>
 
        <div className = "featuredBooks">
         <div className = "book1" >
@@ -78,22 +78,22 @@ function Home() {
         </div>
 
         <div className = "book2">
-                <img src={hungerGames} alt="hungerGames" className="hungerGames" style = {{height: "490px", marginTop: "70px"}}></img>
-                <p className = "books2">In the ruins of a place once known as North America lies the nation of Panem, a shining Capitol 
-                surrounded by twelve outlying districts. The Capitol is harsh and cruel and keeps the districts in line by forcing 
-                them all to send one boy and one girl between the ages of twelve and eighteen to participate in the annual Hunger 
+                <img src={hungerGames} alt="hungerGames" className="hungerGames"></img>
+                <p className = "books2">In the ruins of a place once known as North America lies the nation of Panem, a shining Capitol
+                surrounded by twelve outlying districts. The Capitol is harsh and cruel and keeps the districts in line by forcing
+                them all to send one boy and one girl between the ages of twelve and eighteen to participate in the annual Hunger
                 Games, a fight to the death on live TV.
                 </p>
         </div>
+        <div className = "book3">
+            <img src={twilight} alt="twilight" className="twilight"></img>
+             <p className = "books3">Isabella Swan's move to Forks, a small, perpetually rainy town in Washington, could have been
+                the most boring move she ever made. But once she meets the mysterious and alluring Edward Cullen, Isabella's life
+                takes a thrilling and terrifying turn.
+             </p>
+        </div>
         </div>
 
-        <div className = "book3">
-            <img src={twilight} alt="twilight" className="twilight" style = {{height: "500px", marginTop: "70px"}}></img>
-             <p className = "books3">Isabella Swan's move to Forks, a small, perpetually rainy town in Washington, could have been 
-                the most boring move she ever made. But once she meets the mysterious and alluring Edward Cullen, Isabella's life 
-                takes a thrilling and terrifying turn. 
-             </p>
-        </div>  
     </>
     );
 }
