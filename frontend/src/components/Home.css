@@ -2,18 +2,51 @@
     display: flex; 
     flex-direction: row; 
     margin-top: 0;
+    height: 100vh;
 }
 
 .stafftitle { 
   margin: 20px; 
 }
 
-.staffpicks { 
-  margin-top: 50px; 
+.staffpicks {
+  padding-left: 2em;
+  padding-right: 2em;
+
 }
 
-.staffpicks li {
-  margin-bottom: 60px; 
+.staffpicks li.home-page-staff-pick {
+  margin-bottom: 1em;
+  display: flex;
+  flex-direction: row;
+}
+
+.staffpicks li.home-page-staff-pick:nth-child(even) {
+  flex-direction: row-reverse;
+}
+
+.staffpicks li.home-page-staff-pick p {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+          line-clamp: 4;
+  -webkit-box-orient: vertical;
+}
+
+.staffpicks li.home-page-staff-pick:nth-child(odd) p {
+  text-align: left;
+  padding-left: 1em;
+}
+.staffpicks li.home-page-staff-pick:nth-child(even) p {
+  text-align: right;
+  padding-right: 1em;
+}
+
+.staffpicks li.home-page-staff-pick > img {
+    width: 6em;
+    height: 9em;
+    object-fit: cover;
+    border: 4px double black;
 }
 
 .featuredBooks { 
