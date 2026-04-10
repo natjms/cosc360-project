@@ -47,7 +47,7 @@ function Home() {
                     <h2 className = "stafftitle">Staff Picks</h2>
                     <ul className = "staffpicks">
                         { staff_picks.map((b, i) =>
-                            <li key={i} class='home-page-staff-pick'>
+                            <li key={i} className='home-page-staff-pick'>
                                 <img src={b.cover} alt={`Cover of ${b.title}`}/>
                                 <div>
                                     <p>
