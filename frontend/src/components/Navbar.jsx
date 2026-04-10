@@ -2,14 +2,25 @@ import Login from './LogIn.jsx'
 import About from './About.jsx'
 import Collections from './Collections.jsx'
 import MyAccount from './MyAccount.jsx'
+import { Logout } from './Logout.jsx'
 import { useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom';
 
 function Navbar() {
 
     const [seen, setSeen] = useState(false);
+    const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('token'));
     const navigate = useNavigate();
     const location = useLocation();
+
+    const handleLoginSuccess = () => {
+        setIsLoggedIn(true);
+    };
+
+    const handleLogout = async () => {
+        const success = await Logout(navigate);
+        if (success) setIsLoggedIn(false);
+    };
 
     function togglePop() { 
         setSeen(!seen); 
@@ -46,10 +57,16 @@ function Navbar() {
                     <li><a href="/add" onClick={handleAddBook} style={{color: '#B45253', fontWeight: 'bold'}}> + Add a Book</a></li>
                 }
                 <li><a href = "/profile" onClick = {handleProfile}>Profile</a></li>
-                <li> 
-	    	    <button onClick={togglePop}>Login</button>
-                    {seen && <Login toggle={togglePop} />} 
-	    	    </li>
+                <li>
+                    {isLoggedIn ? (
+                        <button onClick={handleLogout}>Logout</button>
+                    ) : (
+                        <>
+                            <button onClick={togglePop}>Login</button>
+                            {seen && <Login toggle={togglePop} onLoginSuccess={handleLoginSuccess} />}
+                        </>
+                    )}
+                </li>
             </ul>
         </nav>
 

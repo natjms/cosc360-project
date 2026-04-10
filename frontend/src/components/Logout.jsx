@@ -1,26 +1,29 @@
-import { useNavigate } from 'react-router-dom';
-import { useState } from 'react'
-
-
 export async function Logout(navigate) { 
 
     try {
-        const response = await fetch("http://localhost:3000/api/sessions/logout", {
+        const response = await fetch("/api/sessions/logout", {
             method: "GET",
-            headers: { "Content-Type": "application/json" }
+            headers: {
+                "Authorization": `Basic ${localStorage.getItem('token')}`
+            }
         });
 
-        const data = await response.json();
+        if (!response.ok) {
+            const data = await response.json().catch(() => ({}));
+            throw new Error(data.message || "Failed to logout");
+        }
 
-        if (!response.ok) throw new Error(data.message || "Failed to logout");
-
-        alert("Logout successful");
         localStorage.removeItem('token');
-        navigate('/homeUser');
+        localStorage.removeItem('account_id');
+        localStorage.removeItem('username');
+        navigate('/');
+        return true;
 
     } catch (error) {
         console.error("Network or server error", error);
+        return false;
     }
 }
 
 export default Logout;
+
