@@ -79,7 +79,7 @@ function Navbar() {
                 <li><Link to="/collections">Collections</Link></li>
                 <li><Link to="/genres">Genres</Link></li>
                 <li><Link to="/about">About</Link></li>
-                <li><Link to="/profile">Profile</Link></li>
+                <li><Link to={`/user/${localStorage.getItem('username')}`}>Profile</Link></li>
                 { localStorage.getItem('token') ?
 					<>
                         <button onClick={handleLogout}>Logout</button>
