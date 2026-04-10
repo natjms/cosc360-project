@@ -71,6 +71,13 @@ export function getCatalogEntryByISBN(connection, isbn) {
 		.findOne({ isbn, });
 }
 
+export function getRandomCatalogEntries(connection, count) {
+    return connection
+        .collection('catalog')
+        .aggregate([{ '$sample': { size: count } }])
+        .toArray();
+}
+
 export function deleteCatalogEntry(connection, entry_id) {
 	return connection
 		.collection('catalog')

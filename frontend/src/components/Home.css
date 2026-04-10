@@ -1,39 +1,101 @@
-.home1 { 
-    display: flex; 
-    flex-direction: row; 
+.home1 {
+    display: flex;
+    flex-direction: row;
+    margin-top: 0;
+    height: 100vh;
+    background-color: #B45253;
 }
 
 .stafftitle { 
   margin: 20px; 
 }
 
-.staffpicks { 
-  margin-top: 50px; 
+.staffpicks {
+  padding-left: 2em;
+  padding-right: 2em;
+
 }
 
-.staffpicks li {
-  margin-bottom: 60px; 
+.staffpicks li.home-page-staff-pick {
+  margin-bottom: 1em;
+  display: flex;
+  flex-direction: row;
 }
 
-.featuredBooks { 
+.staffpicks li.home-page-staff-pick:nth-child(even) {
+  flex-direction: row-reverse;
+}
+
+.staffpicks li.home-page-staff-pick p {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+          line-clamp: 4;
+  -webkit-box-orient: vertical;
+}
+
+.staffpicks li.home-page-staff-pick:nth-child(odd) p {
+  text-align: left;
+  padding-left: 1em;
+}
+.staffpicks li.home-page-staff-pick:nth-child(even) p {
+  text-align: right;
+  padding-right: 1em;
+}
+
+.staffpicks li.home-page-staff-pick > img {
+    width: 6em;
+    height: 9em;
+    object-fit: cover;
+    border: 4px double black;
+}
+
+.featuredBooks {
+    background-color: #B45253;
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: auto; 
-    gap: 10px; 
-    padding: 10px;
+    grid-template-columns: 33.3% 33.3% 33.3%;
+    grid-template-rows: auto;
+    gap: 10px;
+
+    padding-top: 2em;
+    padding-bottom: 2em;
+
+    font-size: 1em;
 }
 
-.book1, .book2, .book3 {
-  text-align: center; 
-  font-size: 18px;
+.libraryBox {
+    display: block;
+    width: 500px;
+    max-width: 100%;
+
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 2em;
+
+    border-radius: 20px;
 }
 
-.books1, .books2 { 
-  padding-left: 150px;
-  padding-right: 150px; 
+.featuredBooks {
+
 }
 
-.books3 {  
-  padding-left: 400px; 
-  padding-right: 400px; 
+.featuredBooks > div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.featuredBooks img {
+    width: 200px;
+    height: 300px;
+    object-fit: cover;
+
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.book1 p, .book2 p, .book3 p {
+  text-align: justify;
+  padding-left: 2em;
+  padding-right: 2em;
 }

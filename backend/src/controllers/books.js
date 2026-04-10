@@ -1,6 +1,6 @@
 import express from 'express';
 import { SL, at_least } from '#src/authentication.js';
-import { connect_db } from '#src/db/connection.js';
+import { connect_db, DBError } from '#src/db/connection.js';
 import * as dbCatalog from '#src/db/catalog.js';
 import { getBookById, createBook } from '#src/db/books.js';
 
@@ -35,6 +35,22 @@ router.get('/public', async (req, res) => {
     } catch (err) {
         res.status(500).send({error: err.message });
     }
+});
+
+router.get('/random', async (req, res) => {
+    let count = Number(req.query.count);
+    if (count < 0) {
+        res.status(400).send({error: 'Count must be above zero'});
+        return;
+    }
+
+    if (count > 20) {
+        count = 20;
+    }
+
+    const random_books = await dbCatalog.getRandomCatalogEntries(req.conn, count);
+
+    res.status(200).send(random_books);
 });
 
 // Add a "kind" of book to the database. Recognize a new book within the
@@ -111,6 +127,21 @@ router.get('/:book_id/request', at_least(SL.authenticated), async (req, res) => 
 	}
 	catch(err){
         	res.status(400).send({error: err.message});
+	}
+});
+
+router.use(async (err, req, res, next) => {
+	if (res.headersSent) {
+		next(err);
+	}
+
+	if (err instanceof DBError) {
+		res.status(400).send(err.sendable());
+		return;
+	} else {
+		console.error(err);
+		res.status(500);
+		res.send({error: 'An unknown error occured. Please try again later'});
 	}
 });
 
