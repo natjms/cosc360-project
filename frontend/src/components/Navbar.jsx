@@ -63,7 +63,7 @@ function Navbar() {
     };
 
     const handleProfile = () => {
-        navigate('/MyAccount')
+        navigate(`/user/${localStorage.getItem(username)}`)
     };
 
     const handleAdmin = () => {
