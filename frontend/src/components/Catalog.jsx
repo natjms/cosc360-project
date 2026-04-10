@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router';
 import BookItem from './BookItem'; 
-import Header from './Header.jsx'
 import noCover from '../assets/noCover.jpeg';
 import './Catalog.css';
 
@@ -24,7 +23,6 @@ export default function Catalog(){
 	}
 
 	return (<div>
-		<Header />
 		<div className ="container">
 		<div className="book">
 			<h1> {book.title} </h1>

@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import Header from './components/Header';
 import { PieChart, Pie, Tooltip, ResponsiveContainer} from 'recharts';
 import './Admin.css';
 
@@ -165,7 +164,6 @@ export default function Admin(props) {
 
 	return (
         <div className="admin-container">
-            <Header/>
             <div className="admin-layout">
                 <aside className="admin-sidebar">
                     <div className={`nav-item ${activeTab === 'statistics' ? 'active' : ''}`}

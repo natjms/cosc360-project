@@ -2,7 +2,6 @@ import {useEffect, useState} from 'react';
 import { useParams } from 'react-router';
 import BookItem from './BookItem';
 import './ShareBook.css';
-import Header from './Header';
 
 /* this will be a pop up on the user page. let the user share a book from their personal collection. will add it to their user page + the database */
 
@@ -51,7 +50,6 @@ export default function ShareBook(){
 
 	if(!bookList) {return <p>loading...</p>;}
 		return <>
-		<Header />
 		<h1>select a book</h1>
 	<div className="view">
 		<div className="largelist">
