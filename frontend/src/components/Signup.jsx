@@ -154,10 +154,10 @@ function Signup() {
                     <h3><label>Country:</label></h3>
                     <select value={country} onChange={handleCountryChange}>
                         <option value="">Select a country</option>
-                        <option value="1">Canada</option>
-                        <option value="2">USA</option>
-                        <option value="3">UK</option>
-                        <option value="4">Other</option>
+                        <option value="Canada">Canada</option>
+                        <option value="USA">USA</option>
+                        <option value="UK">UK</option>
+                        <option value="Other">Other</option>
                     </select>
                     <span className = "errorMsg">{countryError}</span>
                 </div>
