@@ -1,10 +1,7 @@
 import Login from './LogIn.jsx'
-import About from './About.jsx'
-import Collections from './Collections.jsx'
-import MyAccount from './MyAccount.jsx'
 import { Logout } from './Logout.jsx'
 import { useState } from 'react'
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 
 function Navbar() {
 
@@ -26,42 +23,21 @@ function Navbar() {
         setSeen(!seen); 
     };
 
-    const handleAbout = () => { 
-        navigate('/About'); 
-    };
-
-    const handleCollections = () => { 
-        navigate('/Collections')
-    }
-
-
-    const handleAddBook = () => {
-        navigate('/add');
-    };
-
-    const handleProfile = () => { 
-        navigate('/MyAccount')
-    };
-
-    const handleAdmin = () => {
-        navigate('/admin');
-    };
-
     return (
         <>
         <nav className="main-nav">
             <ul>
-                <li><a href="/">Home</a></li>
-                <li><a href="/collections" onClick = {handleCollections}>Collections</a></li>
-                <li><a href="/genres">Genres</a></li>
-                <li><a href= "/about" onClick={handleAbout}>About</a></li>
+                <li><Link to="/">Home</Link></li>
+                <li><Link to="/collections">Collections</Link></li>
+                <li><Link to="/genres">Genres</Link></li>
+                <li><Link to="/about">About</Link></li>
 
                 { location.pathname === '/admin' &&
-                    <li><a href="/add" onClick={handleAddBook} style={{color: '#B45253', fontWeight: 'bold'}}> + Add a Book</a></li>
+                    <li><Link to="/add" style={{color: '#B45253', fontWeight: 'bold'}}> + Add a Book</Link></li>
                 }
-                <li><a href = "/profile" onClick = {handleProfile}>Profile</a></li>
+                <li><Link to="/profile">Profile</Link></li>
                 { localStorage.getItem('username') === 'admin' &&
-                    <li><a href="/admin" onClick={handleAdmin} style={{color: '#B45253', fontWeight: 'bold'}}>Admin</a></li>
+                    <li><Link to="/admin" style={{color: '#B45253', fontWeight: 'bold'}}>Admin</Link></li>
                 }
                 <li>
                     {isLoggedIn ? (
