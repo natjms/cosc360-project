@@ -10,7 +10,7 @@ export default function Catalog(){
 
 	const params = useParams();
 	useEffect(() => {
-		fetch('/api/books/' + params.isbn)
+		const res = fetch('/api/books/' + params.isbn)
 		.then((res) => res.json())
 		.then((data) => setBook(data))
 		.catch((err) => console.error(err));

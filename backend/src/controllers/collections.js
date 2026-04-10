@@ -11,6 +11,16 @@ const unimplemented = (req, res) => {
 
 router.use(connect_db);
 
+router.get('/public', at_least(SL.unauthenticated), async (req, res) => {
+	try{
+		let coll = await dbCollections.getCollectionsByPartialMatch(req.conn, ".");
+		res.send(coll);
+	}
+	catch(err){
+		res.status(400).send({error: err.message});
+	}
+});
+
 router.post('/', at_least(SL.authenticated), async (req, res) => {
 	try{
 		let {title, description} = req.body;

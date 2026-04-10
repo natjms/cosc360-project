@@ -50,7 +50,7 @@ export default function AddCollection(){
 			key={book.isbn}
 			className = {showElement[i] ?  '' : 'hidden'} 
 			onClick={() => {
-				setCurBookList(prev => [...prev, book._id]);
+				setCurBookList(prev => [...prev, book.isbn]);
 	
  				setShowElement(prev => {
   					const updated = [...prev];
@@ -125,6 +125,7 @@ export default function AddCollection(){
         	if(!response.ok) { 
              		throw new Error("Invalid request")
         	}
+		console.log(response);
 	}
         alert("Collection Added!");
 	navigate('/collections');
@@ -139,7 +140,6 @@ export default function AddCollection(){
 	
 
 	return <>
-		<Header />
 		<h1>Input </h1>
 		<form className='text-items'>
 		<input className='title-form' type="paragraph" placeholder="Title..." name="title" id = "title" onChange={updateTitle}/>
