@@ -1,0 +1,64 @@
+.notifications-container {
+    background-color: #DDD;
+    width: 100%;
+    height: 80vh;
+    padding-top: 2em;
+}
+
+.notifications-window {
+    background-color: white;
+    border-radius: 20px;
+
+    margin-left: auto;
+    margin-right: auto;
+    padding: 2em;
+
+    width: 800px;
+    max-width: 100%;
+    min-height: 60vh;
+    box-sizing: border-box;
+}
+
+.notifications-window > ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.notifications-window li {
+    border-bottom: 1px dotted #888;
+    background-color: #FFF;
+
+    display: flex;
+    flex-direction: row;
+
+    width: 100%;
+}
+
+.notifications-window li > div:last-child {
+    flex-grow: 1;
+}
+
+.notifications-window li > div:first-child {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1em;
+    margin-left: 0.5em;
+}
+
+.notifications-window li.read {
+    border-bottom: 1px dotted #888;
+    background-color: #EEE;
+}
+
+.notifications-window h2 {
+    text-transform: inherit;
+    font-weight: normal;
+    font-size: 1.2em;
+    margin: 0;
+}
+
+.notifications-window p {
+    text-align: left;
+    margin: 0;
+}

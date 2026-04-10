@@ -20,6 +20,7 @@ import User from './components/User';
 import PageNotFound from './components/PageNotFound';
 import Genres from './components/Genres';
 import ShareBook from './components/ShareBook';
+import Notifications from './Notifications';
 
 import { Navigate } from 'react-router-dom';
 
@@ -118,6 +119,7 @@ createRoot(document.getElementById('root')).render(
 		<Route path = '/catalog/:isbn' element = {<Catalog/>} />
 		<Route path = '/user/:username' element = {<User/>} />
 
+        <Route path = '/notifications' element = {<LoginGatedPage><Notifications/></LoginGatedPage>}/>
         <Route path = '/conversations' element = {<LoginGatedPage><Conversations/></LoginGatedPage>}/>
         <Route path="/add" element={<AdminGatedPage><AddBookPage/></AdminGatedPage>}/>
         <Route path = '/profile' element = {<LoginGatedPage><Profile/></LoginGatedPage>} />
