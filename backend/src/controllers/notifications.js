@@ -40,9 +40,7 @@ router.patch('/:account_id', at_least(SL.authenticated), its_mine, async (req, r
 });
 
 router.delete('/:account_id', at_least(SL.authenticated), its_mine, async (req, res) => {
-	const notification = await notifications.getNotificationById(req.conn, req.params.notification_id);
-
-	await notifications.dismissAllNotification(req.conn, req.account._id);
+	await notifications.dismissAllNotifications(req.conn, req.account._id);
 	res.status(204).send();
 });
 
