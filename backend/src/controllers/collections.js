@@ -16,7 +16,7 @@ router.post('/', at_least(SL.authenticated), async (req, res) => {
 		let {title, description} = req.body;
 		
 		let id = await dbCollections.createCollection(req.conn, req.account._id, {title, description});
-		res.status(200).send({id: id});
+		res.status(201).send({id: id});
 	}
 	catch(err){
 		res.status(400).send({error: err.message});

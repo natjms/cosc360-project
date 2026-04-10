@@ -16,6 +16,7 @@ import User from './components/User';
 import PageNotFound from './components/PageNotFound';
 import Genres from './components/Genres'; 
 import ShareBook from './components/ShareBook';
+import AddCollection from './components/AddCollection';
 import './default.css';
 
 
@@ -35,6 +36,7 @@ createRoot(document.getElementById('root')).render(
 	<Route path = '/catalog/:isbn' element = {<Catalog/>} />
 	<Route path = '/user/:username' element = {<User/>} />
 	<Route path = '/sharebook/' element = {<ShareBook/>} />
+	<Route path = '/AddCollection/' element = {<AddCollection/>} />
 		{ /* TODO only allow this route to exist if the user is an admin */ }
         <Route path = '/admin' element = {<Admin/>} />
 	<Route path="*" element={<PageNotFound />} /> 

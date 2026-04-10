@@ -74,7 +74,7 @@ return (
         <a href = "/myaccount" style = {{textAlign: "center", backgroundColor: "#B45253", color: "white", textDecoration: "none"}}>Edit Account</a> : ""}
 		<div className="user-banner">
 		<h1>{user.username}</h1>
-			<img src={"http://localhost:3000"+user.imagePath}></img>
+			<img src={user.imagePath}></img>
 
 		<h2>{comp.length} books</h2>
 		<h2>{user.city}, {user.country}</h2>

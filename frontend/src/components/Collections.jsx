@@ -35,7 +35,10 @@ function Collections() {
       <div className = "about">
         <h1 style = {{color: "white"}}>CONNECT, DISCOVER, IMAGINE</h1>
       </div>
-
+	<div className='btnholder'>
+	         <button><h1><a className="lnk" href="/AddCollection">Add new collection</a></h1></button>
+	    
+	</div>
         <div className = "home1">
         <div style = {{backgroundColor: "#CD9D65",
             width: "100%", 

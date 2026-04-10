@@ -1,0 +1,62 @@
+.hidden{
+	display: none;
+}
+
+
+.title-form{
+	height: 60%;
+	width: 60%;
+	margin: 0;
+	font-size: x-large;
+	text-align: center;
+	margin-bottom: 2vh;
+}
+.description-form{
+	height: 30vh;
+	width: 60%;
+	font-size: x-large;
+	resize: none;
+}
+.text-items{
+	display: flex;
+	flex-direciton: column;
+	justify-content: center;
+	flex-wrap: wrap;
+	align-items: center;
+	margin: 20px;
+}
+
+.optionsList { 
+    display: flex; 
+    flex-direction: row; 
+    list-style: none; 
+    justify-content: center; 
+    align-items: center; 
+    margin-top: 20px; 
+    width: 60%;
+    gap: 100px; 
+}
+
+span{
+	padding: 30px;
+}
+
+
+.option { 
+    font-size: x-large; 
+}
+
+.btnholder{
+	margin: 15px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+.but{
+	width: 50%;
+	height: 100%;
+	background-color: darkgrey;
+	color: white;
+	border-radius: 20px;
+}
+
