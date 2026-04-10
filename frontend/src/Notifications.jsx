@@ -5,13 +5,28 @@ import './Notifications.css';
 
 const Notifications = (props) => {
     const [notifications, setNotifications] = useState(null);
+    const [error, setError] = useState(null);
 
     const pollNotifications = async () => {
         const response = await fetch(`/api/notifications/${localStorage.getItem('account_id')}`, {
             headers: { 'Authorization': `Basic ${localStorage.getItem('token')}` }
         });
 
+        if (!response.ok) {
+            const e = await response.json();
+            if (e.error) {
+                setError(e.error);
+            } else {
+                setError('An unknown error occured');
+                console.error(e);
+            }
+            return;
+        }
+
         const new_notifications = await response.json();
+
+        // This was a success, so let's clear the error message if present
+        setError(null);
 
         if (notifications === null || new_notifications.length > notifications.length) {
             setNotifications(new_notifications);
@@ -33,10 +48,20 @@ const Notifications = (props) => {
         (async () => {
             await pollNotifications();
 
-            await fetch(`/api/notifications/${localStorage.getItem('account_id')}`, {
+            const response = await fetch(`/api/notifications/${localStorage.getItem('account_id')}`, {
                 method: 'PATCH',
                 headers: { 'Authorization': `Basic ${localStorage.getItem('token')}` }
             });
+
+            if (!response.ok) {
+                const e = await response.json();
+                if (e.error) {
+                    setError(e.error);
+                } else {
+                    setError('An unknown error occured');
+                    console.error(e);
+                }
+            }
 
             setInterval(pollNotifications, 10000);
         })();
@@ -45,6 +70,12 @@ const Notifications = (props) => {
     return <div className='notifications-container'>
         <div className='notifications-window'>
             <h1>Notifications</h1>
+
+            { error &&
+                <p className='notifications-error'>
+                    {error}
+                </p>
+            }
             
             { notifications !== null ?
                 notifications.length > 0 ?

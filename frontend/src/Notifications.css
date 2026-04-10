@@ -46,6 +46,10 @@
     margin-left: 0.5em;
 }
 
+p.notifications-error {
+    color: red;
+}
+
 .notifications-window li.read {
     border-bottom: 1px dotted #888;
     background-color: #EEE;
