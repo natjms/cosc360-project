@@ -42,29 +42,8 @@ function Navbar() {
         if (success) setIsLoggedIn(false);
     };
 
-    function togglePop() { 
-        setSeen(!seen); 
-    };
-
-    const handleAbout = () => { 
-        navigate('/About'); 
-    };
-
-    const handleCollections = () => { 
-        navigate('/Collections')
-    }
-
-
-    const handleAddBook = () => {
-        navigate('/add');
-    };
-
-    const handleProfile = () => {
-        navigate('/MyAccount')
-    };
-
-    const handleAdmin = () => {
-        navigate('/admin');
+    function togglePop() {
+        setSeen(!seen);
     };
 
     return (
@@ -75,7 +54,6 @@ function Navbar() {
                 <li><Link to="/collections">Collections</Link></li>
                 <li><Link to="/genres">Genres</Link></li>
                 <li><Link to="/about">About</Link></li>
-
                 <li><Link to="/profile">Profile</Link></li>
                 { localStorage.getItem('token') ?
 					<>
