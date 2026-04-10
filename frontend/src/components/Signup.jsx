@@ -132,7 +132,7 @@ function Signup() {
 
 }
 
-    return (
+    return <div class='signup-container'>
         <div className = "window">
           <button className = "close" onClick ={handleClose}>Close</button>
           <div className = "overlay" onClick = {(e) => e.stopPropagation()}>
@@ -208,8 +208,7 @@ function Signup() {
              </div>
              
         </div>
-        
-    );
+    </div>;
 }
 
 export default Signup;

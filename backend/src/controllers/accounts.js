@@ -158,6 +158,19 @@ router.delete('/:account_id', at_least(SL.authenticated), async (req, res) => {
 	res.status(204).send();
 });
 
+// Toggle whether the account has been disabled
+router.patch('/:account_id/disable', at_least(SL.admin), async (req, res) => {
+	const account = await accounts.getAccountById(req.conn, req.params.account_id);
+
+	if (account === null) {
+		res.status(404).send({error: 'Unknown account'});
+		return;
+	}
+
+	await accounts.toggleAccountDisabled(req.conn, account._id);
+	res.status(200).send({disabled: !account.disabled});
+});
+
 // List of items in a person's personal collection they've indicated they're
 // willing to share
 router.get('/:account_id/holdings', at_least(SL.unauthenticated), async (req, res) => {

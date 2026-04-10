@@ -10,18 +10,6 @@ import './About.css'
 function About() {
     return (
       <>
-        <header className="site-header">
-            <div className="logo">
-                <img src={logo} alt="Library logo" className="logo-img" />
-                <h1>Virtual Library</h1>
-            </div>
-
-            <div className="header-right">
-                <SearchBarNavigator />
-                <Navbar />
-            </div>
-        </header>
-
       <div className = "about">
         <h3 style = {{color: "white"}}>About</h3>
         <h1 style = {{color: "white"}}>CONNECT, LEARN, TRADE</h1>

@@ -1,0 +1,31 @@
+.account-result-container {
+    display: flex;
+    flex-direction: row;
+}
+
+.account-result-container > img {
+    width: 5em;
+    height: 5em;
+    object-fit: cover;
+    border-radius: 100%;
+    margin-right: 2em;
+}
+.account-result-container > div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.account-result-container .account-result-username {
+    font-weight: bold;
+    font-size: 1.1em;
+    text-align: left;
+}
+
+.account-result-username, .account-result-location {
+    margin-bottom: 0;
+    margin-top: 0;
+}
+.account-result-location {
+    color: #222;
+}

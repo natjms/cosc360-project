@@ -48,6 +48,11 @@ label, #email, #password {
   height: 20px; 
 }
 
+.login-error {
+	text-align: left;
+	color: red;
+}
+
 .submit { 
   width: 20%;
   background-color: black; 

@@ -8,7 +8,7 @@ export default function Login(props) {
     const [password, setPassword] = useState("")
     const [email, setEmail] = useState("")
     const [emailError, setEmailError] = useState("");
-    const [passwordError, setPasswordError] = useState("");
+    const [login_error, setLoginError] = useState(null);
 
     const handleSignup = () => {
          navigate('/signup'); 
@@ -17,11 +17,12 @@ export default function Login(props) {
     function handleEmailChange(e) {
         setEmail(e.target.value);
         setEmailError("");
+        setLoginError(null);
     }
 
     function handlePasswordChange(e) {
         setPassword(e.target.value);
-        setPasswordError("");
+        setLoginError(null);
     }
 
 
@@ -31,16 +32,10 @@ export default function Login(props) {
         let hasError = false;
 
         const emailReg = /^(.+)@([^\.].*)\.([a-z]{2,})$/;
-        const passReg = /^[a-zA-Z]\w{8,16}$/;
 
         if (!emailReg.test(email)) {
             {/*if pattern does not match */ }
             setEmailError("Enter a valid email");
-            hasError = true;
-        }
-
-        if (!passReg.test(password)) {
-            setPasswordError("Enter a password between 9 and 17 characters");
             hasError = true;
         }
 
@@ -64,10 +59,19 @@ export default function Login(props) {
        const data = await response.json(); 
             
             if(!response.ok) { 
-                throw new Error("Invalid credentials")
+                setLoginError(data.error);
             } else { 
-                alert("login successful");
-                localStorage.setItem('token', data.token) 
+                localStorage.setItem('token', data.token);
+                localStorage.setItem('account_id', data.account_id);
+
+                const userRes = await fetch('/api/accounts/current-user', {
+                    headers: { 'Authorization': `Basic ${data.token}` }
+                });
+                const userData = await userRes.json();
+                localStorage.setItem('username', userData.username);
+
+                props.onLoginSuccess?.();
+                navigate('/profile');
             }
 
         }   catch(error) { 
@@ -93,10 +97,10 @@ export default function Login(props) {
                     value={email}
                     onChange={handleEmailChange}>
                     </input>
-                    <span>{emailError}</span>
+                    <p className='login-error'>{emailError}</p>
                 </div>
 
-                <div className ={passwordError ? "control error" : "control"}>
+                <div className="control">
                   <h3><label htmlFor = "Password">PASSWORD</label> </h3>
                   <input 
                     type ="password" 
@@ -106,14 +110,15 @@ export default function Login(props) {
                     value={password}
                     onChange= {handlePasswordChange}>
                     </input> 
-                    <span>{passwordError}</span>
                 </div>
+                  { login_error &&
+                    <p className='login-error'>{login_error}</p>
+				  }
                   <button className = "submit" type = "submit">Submit</button>
                   <p id = "response"></p>
              </form>
              </div>
              <h3>No Account?</h3>
-             <p>{emailError}</p>
              <button onClick={handleSignup}>Signup</button>
         </div>
         </>

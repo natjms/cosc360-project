@@ -1,5 +1,7 @@
 import { useState} from 'react';
 
+const ACCEPTED_FILE_TYPES = ['image/png', 'image/jpeg', 'image/webp'];
+
 export default function AddBook({onBookAdded}) {
     const [title, setTitle] = useState('');
     const [author, setAuthor] = useState('');
@@ -13,9 +15,15 @@ export default function AddBook({onBookAdded}) {
     const handleFileChange = (e) => {
         const file = e.target.files[0];
         if (file) {
+            if(!ACCEPTED_FILE_TYPES.includes(file.type)) {
+                setStatus('File must be of type PNG, JPG or WEBP');
+                e.target.value = '';
+                return;
+            }
+
             const reader = new FileReader();
             reader.onloadend = () => {
-                setCover(reader.result.split(',')[1]); 
+                setCover(reader.result);
             };
             reader.readAsDataURL(file);
         }
@@ -38,6 +46,7 @@ export default function AddBook({onBookAdded}) {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Authorization': `Basic ${localStorage.getItem('token')}`,
                 },
                 body: JSON.stringify(newEntry),
             });

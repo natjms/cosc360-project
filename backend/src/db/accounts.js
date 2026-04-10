@@ -1,7 +1,7 @@
 import { randomBytes } from 'node:crypto';
 import bcrypt from 'bcrypt';
 
-import { missingKeys } from '#src/validation.js';
+import { missingKeys, clean_string } from '#src/validation.js';
 import { objectId, assertUniqueness, DBError } from '#src/db/connection.js';
 
 /*
@@ -10,6 +10,7 @@ import { objectId, assertUniqueness, DBError } from '#src/db/connection.js';
 	username: Name used on the website
 	email: account's email address
 	password_hash: bcrypt hash of the password
+	disabled: True if the user cannot log in or do anything
 }
 */
 
@@ -99,6 +100,8 @@ export async function createAccount(connection, account) {
 	if (account.imagePath) {
     	account.imagePath = account.imagePath; 
 	}
+
+	account.disabled = false;
 	
 	const result = await connection
 		.collection('accounts')
@@ -147,6 +150,22 @@ export async function updateAccount(connection, account_id, account_patch) {
 }
 
 /**
+ * If the account is not disabled, disable it. If it is disabled, un-disable it
+ * If your account has been disabled, it's preserved, but it cannot do anything
+ * and you cannot log in.
+ */
+export async function toggleAccountDisabled(connection, account_id) {
+	const account = await getAccountById(connection, account_id);
+	return connection
+		.collection('accounts')
+		.updateOne(
+			{ _id: objectId(account_id) },
+			{ '$set': { disabled: !account.disabled } }
+		);
+}
+
+
+/**
  * Given an account ObjectID and a plaintext password, return a promise that
  * resolves to true if the password matches the account's password hash.
  *
@@ -169,15 +188,12 @@ export async function verifyPassword(connection, account_id, password_to_test, a
  * Partial match against account usernames, in case that was something you
  * wanted to do for, say, lab 8 related purposes
  */
-export function getAccountByPartialMatch(connection, query) {
-	// This guarantees the regex is safe
-	if (!/^[a-zA-Z0-9]+$/.test(query)) {
-		throw new DBError('Invalid username');
-	}
+export function getAccountsByPartialMatch(connection, query) {
+	const clean_query = clean_string(query);
 
 	return connection
 		.collection('accounts')
-		.find({ username: new RegExp(`${query}`, 'i') })
+		.find({ username: new RegExp(`${clean_query}`, 'i') })
 		.project({ password_hash: 0, email: 0 })
 		.toArray();
 }

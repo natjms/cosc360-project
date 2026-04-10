@@ -1,6 +1,5 @@
 import {useEffect, useState} from 'react';
 import { useParams } from 'react-router';
-import Header from './Header.jsx';
 import './User.css';
 import PageNotFound from './PageNotFound';
 import BookItem from './BookItem';
@@ -69,7 +68,6 @@ function User(){
 
 return (
 	<div>
-		<Header />
 		{isThisUser ? 
         <a href = "/myaccount" style = {{textAlign: "center", backgroundColor: "#B45253", color: "white", textDecoration: "none"}}>Edit Account</a> : ""}
 		<div className="user-banner">

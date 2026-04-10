@@ -38,7 +38,13 @@ export async function getDatabaseConnection(options={}) {
  * Adds a DB connection to req.conn for use later
  */
 export async function connect_db(req, res, next) {
-	req.conn = await getDatabaseConnection();
+	req.client = await getDatabaseConnection({ yield_client: true });
+	req.conn = req.client.db();
+
+	res.on('close', () => {
+		req.client.close();
+	});
+
 	next();
 }
 

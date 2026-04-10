@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import Header from './components/Header';
 import { PieChart, Pie, Tooltip, ResponsiveContainer} from 'recharts';
 import './Admin.css';
 
@@ -90,6 +89,34 @@ export default function Admin(props) {
         checkAdminAccess();
     }, []);
 
+    const handleDisableUser = async (id, username) => {
+        if(!window.confirm(`Toggle whether ${username}'s account is disabled?`)) return;
+
+        try {
+            const res = await fetch(`/api/accounts/${id}/disable`, {
+                method: 'PATCH',
+                headers: { 'Authorization': `Basic ${localStorage.getItem('token')}`}
+            });
+
+            if (res.status === 200) {
+                // Toggle the `disabled` property on our local representation
+                // to avoid having to hit the backend again
+                setAccounts(
+                    accounts.map(
+                        user =>
+                            user._id === id ?
+                                {...user, disabled: !user.disabled }
+                                : user
+
+                    )
+                );
+            }
+        } catch (e) {
+            console.error(e);
+            setError(`Failed to disable or enable ${username}`);
+        }
+    };
+
     const handleDeleteUser = async (id, username) => {
         if(!window.confirm(`Delete user "${username}"?`)) return;
 
@@ -137,7 +164,6 @@ export default function Admin(props) {
 
 	return (
         <div className="admin-container">
-            <Header/>
             <div className="admin-layout">
                 <aside className="admin-sidebar">
                     <div className={`nav-item ${activeTab === 'statistics' ? 'active' : ''}`}
@@ -198,6 +224,16 @@ export default function Admin(props) {
                                             <tr key={i}>
                                                 <td>{account.username}</td>
                                                 <td style={{color: '#888'}}>{account._id}</td>
+                                                <td>
+                                                    <button
+                                                        className="btn-disable"
+                                                        onClick={() => handleDisableUser(account._id, account.username)}>
+                                                        { account.disabled ?
+                                                            'Enable'
+                                                            : 'Disable'
+                                                        }
+                                                    </button>
+                                                </td>
                                                 <td>
                                                     <button className="btn-delete" onClick={() => handleDeleteUser(account._id, account.username)}>Delete</button>
                                                 </td>

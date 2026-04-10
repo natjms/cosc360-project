@@ -5,7 +5,7 @@ export default function AddBookPage() {
     const navigate = useNavigate();
 
     const handleSuccess = () => {
-        console.log("Book added successfully!"); 
+        console.log("Book added successfully!");
     };
 
     return (

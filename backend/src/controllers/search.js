@@ -2,7 +2,9 @@ import express from 'express';
 import { SL, at_least } from '#src/authentication.js';
 import { connect_db } from '#src/db/connection.js';
 
-import example from '#src/books/example.json' with { type: "json" };
+import * as accounts from '#src/db/accounts.js';
+import * as catalog from '#src/db/catalog.js';
+import * as collections from '#src/db/collections.js';
 
 const router = express.Router();
 
@@ -13,13 +15,14 @@ const unimplemented = (req, res) => {
 
 router.use(connect_db);
 
-// TODO: unimplemented (this needs to be fixed so this comment exists for ease
-// of grepping
-router.get("/", (req, res) => {
-	res.send(example.filter(book => {
-		if(req.query.q == null || !req.query.q.trim()) return "";
-		return book.title.toLowerCase().includes(req.query.q.toLowerCase()) || book.description.toLowerCase().includes(req.query.q.toLowerCase());
-	}));
+router.get("/", async (req, res) => {
+	const results = {
+		'accounts': await accounts.getAccountsByPartialMatch(req.conn, req.query.q),
+		'catalog': await catalog.getCatalogEntriesByPartialMatch(req.conn, req.query.q),
+		'collections': await collections.getCollectionsByPartialMatch(req.conn, req.query.q),
+	};
+
+	res.status(200).send(results);
 });
 
 export default router;

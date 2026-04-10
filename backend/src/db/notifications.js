@@ -73,6 +73,15 @@ export async function getUnreadNotifications(connection, account_id) {
 }
 
 /**
+ * Return true if the account has at least one unread notification
+ */
+export async function hasUnreadNotifications(connection, account_id) {
+	return (await connection
+		.collection('notifications')
+		.countDocuments({ account: objectId(account_id), read: false })) > 0;
+ }
+
+/**
  * Mark a single notification read
  */
 export async function markNotificationRead(connection, notification_id) {

@@ -35,7 +35,7 @@ export async function createSession(connection, account_id) {
 		.insertOne({
 			account_id: objectId(account_id),
 			token: session_token,
-			expires: Math.floor(Date.now()/1000) + process.env.SESSION_LIFESPAN_SECONDS
+			expires: Math.floor(Date.now()/1000) + Number(process.env.SESSION_LIFESPAN_SECONDS)
 		});
 	
 	return session_token;
