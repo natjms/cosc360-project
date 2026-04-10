@@ -4,7 +4,7 @@ import Collections from './Collections.jsx'
 import MyAccount from './MyAccount.jsx'
 import { Logout } from './Logout.jsx'
 import { useState, useEffect } from 'react'
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 
 import notification_icon from '../assets/notification.png';
 import unread_notification_icon from '../assets/notification-unread.png';
@@ -90,12 +90,14 @@ function Navbar() {
 					<>
                         <button onClick={handleLogout}>Logout</button>
                     	<li>
-                    	    <img src={
-                    	            unread_notifications ?
-                    	                unread_notification_icon
-                    	                : notification_icon
-                    	        }
-                    	        width={20}/>
+                        	<Link to='/notifications'>
+                        	    <img src={
+                        	            unread_notifications ?
+                        	                unread_notification_icon
+                        	                : notification_icon
+                        	        }
+                        	        width={20}/>
+                        	</Link>
                     	</li>
 					</>
 					: <li>
