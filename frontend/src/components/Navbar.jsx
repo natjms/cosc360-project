@@ -41,7 +41,10 @@ function Navbar() {
 
     const handleProfile = () => { 
         navigate('/MyAccount')
+    };
 
+    const handleAdmin = () => {
+        navigate('/admin');
     };
 
     return (
@@ -57,6 +60,9 @@ function Navbar() {
                     <li><a href="/add" onClick={handleAddBook} style={{color: '#B45253', fontWeight: 'bold'}}> + Add a Book</a></li>
                 }
                 <li><a href = "/profile" onClick = {handleProfile}>Profile</a></li>
+                { localStorage.getItem('username') === 'admin' &&
+                    <li><a href="/admin" onClick={handleAdmin} style={{color: '#B45253', fontWeight: 'bold'}}>Admin</a></li>
+                }
                 <li>
                     {isLoggedIn ? (
                         <button onClick={handleLogout}>Logout</button>
