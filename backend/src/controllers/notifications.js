@@ -1,6 +1,7 @@
 import express from 'express';
 import { SL, at_least } from '#src/authentication.js';
-import { connect_db } from '#src/db/connection.js';
+import { connect_db, objectId } from '#src/db/connection.js';
+import * as notifications from '#src/db/notifications.js';
 
 const router = express.Router();
 
@@ -25,6 +26,13 @@ router.get('/:account_id', at_least(SL.authenticated), its_mine, async (req, res
 	res.status(200).send(notification_list);
 });
 
+router.get('/:account_id/unread', at_least(SL.authenticated), its_mine, async (req, res) => {
+	const unread =
+		await notifications.hasUnreadNotifications(req.conn, req.params.account_id);
+
+	res.status(200).send({ unread });
+});
+
 router.patch('/:account_id', at_least(SL.authenticated), its_mine, async (req, res) => {
 	// Next time we open the notifications, they'll all be read
 	await notifications.markAllNotificationsRead(req.conn, req.params.account_id);
@@ -32,9 +40,7 @@ router.patch('/:account_id', at_least(SL.authenticated), its_mine, async (req, r
 });
 
 router.delete('/:account_id', at_least(SL.authenticated), its_mine, async (req, res) => {
-	const notification = await notifications.getNotificationById(req.conn, req.params.notification_id);
-
-	await notifications.dismissAllNotification(req.conn, req.account._id);
+	await notifications.dismissAllNotifications(req.conn, req.account._id);
 	res.status(204).send();
 });
 

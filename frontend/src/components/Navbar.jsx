@@ -1,14 +1,37 @@
 import Login from './LogIn.jsx'
 import { Logout } from './Logout.jsx'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate, useLocation, Link } from 'react-router-dom';
+
+import notification_icon from '../assets/notification.png';
+import unread_notification_icon from '../assets/notification-unread.png';
 
 function Navbar() {
 
+    const [unread_notifications, setUnreadNotifications] = useState(false);
+
     const [seen, setSeen] = useState(false);
-    const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('token'));
     const navigate = useNavigate();
-    const location = useLocation();
+    const _location = useLocation();
+
+    const checkUnreadNotifications = async () => {
+        const session_token = localStorage.getItem('token');
+        if (session_token) {
+            const response = await fetch(`/api/notifications/${localStorage.getItem('account_id')}/unread`, {
+                headers: { 'Authorization': `Basic ${session_token}` }
+            });
+            const { unread } = await response.json();
+            setUnreadNotifications(unread);
+        }
+    };
+
+    useEffect(() => {
+        // Check on page load
+        checkUnreadNotifications();
+
+        // Check again every 10 seconds
+        setInterval(checkUnreadNotifications, 10000);
+    }, []);
 
     const handleLoginSuccess = () => {
         setIsLoggedIn(true);
@@ -23,6 +46,27 @@ function Navbar() {
         setSeen(!seen); 
     };
 
+    const handleAbout = () => { 
+        navigate('/About'); 
+    };
+
+    const handleCollections = () => { 
+        navigate('/Collections')
+    }
+
+
+    const handleAddBook = () => {
+        navigate('/add');
+    };
+
+    const handleProfile = () => {
+        navigate('/MyAccount')
+    };
+
+    const handleAdmin = () => {
+        navigate('/admin');
+    };
+
     return (
         <>
         <nav className="main-nav">
@@ -32,24 +76,41 @@ function Navbar() {
                 <li><Link to="/genres">Genres</Link></li>
                 <li><Link to="/about">About</Link></li>
 
-                { location.pathname === '/admin' &&
-                    <li><Link to="/add" style={{color: '#B45253', fontWeight: 'bold'}}> + Add a Book</Link></li>
-                }
                 <li><Link to="/profile">Profile</Link></li>
+                { localStorage.getItem('token') ?
+					<>
+                        <button onClick={handleLogout}>Logout</button>
+                    	<li>
+                        	<Link to='/notifications'>
+                        	    <img src={
+                        	            unread_notifications ?
+                        	                unread_notification_icon
+                        	                : notification_icon
+                        	        }
+                        	        width={20}/>
+                        	</Link>
+                    	</li>
+					</>
+					: <li>
+                        <button onClick={togglePop}>Login</button>
+                        {seen && <Login toggle={togglePop} />}
+                    </li>
+                }
+            </ul>
+
+			<ul>
+				{ localStorage.getItem('token') &&
+					<>
+						<li><Link to='/conversations'>Conversations</Link></li>
+					</>
+				}
+                { _location.pathname === '/admin' &&
+                    <li><Link to="/add" style={{color: '#B45253', fontWeight: 'bold'}}> + New Book</Link></li>
+                }
                 { localStorage.getItem('username') === 'admin' &&
                     <li><Link to="/admin" style={{color: '#B45253', fontWeight: 'bold'}}>Admin</Link></li>
                 }
-                <li>
-                    {isLoggedIn ? (
-                        <button onClick={handleLogout}>Logout</button>
-                    ) : (
-                        <>
-                            <button onClick={togglePop}>Login</button>
-                            {seen && <Login toggle={togglePop} onLoginSuccess={handleLoginSuccess} />}
-                        </>
-                    )}
-                </li>
-            </ul>
+			</ul>
         </nav>
 
         </>

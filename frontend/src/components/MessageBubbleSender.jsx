@@ -9,6 +9,7 @@ const MessageBubbleSender = ({image_source, username}) => {
 				width: 40,
 				height: 40,
 				borderRadius: '100%',
+				objectFit: 'cover',
 			}}
 		/>
 	);

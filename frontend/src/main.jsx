@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client'
 import { useEffect, useState } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
+import Header from './components/Header';
 import App from './App.jsx'
 import Signup from './components/Signup';
 import SearchResults from './SearchResults.jsx'
@@ -19,6 +20,7 @@ import User from './components/User';
 import PageNotFound from './components/PageNotFound';
 import Genres from './components/Genres';
 import ShareBook from './components/ShareBook';
+import Notifications from './Notifications';
 
 import { Navigate } from 'react-router-dom';
 
@@ -105,26 +107,30 @@ const AdminGatedPage = ({children}) => {
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<App />} />
-        <Route path = "/signup" element = {<Signup />} />
-        <Route path = "/login" element = {<LoginPage />} />
-        <Route path = "/search" element = {<SearchResults />} />
-        <Route path = '/about' element = {<About />} />
-        <Route path = '/collections' element = {<Collections/>}/>
-        <Route path = '/genres' element = {<Genres/>} />
-		<Route path = '/catalog/:isbn' element = {<Catalog/>} />
-		<Route path = '/user/:username' element = {<User/>} />
+      <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', }}>
+        <Header />
+        <Routes>
+          <Route path="/" element={<App />} />
+          <Route path = "/signup" element = {<Signup />} />
+          <Route path = "/login" element = {<LoginPage />} />
+          <Route path = "/search" element = {<SearchResults />} />
+          <Route path = '/about' element = {<About />} />
+          <Route path = '/collections' element = {<Collections/>}/>
+          <Route path = '/genres' element = {<Genres/>} />
+	      <Route path = '/catalog/:isbn' element = {<Catalog/>} />
+	      <Route path = '/user/:username' element = {<User/>} />
 
-        <Route path = '/conversations' element = {<LoginGatedPage><Conversations/></LoginGatedPage>}/>
-        <Route path="/add" element={<AdminGatedPage><AddBookPage/></AdminGatedPage>}/>
-        <Route path = '/profile' element = {<LoginGatedPage><Profile/></LoginGatedPage>} />
-        <Route path = '/myaccount' element = {<LoginGatedPage><MyAccount/></LoginGatedPage>} />
-        <Route path = '/sharebook/' element = {<LoginGatedPage><ShareBook/></LoginGatedPage>} />
-        <Route path = '/admin' element = {<AdminGatedPage><Admin/></AdminGatedPage>} />
+          <Route path = '/notifications' element = {<LoginGatedPage><Notifications/></LoginGatedPage>}/>
+          <Route path = '/conversations' element = {<LoginGatedPage><Conversations/></LoginGatedPage>}/>
+          <Route path="/add" element={<AdminGatedPage><AddBookPage/></AdminGatedPage>}/>
+          <Route path = '/profile' element = {<LoginGatedPage><Profile/></LoginGatedPage>} />
+          <Route path = '/myaccount' element = {<LoginGatedPage><MyAccount/></LoginGatedPage>} />
+          <Route path = '/sharebook/' element = {<LoginGatedPage><ShareBook/></LoginGatedPage>} />
+          <Route path = '/admin' element = {<AdminGatedPage><Admin/></AdminGatedPage>} />
 
-        <Route path="*" element={<PageNotFound />} />
-      </Routes>
+          <Route path="*" element={<PageNotFound />} />
+        </Routes>
+      </div>
     </BrowserRouter>
   </StrictMode>,
 )

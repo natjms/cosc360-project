@@ -6,6 +6,7 @@ import * as accounts from '#src/db/accounts.js';
 import * as books from '#src/db/books.js';
 import * as catalog from '#src/db/catalog.js';
 import * as conversations from '#src/db/conversations.js';
+import * as notifications from '#src/db/notifications.js';
 import * as messages from '#src/db/messages.js';
 
 const router = express.Router();
@@ -52,8 +53,14 @@ router.post('/:account_id', at_least(SL.authenticated), async (req, res) => {
 
 	let new_conversation =
 		await conversations.getConversationById(req.conn, new_conversation_id);
-	
+
 	new_conversation = await populate(req, new_conversation);
+
+	await notifications.sendNotification(req.conn, req.params.account_id,
+		`New request for your copy of ${new_conversation.context.catalog_entry.title}`,
+		`${req.account.username} has sent you a message about a book you're sharing.`
+	);
+
 	res.status(201).send(new_conversation);
 });
 
@@ -111,6 +118,16 @@ router.post('/:account_id/:conversation_id', at_least(SL.authenticated), async (
 		req.conn, req.params.conversation_id, req.account._id, req.body.content);
 
 	const message = await messages.getMessageById(req.conn, message_id);
+
+	const conversation = await conversations.getConversationById(req.conn, req.params.conversation_id);
+	const message_recipient_id = req.account._id.equals(conversation.recipient) ?
+		conversation.initiator
+		: conversation.recipient;
+
+	await notifications.sendNotification(req.conn, message_recipient_id,
+		'New message',
+		`${req.account.username} has sent you a message`,
+	);
 
 	res.status(201).send(message)
 });
