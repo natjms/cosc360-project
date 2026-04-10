@@ -35,13 +35,42 @@ const Notifications = (props) => {
 
     const handleDismiss = (id) => {
         return async () => {
-            await fetch(`/api/notifications/${localStorage.getItem('account_id')}/${id}`, {
+            const response = await fetch(`/api/notifications/${localStorage.getItem('account_id')}/${id}`, {
                 method: 'DELETE',
                 headers: { 'Authorization': `Basic ${localStorage.getItem('token')}` }
             });
 
+            if (!response.ok) {
+                try {
+                    const e = await response.json();
+                    setError(e.error);
+                } catch {
+                    setError('An unknown error occured while dismissing');
+                }
+                return;
+            }
+
             setNotifications(notifications.filter(n => n._id !== id));
         };
+    };
+
+    const handleDismissAll = async () => {
+        const response = await fetch(`/api/notifications/${localStorage.getItem('account_id')}`, {
+            method: 'DELETE',
+            headers: { 'Authorization': `Basic ${localStorage.getItem('token')}` }
+        });
+
+        if (!response.ok) {
+            try {
+                const e = await response.json();
+                setError(e.error);
+            } catch {
+                setError('An unknown error occured while dismissing');
+            }
+            return;
+        }
+
+        setNotifications([]);
     };
 
     useEffect(() => {
@@ -70,6 +99,10 @@ const Notifications = (props) => {
     return <div className='notifications-container'>
         <div className='notifications-window'>
             <h1>Notifications</h1>
+
+            <button onClick={handleDismissAll}>
+                Dismiss all
+            </button>
 
             { error &&
                 <p className='notifications-error'>
