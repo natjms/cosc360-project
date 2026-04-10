@@ -124,29 +124,30 @@ const Conversations = (props) => {
 		setActiveConversation({...active_conversation,
 			messages: [...active_conversation.messages, message_result]
 		});
-		
 	};
 
 	return <>
 		<div className='conversations-page-container'>
 			<div className='conversations-sidebar'>
-				<button onClick={() => setShowCompleteConversations(!show_complete_conversations)}>
-					{ !show_complete_conversations ?
-						'Show complete conversations'
-						: 'Show incomplete conversations'
+				<div className='conversations-sidebar-inner'>
+					<button onClick={() => setShowCompleteConversations(!show_complete_conversations)}>
+						{ !show_complete_conversations ?
+							'Show complete conversations'
+							: 'Show incomplete conversations'
+						}
+					</button>
+					{ conversations.length > 0 ?
+						<ul className='conversation-tab-list'>
+							{ conversations.map((c, i) =>
+								<ConversationTab
+									key={i}
+									conversation={c}
+									onClick={() => setActiveConversationId(c._id)}/>
+							)}
+						</ul>
+						: <p>Nothing to show</p>
 					}
-				</button>
-				{ conversations.length > 0 ?
-					<ul className='conversation-tab-list'>
-						{ conversations.map((c, i) =>
-							<ConversationTab
-								key={i}
-								conversation={c}
-								onClick={() => setActiveConversationId(c._id)}/>
-						)}
-					</ul>
-					: <p>Nothing to show</p>
-				}
+				</div>
 			</div>
 			<div className='conversations-message-window'>
 				{ active_conversation !== null && otherPerson !== null ?
@@ -163,27 +164,43 @@ const Conversations = (props) => {
 								</button>
 							}
 						</div>
-						<ul>
-							{ active_conversation.messages.map((m, i) =>
-								<MessageBubble
-									key={i}
-									message={m.content}
-									alignment={m.sender === otherPerson._id ? 'left' : 'right'}
-									sender_src={
-										m.sender === otherPerson._id ?
-											`/api${otherPerson.imagePath}`
-											: `/api${myAccount.imagePath}`
-									} />
-							)}
-						</ul>
+						<div className='conversation-messages'>
+							<div className='context-container'>
+								<img src={active_conversation.context.catalog_entry.cover}/>
+								<div>
+									<p>
+										You{"'"}re discussing {active_conversation.recipient.username}{"'"}s
+										copy of <em>{active_conversation.context.catalog_entry.title}</em>
+									</p>
+									<p><small>
+										You can use this conversation to arrange for a trade or pickup. Be sure
+										not to share any unnecessary personal information
+									</small></p>
+								</div>
+							</div>
+							<ul>
+								{ active_conversation.messages.map((m, i) =>
+									<MessageBubble
+										key={i}
+										message={m.content}
+										alignment={m.sender === otherPerson._id ? 'left' : 'right'}
+										sender_src={
+											m.sender === otherPerson._id ?
+												`/api${otherPerson.imagePath}`
+												: `/api${myAccount.imagePath}`
+										} />
+								)}
+							</ul>
 
-						{ active_conversation.complete &&
-							<p className='convesation-complete-message'>This conversation has been completed</p>
-						}
+							{ active_conversation.complete &&
+								<p className='conversation-complete-message'>This conversation has been completed</p>
+							}
+						</div>
 
 						<div className='message-window-send-bar'>
 							<input
 								value={new_message}
+								placeholder='Say something...'
 								onChange={(e) => setNewMessage(e.target.value)}/>
 							<button onClick={handleSendMessage}>
 								Send
