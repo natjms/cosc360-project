@@ -1,5 +1,6 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom'
 import MessageBubble from './components/MessageBubble';
 import ConversationTab from './components/ConversationTab';
 import './Conversations.css';
@@ -166,7 +167,9 @@ const Conversations = (props) => {
 						</div>
 						<div className='conversation-messages'>
 							<div className='context-container'>
-								<img src={active_conversation.context.catalog_entry.cover}/>
+								<Link to={`/catalog/${active_conversation.context.catalog_entry.isbn}`}>
+									<img src={active_conversation.context.catalog_entry.cover}/>
+								</Link>
 								<div>
 									<p>
 										You{"'"}re discussing {active_conversation.recipient.username}{"'"}s
