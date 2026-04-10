@@ -102,6 +102,11 @@ function Navbar() {
             </ul>
 
 			<ul>
+				{ localStorage.getItem('token') &&
+					<>
+						<li><Link to='/conversations'>Conversations</Link></li>
+					</>
+				}
                 { _location.pathname === '/admin' &&
                     <li><a href="/add" onClick={handleAddBook} style={{color: '#B45253', fontWeight: 'bold'}}> + New Book</a></li>
                 }
