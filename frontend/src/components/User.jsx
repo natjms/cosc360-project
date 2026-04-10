@@ -11,6 +11,7 @@ function User(){
 	const [user, setUser] = useState(null);
 	const [holdings, setHoldings] = useState(null);
 	const [isThisUser, setIsThisUser] = useState(false);
+	const [image, setImage] = useState(null);	
 
 	const params = useParams();
 
@@ -21,6 +22,9 @@ function User(){
       			const userData = await res.json();
       			setUser(userData);
 
+
+        		const imageData = userData.imagePath
+        		setImage(`/api${imageData}`);
       			const res2 = await fetch('/api/accounts/' + userData._id + '/holdings');
       			const holdingsData = await res2.json();
       			setHoldings(holdingsData);
@@ -70,18 +74,20 @@ return (
 	<div>
 		{isThisUser ? 
         <a href = "/myaccount" style = {{textAlign: "center", backgroundColor: "#B45253", color: "white", textDecoration: "none"}}>Edit Account</a> : ""}
+		<div className="center">
 		<div className="user-banner">
 		<h1>{user.username}</h1>
-			<img src={user.imagePath}></img>
+			<img className='profileImg' src={image}></img>
 
-		<h2>{comp.length} books</h2>
-		<h2>{user.city}, {user.country}</h2>
-		<h2>joined {Date(user.joinDate)
+		<h3>{comp.length} books</h3>
+		<h3>{user.city}</h3>
+		<h3>joined {Date(user.joinDate)
 				.toString()
 				.split(" ")
 				.slice(1,4)
 				.join(" ")}
-		</h2>
+		</h3>
+		</div>
 		</div>
 		<h1>Shared Books</h1>
 		
