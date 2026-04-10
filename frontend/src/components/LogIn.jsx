@@ -68,6 +68,12 @@ export default function Login(props) {
                 localStorage.setItem('token', data.token);
                 localStorage.setItem('account_id', data.account_id);
 
+                const userRes = await fetch('/api/accounts/current-user', {
+                    headers: { 'Authorization': `Basic ${data.token}` }
+                });
+                const userData = await userRes.json();
+                localStorage.setItem('username', userData.username);
+
                 navigate('/profile');
             }
 

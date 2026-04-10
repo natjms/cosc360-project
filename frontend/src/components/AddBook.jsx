@@ -46,6 +46,7 @@ export default function AddBook({onBookAdded}) {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Authorization': `Basic ${localStorage.getItem('token')}`,
                 },
                 body: JSON.stringify(newEntry),
             });

@@ -3,12 +3,13 @@ import About from './About.jsx'
 import Collections from './Collections.jsx'
 import MyAccount from './MyAccount.jsx'
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 function Navbar() {
 
     const [seen, setSeen] = useState(false);
     const navigate = useNavigate();
+    const location = useLocation();
 
     function togglePop() { 
         setSeen(!seen); 
@@ -41,7 +42,9 @@ function Navbar() {
                 <li><a href="/genres">Genres</a></li>
                 <li><a href= "/about" onClick={handleAbout}>About</a></li>
 
-                <li><a href="/add" onClick={handleAddBook} style={{color: '#B45253', fontWeight: 'bold'}}> + Add a Book</a></li>
+                { location.pathname === '/admin' &&
+                    <li><a href="/add" onClick={handleAddBook} style={{color: '#B45253', fontWeight: 'bold'}}> + Add a Book</a></li>
+                }
                 <li><a href = "/profile" onClick = {handleProfile}>Profile</a></li>
                 <li> 
 	    	    <button onClick={togglePop}>Login</button>

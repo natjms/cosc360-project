@@ -39,7 +39,7 @@ router.get('/public', async (req, res) => {
 
 // Add a "kind" of book to the database. Recognize a new book within the
 // system without necessarily listing it
-router.post('/', at_least(SL.unauthenticated), async (req, res) => {
+router.post('/', at_least(SL.admin), async (req, res) => {
     try {
         const connection = req.conn;
         const {title, author, description, isbn, cover, genre} = req.body;

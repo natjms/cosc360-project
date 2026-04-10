@@ -117,7 +117,7 @@ createRoot(document.getElementById('root')).render(
 		<Route path = '/user/:username' element = {<User/>} />
 
         <Route path = '/conversations' element = {<LoginGatedPage><Conversations/></LoginGatedPage>}/>
-        <Route path="/add" element={<LoginGatedPage><AddBookPage/></LoginGatedPage>}/>
+        <Route path="/add" element={<AdminGatedPage><AddBookPage/></AdminGatedPage>}/>
         <Route path = '/profile' element = {<LoginGatedPage><Profile/></LoginGatedPage>} />
         <Route path = '/myaccount' element = {<LoginGatedPage><MyAccount/></LoginGatedPage>} />
         <Route path = '/sharebook/' element = {<LoginGatedPage><ShareBook/></LoginGatedPage>} />
