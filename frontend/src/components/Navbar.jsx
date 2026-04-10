@@ -79,13 +79,7 @@ function Navbar() {
                 <li><a href="/genres">Genres</a></li>
                 <li><a href= "/about" onClick={handleAbout}>About</a></li>
 
-                { _location.pathname === '/admin' &&
-                    <li><a href="/add" onClick={handleAddBook} style={{color: '#B45253', fontWeight: 'bold'}}> + Add a Book</a></li>
-                }
                 <li><a href = "/profile" onClick = {handleProfile}>Profile</a></li>
-                { localStorage.getItem('username') === 'admin' &&
-                    <li><a href="/admin" onClick={handleAdmin} style={{color: '#B45253', fontWeight: 'bold'}}>Admin</a></li>
-                }
                 { localStorage.getItem('token') ?
 					<>
                         <button onClick={handleLogout}>Logout</button>
@@ -106,6 +100,15 @@ function Navbar() {
                     </li>
                 }
             </ul>
+
+			<ul>
+                { _location.pathname === '/admin' &&
+                    <li><a href="/add" onClick={handleAddBook} style={{color: '#B45253', fontWeight: 'bold'}}> + New Book</a></li>
+                }
+                { localStorage.getItem('username') === 'admin' &&
+                    <li><a href="/admin" onClick={handleAdmin} style={{color: '#B45253', fontWeight: 'bold'}}>Admin</a></li>
+                }
+			</ul>
         </nav>
 
         </>
