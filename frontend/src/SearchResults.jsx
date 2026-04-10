@@ -25,7 +25,7 @@ const CatalogEntryResult = ({entry}) => {
 		<article style={{ display: 'flex', gap: '20px', alignItems: 'start'}}>
 			{entry.cover && (
 				<img
-				src={`data:image/jpeg;base64,${entry.cover}`}
+				src={entry.cover}
 				alt={entry.title}
 				style={{width: '100px', borderRadius: '4px', boxShadow: '0 2px 5px rgba(0,0,0,0.2'}}
 				/>

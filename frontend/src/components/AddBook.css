@@ -1,0 +1,113 @@
+.add-book-page {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 40px 20px;
+}
+
+.add-book-window {
+    width: 100%;
+    max-width: 1200px;
+    background-color: #FFE797;
+    padding: 30px;
+    box-sizing: border-box;
+}
+
+.add-book-overlay {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto 1fr;
+    background-color: white;
+    border-radius: 20px;
+    border: 3px black solid;
+    overflow: hidden;
+}
+
+.add-book-overlay h2 {
+    grid-column: 1 / -1;
+    text-align: center;
+    margin: 20px 0 10px 0;
+    padding: 0;
+}
+
+.add-book-form {
+    padding: 10px 30px 30px 30px;
+    display: flex;
+    flex-direction: column;
+}
+
+.add-book-preview {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 30px 30px 30px;
+    border-left: 2px solid #eee;
+    background-color: #fafafa;
+    border-radius: 0 17px 17px 0;
+    min-height: 400px;
+}
+
+.add-book-preview img {
+    max-width: 100%;
+    max-height: 380px;
+    object-fit: contain;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+
+.add-book-preview p {
+    color: #aaa;
+    font-size: 90%;
+    text-align: center;
+}
+
+.add-book-control {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 12px;
+}
+
+.add-book-control label {
+    margin-bottom: 3px;
+    font-weight: bold;
+    font-size: 90%;
+}
+
+.add-book-control input,
+.add-book-control textarea,
+.add-book-control select {
+    width: 100%;
+    border-color: black;
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 4px;
+    padding: 4px 6px;
+    font-family: "Verdana", sans-serif;
+    font-size: 90%;
+    box-sizing: border-box;
+}
+
+.add-book-control textarea {
+    height: 70px;
+    resize: vertical;
+}
+
+.add-book-submit {
+    width: 60%;
+    background-color: black;
+    color: white;
+    margin-top: 10px;
+    height: 34px;
+    cursor: pointer;
+    font-family: "Verdana", sans-serif;
+    text-transform: uppercase;
+    font-weight: bold;
+    border: none;
+}
+
+.add-book-status {
+    margin-top: 8px;
+    font-size: 85%;
+    color: #B45253;
+}

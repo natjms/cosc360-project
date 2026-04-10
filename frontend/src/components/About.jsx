@@ -11,16 +11,15 @@ function About() {
     return (
       <>
       <div className = "about">
-        <h3 style = {{color: "white"}}>About</h3>
-        <h1 style = {{color: "white"}}>CONNECT, LEARN, TRADE</h1>
+        <h1><small>About</small><br/>CONNECT, LEARN, TRADE</h1>
       </div>
 
-      <div> 
+      <div>
         <img src = {hammock} alt = "Hammock photo" className = "hammock-img" />
       </div>
 
       <div className = "blurb">
-        <h3>OUR VISION IS TO ALLOW USERS TO EXCHANGE BOOKS AMONGST EACH OTHER, SPREADING KNOWLEDGE</h3>
+        <p>Our vision is to allow people to exchange books amongst each other, spreading knowledge</p>
       </div>
 
       <div className = "images">
@@ -44,7 +43,7 @@ function About() {
 
       <div className = "paragraph">
         <h1>MORE ABOUT US</h1>
-        <h3 className = "aboutpara">We are a group of people who love books. Our mission is to spread books
+        <p className = "aboutpara">We are a group of people who love books. Our mission is to spread books
           with other people. We are a group of people who love books. Our mission is to spread books
           with other people. We are a group of people who love books. Our mission is to spread books
           with other people. We are a group of people who love books. Our mission is to spread books
@@ -52,9 +51,8 @@ function About() {
           with other people. We are a group of people who love books. Our mission is to spread books
           with other people. We are a group of people who love books. Our mission is to spread books
           with other people. We are a group of people who love books. Our mission is to spread books
-          with other people.</h3>
+          with other people.</p>
       </div>
-
       </>
     );
 }

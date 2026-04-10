@@ -2,13 +2,14 @@ import React, { useEffect, useState } from "react";
 import MessageBubbleSender from "./MessageBubbleSender.jsx";
 
 const MessageBubble = ({message, alignment, sender_src}) => {
-	const bubble_colour = alignment === 'left' ? '#FFE797' : 'green';
+	const bubble_colour = alignment === 'left' ? '#FFE797' : '#3d993d';
 	return <div style={{
 				display: 'flex',
 				flexDirection: 'row',
 				justifyContent: alignment === 'left' ?
 					'flex-start' : 'flex-end',
 				alignItems: 'flex-end',
+				marginBottom: '0.5em',
 			}}>
 		{alignment === 'left' &&
 			<MessageBubbleSender
@@ -22,6 +23,7 @@ const MessageBubble = ({message, alignment, sender_src}) => {
 			height: 'auto',
 			padding: 10,
 			fontFamily: 'sans-serif',
+			border: '1px solid #AAA',
 			fontSize: '0.8em',
 		}}>
 			{message}

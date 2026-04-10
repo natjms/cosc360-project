@@ -119,14 +119,8 @@ createRoot(document.getElementById('root')).render(
         <Route path = '/genres' element = {<Genres/>} />
 	<Route path = '/catalog/:isbn' element = {<Catalog/>} />
 	<Route path = '/user/:username' element = {<User/>} />
-	<Route path = '/sharebook/' element = {<ShareBook/>} />
-	<Route path = '/AddCollection/' element = {<AddCollection/>} />
-		{ /* TODO only allow this route to exist if the user is an admin */ }
-        <Route path = '/admin' element = {<Admin/>} />
-	<Route path="*" element={<PageNotFound />} /> 
-	<Route path = '/catalog/:isbn' element = {<Catalog/>} />
-	<Route path = '/user/:username' element = {<User/>} />
 
+        <Route path = '/AddCollection/' element = {<LoginGatedPage><AddCollection/></LoginGatedPage>}/>
         <Route path = '/notifications' element = {<LoginGatedPage><Notifications/></LoginGatedPage>}/>
         <Route path = '/conversations' element = {<LoginGatedPage><Conversations/></LoginGatedPage>}/>
         <Route path="/add" element={<AdminGatedPage><AddBookPage/></AdminGatedPage>}/>
@@ -135,8 +129,8 @@ createRoot(document.getElementById('root')).render(
         <Route path = '/sharebook/' element = {<LoginGatedPage><ShareBook/></LoginGatedPage>} />
         <Route path = '/admin' element = {<AdminGatedPage><Admin/></AdminGatedPage>} />
 
-        <Route path="*" element={<PageNotFound />} />
-      </Routes>
+          <Route path="*" element={<PageNotFound />} />
+        </Routes>
     </BrowserRouter>
   </StrictMode>,
 )
