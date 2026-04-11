@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router';
+import { useParams, useNavigate } from 'react-router';
 import BookItem from './BookItem'; 
 import noCover from '../assets/noCover.jpeg';
+import PageNotFound from './PageNotFound';
 import './Catalog.css';
 
 export default function Catalog(){
@@ -9,12 +10,27 @@ export default function Catalog(){
 	const [book, setBook] = useState(null);
 
 	const params = useParams();
+	const navigate = useNavigate();
+
 	useEffect(() => {
-		const res = fetch('/api/books/' + params.isbn)
-		.then((res) => res.json())
-		.then((data) => setBook(data))
-		.catch((err) => console.error(err));
-	},[])
+		const fetchBook = async () => {
+			try {
+				const res = await fetch('/api/books/' + params.isbn);
+				if (res.status === 404) {
+					navigate('/');
+					return;
+				}
+				const data = await res.json();
+				setBook(data);
+			} catch (err) {
+				console.error(err);
+			}
+		};
+
+		fetchBook();
+		const interval = setInterval(fetchBook, 10000);
+		return () => clearInterval(interval);
+	}, [])
 	if(!book) {return <p>loading...</p>;}
 	if(!book.title){
 		return (

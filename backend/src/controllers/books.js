@@ -79,7 +79,8 @@ router.patch('/:book_id', at_least(SL.admin), unimplemented);
 
 router.delete('/:book_id', at_least(SL.admin), async (req, res) => {
 	try{
-		dbCatalog.deleteCatalogEntry(req.conn, req.params.book_id);
+		await dbCatalog.deleteCatalogEntry(req.conn, req.params.book_id);
+		res.status(204).send();
 	}
 	catch(err){
 		res.status(400).send({error: err.message});
@@ -89,6 +90,10 @@ router.delete('/:book_id', at_least(SL.admin), async (req, res) => {
 router.get('/:isbn', at_least(SL.unauthenticated), async (req, res) => {
 	try{
 		const book = await dbCatalog.getCatalogEntryByISBN(req.conn, req.params.isbn);
+		if (!book) {
+			res.status(404).send({error: 'Book not found'});
+			return;
+		}
 		res.status(200).send(book);
 	}
 	catch(err){
