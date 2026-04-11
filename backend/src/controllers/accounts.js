@@ -39,6 +39,28 @@ const upload = multer({storage,limits: { fileSize: 2 * 1024 * 1024 }, fileFilter
 		cb(new Error("Only JPG and PNG files are allowed"),false); } } });
 
 
+router.patch('/:account_id', at_least(SL.authenticated), async (req, res) => {
+	console.log('ROUTE HIT');
+	console.log('BODY:', req.body);
+	if (req.account.username !== 'admin' && !req.account._id.equals(req.params.account_id)) {
+		res.status(403).send({'error': 'You can only update your own account'});
+		return;
+	}
+	
+	const updates = {};
+	if (req.body.username) updates.username = req.body.username;
+	if (req.body.email) updates.email = req.body.email;
+	if (req.body.city) updates.city = req.body.city;
+	if (req.body.country) updates.country = req.body.country;
+	if (req.body.password_plaintext) updates.password_plaintext = req.body.password_plaintext;
+
+	console.log("UPDATES", updates)
+
+	await accounts.updateAccount(req.conn, req.params.account_id, updates);
+	res.status(200).json({ success: true });
+});
+
+
 // Get all accounts as a list. Returns an array of accounts
 router.get('/', at_least(SL.authenticated), async (req, res) => {
 	if (req.query?.q === '' || !req.query?.q) {
@@ -105,6 +127,7 @@ router.post('/', at_least(SL.unauthenticated), upload.single("image"), async (re
     }
   }
 );
+
   
 
 router.get('/current-user', at_least(SL.authenticated), async (req, res) => {
@@ -127,56 +150,6 @@ router.get('/current-user', at_least(SL.authenticated), async (req, res) => {
         }
     });
 
-
-router.get('/:identifier', at_least(SL.unauthenticated), async (req, res) => {
-	// Maybe we got a username
-	let account = await accounts.getAccountByUsername(req.conn, req.params.identifier);
-
-	if (account === null) {
-		// Maybe it was an ObjectID
-		try {
-			let account_id = new mongodb.ObjectId(req.params.identifier);
-			account = await accounts.getAccountById(req.conn, account_id);
-		} catch (err) {
-			if (!(err instanceof mongodb.BSON.BSONError)) {
-				throw err;
-			}
-		}
-
-	}
-
-	if (account === null) {
-		// Still null? The account must not exist
-		res.status(404).send({error: 'Unknown account'});
-		return;
-	}
-
-	// Shouldn't be returning this in this context
-	delete account.password_hash;
-
-	res.status(200).send(account);
-});
-
-router.patch('/:account_id', at_least(SL.authenticated), async (req, res) => {
-	if (req.account.username !== 'admin' && !req.account._id.equals(req.params.account_id)) {
-		res.status(403).send({'error': 'You can only update your own account'});
-		return;
-	}
-	 const updates = {};
-	if (req.body.username && req.body.username !== req.account.username)
-		 updates.username = req.body.username;
-	if (req.body.email && req.body.email !== req.account.email) 
-		updates.email = req.body.email;
-	if (req.body.city && req.body.city !== req.account.city) 
-		updates.city = req.body.city;
-	if (req.body.country && req.body.country !== req.account.country) 
-		updates.country = req.body.country;
-	if (req.body.password) 
-		updates.password = req.body.password;
-
-	await accounts.updateAccount(req.conn, req.params.account_id, updates);
-	res.status(200).json({ success: true });
-});
 
 router.delete('/:account_id', at_least(SL.authenticated), async (req, res) => {
 	if (req.account.username !== 'admin' && !req.account._id.equals(req.params.account_id)) {
@@ -249,6 +222,39 @@ router.use(async (err, req, res, next) => {
 		res.send({error: 'AN UNKNOWN ACCOUNT ERROR OCCURRED. Please try again later'});
 	}
 });
+
+router.get('/:identifier', at_least(SL.unauthenticated), async (req, res) => {
+	// Maybe we got a username
+	let account = await accounts.getAccountByUsername(req.conn, req.params.identifier);
+
+	if (account === null) {
+		// Maybe it was an ObjectID
+		try {
+			let account_id = new mongodb.ObjectId(req.params.identifier);
+			account = await accounts.getAccountById(req.conn, account_id);
+		} catch (err) {
+			if (!(err instanceof mongodb.BSON.BSONError)) {
+				throw err;
+			}
+		}
+
+	}
+
+	if (account === null) {
+		// Still null? The account must not exist
+		res.status(404).send({error: 'Unknown account'});
+		return;
+	}
+
+	// Shouldn't be returning this in this context
+	delete account.password_hash;
+
+	res.status(200).send(account);
+});
+
+
+
+
 
 
 export default router;

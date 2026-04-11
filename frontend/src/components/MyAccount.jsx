@@ -66,15 +66,10 @@ function MyAccount() {
         setLoading(false);
         return;
       }
-    		try {
-      			const response = await fetch('/api/accounts/');
-      			const userData = await response.json();
-      			setUser(userData);
-
-
-        		const imageData = userData.imagePath
-        		setImage(`/api${imageData}`);
+    		
       
+    try {
+    
       const res = await fetch("/api/accounts/current-user", {
         method: "GET",
         headers: {
@@ -84,7 +79,7 @@ function MyAccount() {
       });
 
       const data = await res.json();
-
+    
       if (!res.ok) {
         setError(data.error || "Failed to get user");
         return;
@@ -93,6 +88,8 @@ function MyAccount() {
       setUser(data);
 
       if (data.imagePath) {
+        const imageData = data.imagePath
+        setImage(`/api${imageData}`);
         setImage(`/api${data.imagePath}`);
       }
 
@@ -168,33 +165,37 @@ async function validateForm(e) {
             return;
         }
 
+        console.log("USERNAME", username)
+        console.log("password", password_plaintext)
+        console.log("email", email)
+        console.log("city", city)
+        console.log("country", country)
 
-  try { 
-  const response = await fetch(`/api/accounts/${user._id}`, {
+        const payload = {};
+        if (username) payload.username = username;
+        if (email) payload.email = email;
+        if (city) payload.city = city;
+        if (country) payload.country = country;
+        if (password_plaintext) payload.password_plaintext = password;
+
+     try {
+        const response = await fetch(`/api/accounts/${user._id}`, {
         method: "PATCH",
-        headers: { 
-            'Content-Type': 'application/json',
-            'Authorization': `Basic ${localStorage.getItem('token')}`,
-        
-          },
-          body: JSON.stringify({
-                    email: email,
-                    username: username, 
-                    city: city,
-                    country: country,
-                    password_plaintext: password_plaintext
-                  }),
-        })
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Basic ${localStorage.getItem('token')}`,
+      },
+        body: JSON.stringify(payload),
+    });
           
             if(!response.ok) { 
                 throw new Error("invalid email")
             } else { 
             
             const data = await response.json(); 
-            console.log("USERNAME", data.username)
             
             alert("successfully updated")
-            navigate('/');
+            navigate(`/user/${payload.username}`);
             }
           }catch(error) { 
             console.log("error")
