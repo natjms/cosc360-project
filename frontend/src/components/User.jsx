@@ -118,7 +118,6 @@ function User(){
 		let bookInstance = holdings[i];
 		let book = bookInstance.catalog_entry;
 		if (!book) continue;
-		console.log(book);
 		comp.push(
 			<div key={book.isbn} style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
 				<BookItem
@@ -147,7 +146,6 @@ function User(){
 		);
 	}
 			
-	
 	
 
 return (

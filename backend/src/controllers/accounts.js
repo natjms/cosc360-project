@@ -69,7 +69,7 @@ router.post('/', at_least(SL.unauthenticated), upload.single("image"), async (re
 	   		if (req.file) {
         		account.imagePath = `/uploaded_images/${req.file.filename}`;
       		}
-	
+			
 		const accountId = await accounts.createAccount(req.conn, account);
 		res.status(201).send({ id: accountId });
   	} catch (err) {
@@ -204,7 +204,11 @@ router.get('/:account_id/holdings', at_least(SL.unauthenticated), async (req, re
 	res.status(200).send(possessed_books);
 });
 
-
+router.get('/recent/:num', at_least(SL.authenticated), async (req, res) =>{
+	console.log(req.params.num);
+	let query = await accounts.getRecentAccounts(req.conn, req.params.num);	
+	res.status(200).send(query);
+});
 
 router.use(async (err, req, res, next) => {
 	if (res.headersSent) {

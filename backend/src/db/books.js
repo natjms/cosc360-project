@@ -19,11 +19,13 @@ export async function createBook(connection, possessor_account_id, isbn) {
 	if (entry === null) {
 		throw new DBError(`Catalog entry does not exist`);
 	}
+	const timestamp = Date.now();
 	const result = await connection
 		.collection('books')
 		.insertOne({
 			possessor: objectId(possessor_account_id),
-			catalog_entry: objectId(entry._id)
+			catalog_entry: objectId(entry._id),
+			creationDate: timestamp
 		});
 
 	return result.insertedId;
@@ -62,4 +64,16 @@ export async function getBooksByEntry(connection, entry_id) {
 		.collection('books')
 		.find({ catalog_entry: objectId(entry_id) })
 		.toArray();
+}
+
+export async function getRecentBook(connection, limit){
+	try{
+		return connection
+		.collection('books')
+		.find({})
+		.toArray();
+	}
+	catch(err){
+		console.log(err);
+	}
 }

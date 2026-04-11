@@ -144,3 +144,14 @@ export function getCollectionsByPartialMatch(connection, query) {
 		})
 		.toArray();
 }
+
+
+export function getRecentCollections(connection, limit){
+	return connection
+		.collection('collections')
+		.find({})
+		.sort({'creationDate': -1})
+		.limit(Number(limit))
+		.toArray();
+}
+

@@ -73,4 +73,14 @@ router.delete('/:collection_id', at_least(SL.authenticated), async (req, res) =>
 	}
 });
 
+router.get('/recent/:num', at_least(SL.authenticated), async (req, res) => {
+	try{
+		let query = await dbCollections.getRecentCollections(req.conn, req.params.num);
+		res.status(200).send(query);
+	}
+	catch(err){
+		res.status(400).send({error: err.message});
+	}
+});
+
 export default router;

@@ -208,3 +208,13 @@ export function getAccountsByPartialMatch(connection, query) {
 		.project({ password_hash: 0, email: 0 })
 		.toArray();
 }
+
+export function getRecentAccounts(connection, limit){
+	return connection
+		.collection('accounts')
+		.find({})
+		.project({ password_hash: 0, email: 0 })
+		.sort({'joinDate': -1})
+		.limit(Number(limit))
+		.toArray();
+}

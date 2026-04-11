@@ -2,7 +2,7 @@ import express from 'express';
 import { SL, at_least } from '#src/middleware/authentication.js';
 import { connect_db, DBError } from '#src/db/connection.js';
 import * as dbCatalog from '#src/db/catalog.js';
-import { getBookById, createBook, transferBook, getBooksByEntry, deleteBook } from '#src/db/books.js';
+import { getBookById, createBook, transferBook, getBooksByEntry, deleteBook, getRecentBook } from '#src/db/books.js';
 import * as dbAccounts from '#src/db/accounts.js';
 import * as dbTransfers from '#src/db/transfers.js';
 
@@ -120,16 +120,6 @@ router.post('/:isbn/share', at_least(SL.authenticated), async (req, res) => {
 	}
 });
 
-//TODO auth should be for book's owner , rather than any user
-// this probably means passing along token 
-//
-//
-/*
- *if (req.account.username !== 'admin' && !req.account._id.equals(req.params.account_id)) {
-		res.status(403).send({'error': 'You can only update your own account'});
-		return;
-	}
-	*/
 router.get('/:book_id/request', at_least(SL.authenticated), async (req, res) => {
 	try{
 	const { book_id, receiver_account_id } = req.body;
@@ -168,6 +158,20 @@ router.post('/:book_id/transfer', at_least(SL.authenticated), async (req, res) =
 	}
 });
 
+
+router.get('/recent/:num', at_least(SL.authenticated), async (req, res) => {
+	try{
+		console.log(req.params.num);
+		const query = getRecentBook(req.conn, req.params.num);
+		res.status(200).send(query);
+	}
+	catch(err){
+		res.status(400).send({ error: err.message });
+	}
+});
+
+
+
 router.use(async (err, req, res, next) => {
 	if (res.headersSent) {
 		next(err);
@@ -182,5 +186,8 @@ router.use(async (err, req, res, next) => {
 		res.send({error: 'An unknown books error occured. Please try again later'});
 	}
 });
+
+
+
 
 export default router;
