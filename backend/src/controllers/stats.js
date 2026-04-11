@@ -1,6 +1,7 @@
 import express from 'express';
 import { SL, at_least } from '#src/middleware/authentication.js';
 import { connect_db } from '#src/db/connection.js';
+import * as transfers from '#src/db/transfers.js';
 
 const router = express.Router();
 router.use(connect_db);
@@ -27,6 +28,16 @@ router.get('/catalog', at_least(SL.unauthenticated), async (req, res) => {
     } catch (err) {
         res.status(500).send({ error: err.message });
     }
+});
+
+router.get('/transfers', at_least(SL.admin), async (req, res) => {
+	try {
+		const since = req.query.since || null;
+		const data = await transfers.getMostTransferredBooks(req.conn, since);
+		res.send(data);
+	} catch (err) {
+		res.status(500).send({ error: err.message });
+	}
 });
 
 export default router;
