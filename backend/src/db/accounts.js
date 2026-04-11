@@ -20,7 +20,6 @@ import { objectId, assertUniqueness, DBError } from '#src/db/connection.js';
  * document; namely, it has a password_plaintext field rather than password_hash
  */
 export function validateAccount(account) {
-	const issue_count = 0;
 	const issues = [];
 
 	if (missingKeys(account, ['username', 'email', 'password_plaintext', 'city', 'country']).length != 0) {
@@ -36,13 +35,12 @@ export function validateAccount(account) {
 		issues.push('Invalid email');
 	}
 
-	
     const lengthReg = /^.{9,17}$/;
 	const digitReg = /[0-9]/;
 	const specialCharReg = /[!@#$%^&*(),.?":{}|<>_\-\\[\]\/+=;]/;
 	const uppercaseReg = /[A-Z]/;
 
-	const password = account.password;
+	const password = account.password_plaintext;
 
 	if (!password) {
   		issues.push('Password is required');

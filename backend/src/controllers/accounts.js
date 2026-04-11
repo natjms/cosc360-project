@@ -63,8 +63,6 @@ router.get('/', at_least(SL.authenticated), async (req, res) => {
 // Register a new account
 router.post('/', at_least(SL.unauthenticated), upload.single("image"), async (req, res) => {
 	
-	console.log("FILE?", req.file);
-	
 	try {
       	const account = req.body;
 
