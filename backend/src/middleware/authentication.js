@@ -34,7 +34,6 @@ export function at_least(minimum_level) {
 		}
 
 		const auth_header = req.get("Authorization");
-		console.log("AUTH HEADER", auth_header);
 
 		if (auth_header === undefined) {
 			// There was no auth header provided, thus the person is unauthorized.
