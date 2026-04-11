@@ -1,4 +1,7 @@
 import { useState} from 'react';
+import './AddBook.css';
+
+const ACCEPTED_FILE_TYPES = ['image/png', 'image/jpeg', 'image/webp'];
 
 export default function AddBook({onBookAdded}) {
     const [title, setTitle] = useState('');
@@ -13,9 +16,15 @@ export default function AddBook({onBookAdded}) {
     const handleFileChange = (e) => {
         const file = e.target.files[0];
         if (file) {
+            if(!ACCEPTED_FILE_TYPES.includes(file.type)) {
+                setStatus('File must be of type PNG, JPG or WEBP');
+                e.target.value = '';
+                return;
+            }
+
             const reader = new FileReader();
             reader.onloadend = () => {
-                setCover(reader.result.split(',')[1]); 
+                setCover(reader.result);
             };
             reader.readAsDataURL(file);
         }
@@ -34,10 +43,11 @@ export default function AddBook({onBookAdded}) {
         };
 
         try {
-            const response = await fetch('http://localhost:3000/api/books', {
+            const response = await fetch('/api/books', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Authorization': `Basic ${localStorage.getItem('token')}`,
                 },
                 body: JSON.stringify(newEntry),
             });
@@ -63,39 +73,44 @@ export default function AddBook({onBookAdded}) {
     };
 
     return (
-        <div style={{ padding: '20px', border: '1px solid #ccc', borderRadius: '8px'}}>
-            <h3>Add Book to Catalog</h3>
-            <form onSubmit={handleSubmit}>
-                <div>
-                    <label>Title:</label><br/>
-                    <input value={title} onChange={(e) => setTitle(e.target.value)} required />
-                </div>
-                <div>
-                    <label>Author:</label><br/>
-                    <input value={author} onChange={(e) => setAuthor(e.target.value)} required />
-                </div>
-                <div>
-                    <label>ISBN (10 or 13 digits):</label><br/>
-                    <input value={isbn} onChange={(e) => setIsbn(e.target.value)} required placeholder="e.g. 0-123456789" />
-                </div>
-                <div>
-                </div>
-                <div>
-                    <label>Description:</label><br/>
-                    <textarea value={description} onChange={(e) => setDescription(e.target.value)}/>
-                </div>
-                <div>
-                    <label>Cover Image:</label><br/>
-                    <input type="file" accept="image/*" onChange={handleFileChange} required />
-                </div>
-                <div>
-                    <label>Genre:</label><br/>
-                    <input value={genre} onChange={(e) => setGenre(e.target.value)} required />
-                </div>
-                <button type="submit" style={{ marginTop: '10px'}}>Create Catalog Entry</button>
-            </form>
-
-            {status && <p style={{ color: 'blue'}}>{status}</p>}
+        <div className="add-book-overlay">
+            <h2>Add Book to Catalog</h2>
+            <div className="add-book-form">
+                <form onSubmit={handleSubmit}>
+                    <div className="add-book-control">
+                        <label>Title</label>
+                        <input value={title} onChange={(e) => setTitle(e.target.value)} required />
+                    </div>
+                    <div className="add-book-control">
+                        <label>Author</label>
+                        <input value={author} onChange={(e) => setAuthor(e.target.value)} required />
+                    </div>
+                    <div className="add-book-control">
+                        <label>ISBN (10 or 13 digits)</label>
+                        <input value={isbn} onChange={(e) => setIsbn(e.target.value)} required placeholder="e.g. 0-123456789" />
+                    </div>
+                    <div className="add-book-control">
+                        <label>Description</label>
+                        <textarea value={description} onChange={(e) => setDescription(e.target.value)}/>
+                    </div>
+                    <div className="add-book-control">
+                        <label>Cover Image</label>
+                        <input type="file" accept="image/*" onChange={handleFileChange} required />
+                    </div>
+                    <div className="add-book-control">
+                        <label>Genre</label>
+                        <input value={genre} onChange={(e) => setGenre(e.target.value)} required />
+                    </div>
+                    <button type="submit" className="add-book-submit">Create Catalog Entry</button>
+                </form>
+                {status && <p className="add-book-status">{status}</p>}
+            </div>
+            <div className="add-book-preview">
+                {cover
+                    ? <img src={cover} alt="Cover preview" />
+                    : <p>Cover image preview will appear here once you select a file.</p>
+                }
+            </div>
         </div>
     );
 }

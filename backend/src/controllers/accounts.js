@@ -22,7 +22,7 @@ router.use(connect_db);
 // Multer setup 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "images/"); //no error and file is accepted
+    cb(null, "/uploaded_images/"); //no error and file is accepted
   },
   filename: function (req, file, cb) {
     const uniqueName = Date.now() + path.extname(file.originalname);
@@ -156,6 +156,19 @@ router.delete('/:account_id', at_least(SL.authenticated), async (req, res) => {
 
 	const result = await accounts.deleteAccount(req.conn, req.params.account_id);
 	res.status(204).send();
+});
+
+// Toggle whether the account has been disabled
+router.patch('/:account_id/disable', at_least(SL.admin), async (req, res) => {
+	const account = await accounts.getAccountById(req.conn, req.params.account_id);
+
+	if (account === null) {
+		res.status(404).send({error: 'Unknown account'});
+		return;
+	}
+
+	await accounts.toggleAccountDisabled(req.conn, account._id);
+	res.status(200).send({disabled: !account.disabled});
 });
 
 // List of items in a person's personal collection they've indicated they're

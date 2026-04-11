@@ -40,18 +40,6 @@ function Genres() {
 
   return (
     <>
-       <header className="site-header">
-            <div className="logo">
-                <img src={logo} alt="Library logo" className="logo-img" />
-                <h1>Virtual Library</h1>
-            </div>
-
-            <div className="header-right">
-                <SearchBarNavigator />
-                <Navbar />
-            </div>
-        </header>
-
       <div className = "about">
         <h1 style = {{color: "white"}}>CONNECT, DISCOVER, IMAGINE</h1>
       </div>
@@ -63,6 +51,7 @@ function Genres() {
         <ul>
           {books.map(book => (
             <li key={book._id}>
+			  <img src={book.cover} alt={`Cover of ${book.title}`} />
               <strong>{book.title}</strong> by {book.author} <br/>
               ISBN: {book.isbn} <br/>
               {book.description && <em>{book.description}</em>}

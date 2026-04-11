@@ -1,4 +1,4 @@
-import { missingKeys } from '#src/validation.js';
+import { missingKeys, clean_string } from '#src/validation.js';
 import { objectId, DBError } from '#src/db/connection.js';
 import * as catalog from '#src/db/catalog.js';
 
@@ -42,7 +42,8 @@ export async function createCollection(connection, owner_account_id, collection)
 
 	collection.list = [];
 	collection.owner = objectId(owner_account_id);
-
+	collection.creationDate = Date.now(); 	
+	
 	const result = await connection
 		.collection('collections')
 		.insertOne(collection);
@@ -58,7 +59,7 @@ export async function entryIsInCollection(connection, collection_id, entry_id) {
 		.collection('collections')
 		.findOne({
 			_id: objectId(collection_id),
-			list: objectId(entry_id)
+			list: entry_id
 		});
 	
 	return collection !== null
@@ -72,9 +73,10 @@ export async function entryIsInCollection(connection, collection_id, entry_id) {
  *   this operating is idempotent
  */
 export async function addEntryToCollection(connection, collection_id, entry_id) {
-	const entry = await catalog.getCatalogEntryById(connection, entry_id);
+	const entry = await catalog.getCatalogEntryByISBN(connection, entry_id);
+	console.log(entry);
 	if (entry === null) {
-		throw new DBError(`Entry with id ${entry_id} does not exist`);
+		throw new DBError(`Entry with isbn ${entry_id} does not exist`);
 	}
 
 	if (await entryIsInCollection(connection, collection_id, entry_id)) {
@@ -85,7 +87,7 @@ export async function addEntryToCollection(connection, collection_id, entry_id) 
 		.collection('collections')
 		.updateOne(
 			{ _id: objectId(collection_id) },
-			{ '$push': { list: objectId(entry_id) } }
+			{ '$push': { list: entry_id } }
 		);
 }
 
@@ -94,7 +96,7 @@ export function removeEntryFromCollection(connection, collection_id, entry_id) {
 		.collection('collections')
 		.updateOne(
 			{ _id: objectId(collection_id) },
-			{ '$pull': { list: objectId(entry_id) } }
+			{ '$pull': { list: entry_id } }
 		);
 }
 
@@ -112,11 +114,11 @@ export function getCollectionsFromOwner(connection, account_id) {
 }
 
 export async function getEntriesInCollection(connection, collection_id) {
-	const entry_ids = (await getCollectionById(connection, collection_id)).list;
+	const entry_ids = (await getCollectionByISBN(connection, collection_id)).list;
 
 	return connection
 		.collection('catalog')
-		.find({ _id: { '$in': entry_ids } })
+		.find({ isbn: { '$in': entry_ids } })
 		.toArray();
 }
 
@@ -131,12 +133,13 @@ export function deleteCollection(connection, collection_id) {
  * title and description
  */
 export function getCollectionsByPartialMatch(connection, query) {
+	const clean_query = clean_string(query);
 	return connection
 		.collection('collections')
 		.find({
 			'$or': [
-				{ title: new RegExp(`${query}`, 'i'), },
-				{ description: new RegExp(`${query}`, 'i'), }
+				{ title: new RegExp(`${clean_query}`, 'i'), },
+				{ description: new RegExp(`${clean_query}`, 'i'), }
 			]
 		})
 		.toArray();

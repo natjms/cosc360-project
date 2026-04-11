@@ -4,56 +4,86 @@ import logo from "../assets/logo.jpg";
 import './Collections.css'
 import { useState } from 'react'
 import { useEffect } from 'react'
+import BookItem from './BookItem';
 
 
-function Collections() {
+export default function Collections() {
 
-  const [book, getBook] = useState([]); 
+    const [collections, setCollections] = useState([]); 
 
+    async function queryBook(id){
+	    try{
+		const res = await fetch(`api/books/${id}`);
+		const book = await res.json();
+		return book;
+	    }
+	    
+	    catch(err){
+		    console.log(err);
+	    }	
+    }
+
+    async function queryData(){
+	    const res = await fetch('/api/collections/public');
+	    const coll = await res.json();
+
+	    const bookColl = await Promise.all(
+		coll.map((collection) => {
+			const book = collection.list?.map((id) => {return queryBook(id);});
+			return {...collection, book};
+		})
+	    );
+	console.log(bookColl);
+	setCollections(bookColl); 
+
+    }
   useEffect(() => { 
-    books()
-  }, [])
+	queryData();
+  }, []);
+    const renderArr = collections.map( (collection) => {
+	console.log(collection);
+	
+	const books = collection.book.map(b => {
+		return <BookItem
+		title={b.title}
+		author={b.author}
+		image={b.cover}
+		description={b.description}
+		key={b.isbn}
+		/>;
+	});
 
-  const books = async () => { 
-    
-  }
+	return (
+		<div className='collection' id={collection._id}>
+			<h1>{collection.title}</h1> 
+			<p>{collection.description}</p>
+			<div className='books-container'>
+				{books}
+			</div>
+		</div>
+
+	);
+    });
 
     return (
       <>
-        <header className="site-header">
-            <div className="logo">
-                <img src={logo} alt="Library logo" className="logo-img" />
-                <h1>Virtual Library</h1>
-            </div>
-
-            <div className="header-right">
-                <SearchBarNavigator />
-                <Navbar />
-            </div>
-        </header>
-
       <div className = "about">
         <h1 style = {{color: "white"}}>CONNECT, DISCOVER, IMAGINE</h1>
       </div>
-
+	<div className='btnholder'>
+	         <button><h1><a className="lnk" href="/AddCollection">Add new collection</a></h1></button>
+	    
+	</div>
         <div className = "home1">
         <div style = {{backgroundColor: "#CD9D65",
             width: "100%", 
             height: "100px"
         }}>
-        <ul className = "optionsList">
-            <li className = "option">By most borrowed</li>
-            <li className = "option">By the newest posted</li>
-            <li className = "option">By the oldest posted</li>
-            <li className = "option">By release date</li>
-        </ul>
         </div>
         </div>
-
-
+	{renderArr}	
       </>
     );
 }
 
 
-export default Collections;
