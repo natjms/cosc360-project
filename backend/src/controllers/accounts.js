@@ -53,7 +53,7 @@ router.get('/', at_least(SL.authenticated), async (req, res) => {
 	} else{
 		// Partial match with given query
 		const found_accounts =
-			await accounts.getAccountByPartialMatch(req.conn, req.query.q);
+			await accounts.getAccountsByPartialMatch(req.conn, req.query.q);
 
 		res.status(200).send(found_accounts);
 	}
