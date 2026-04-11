@@ -2,7 +2,9 @@ import express from 'express';
 import { SL, at_least } from '#src/middleware/authentication.js';
 import { connect_db, DBError } from '#src/db/connection.js';
 import * as dbCatalog from '#src/db/catalog.js';
-import { getBookById, createBook } from '#src/db/books.js';
+import { getBookById, createBook, transferBook, getBooksByEntry, deleteBook } from '#src/db/books.js';
+import * as dbAccounts from '#src/db/accounts.js';
+import * as dbTransfers from '#src/db/transfers.js';
 
 const router = express.Router();
 
@@ -79,6 +81,10 @@ router.patch('/:book_id', at_least(SL.admin), unimplemented);
 
 router.delete('/:book_id', at_least(SL.admin), async (req, res) => {
 	try{
+		const instances = await getBooksByEntry(req.conn, req.params.book_id);
+		for (const instance of instances) {
+			await deleteBook(req.conn, instance._id);
+		}
 		await dbCatalog.deleteCatalogEntry(req.conn, req.params.book_id);
 		res.status(204).send();
 	}
@@ -106,7 +112,7 @@ router.get('/:isbn', at_least(SL.unauthenticated), async (req, res) => {
 // copy
 router.post('/:isbn/share', at_least(SL.authenticated), async (req, res) => {
 	try{
-		const id = createBook(req.conn, req.account._id, req.params.isbn);
+		const id = await createBook(req.conn, req.account._id, req.params.isbn);
         	res.status(201).send({'id': id});
 	}
 	catch(err){
@@ -132,6 +138,33 @@ router.get('/:book_id/request', at_least(SL.authenticated), async (req, res) => 
 	}
 	catch(err){
         	res.status(400).send({error: err.message});
+	}
+});
+
+router.post('/:book_id/transfer', at_least(SL.authenticated), async (req, res) => {
+	try {
+		const book = await getBookById(req.conn, req.params.book_id);
+		if (!book) {
+			res.status(404).send({ error: 'Book not found' });
+			return;
+		}
+		if (!book.possessor.equals(req.account._id)) {
+			res.status(403).send({ error: 'You can only transfer books you own' });
+			return;
+		}
+		const recipient = await dbAccounts.getAccountByUsername(req.conn, req.body.to_username);
+		if (!recipient) {
+			res.status(404).send({ error: 'Recipient not found' });
+			return;
+		}
+		await transferBook(req.conn, req.params.book_id, recipient._id);
+		await dbTransfers.recordTransfer(
+			req.conn, req.params.book_id, book.catalog_entry,
+			req.account._id, recipient._id
+		);
+		res.status(204).send();
+	} catch (err) {
+		res.status(400).send({ error: err.message });
 	}
 });
 

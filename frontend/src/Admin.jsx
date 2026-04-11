@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { PieChart, Pie, Tooltip, ResponsiveContainer} from 'recharts';
+import { PieChart, Pie, Tooltip, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid } from 'recharts';
 import './Admin.css';
 
 export default function Admin(props) {
@@ -14,7 +14,24 @@ export default function Admin(props) {
     const [isAdmin, setIsAdmin] = useState(false);
     const [accessDenied, setAccessDenied] = useState(false);
 
+    const [transferStats, setTransferStats] = useState([]);
+    const [transferPeriod, setTransferPeriod] = useState('30');
+
     const COLORS = ['#B45253', '#15753d', '#FFBB28', '#FF8042', '#AF19FF'];
+
+    const fetchTransferStats = async (days) => {
+        const token = localStorage.getItem('token');
+        const since = new Date();
+        since.setDate(since.getDate() - Number(days));
+        try {
+            const res = await fetch(`/api/stats/transfers?since=${since.toISOString()}`, {
+                headers: { 'Authorization': `Basic ${token}` }
+            });
+            if (res.ok) setTransferStats(await res.json());
+        } catch (err) {
+            console.error('Failed to fetch transfer stats:', err);
+        }
+    };
 
     const fetchData = async (userQuery ='') => {
         const token = localStorage.getItem('token');
@@ -42,6 +59,7 @@ export default function Admin(props) {
             if(catalogRes.ok){
                 setCatalog(await catalogRes.json());
             }
+            await fetchTransferStats(transferPeriod);
 
 		} catch (err){
             console.error("Dashboard load error:", err);
@@ -88,6 +106,10 @@ export default function Admin(props) {
 
         checkAdminAccess();
     }, []);
+
+    useEffect(() => {
+        if (isAdmin) fetchTransferStats(transferPeriod);
+    }, [transferPeriod]);
 
     const handleDisableUser = async (id, username) => {
         if(!window.confirm(`Toggle whether ${username}'s account is disabled?`)) return;
@@ -144,7 +166,11 @@ export default function Admin(props) {
             if(res.ok){
                 setCatalog(catalog.filter(book => book._id !== id));
                 const statsRes = await fetch('/api/stats/catalog');
-                if(statsRes.ok) setGenreStats(await statsRes.json());
+                if(statsRes.ok) {
+                    const statsData = await statsRes.json();
+                    setGenreStats(statsData.map((item, index) => ({...item, fill: COLORS[index % COLORS.length]})));
+                    await fetchTransferStats(transferPeriod);
+                }
             }
         } catch(err) { setError('Failed to delete book');}
     };
@@ -189,6 +215,28 @@ export default function Admin(props) {
                                             </PieChart>
                                         </ResponsiveContainer>
                                     </div>
+                                </div>
+                                <div className="chart-container">
+                                    <h3>Most Shared Books</h3>
+                                    <div style={{marginBottom: '10px'}}>
+                                        <select value={transferPeriod} onChange={e => setTransferPeriod(e.target.value)}>
+                                            <option value="1">Today</option>
+                                            <option value="7">Last 7 days</option>
+                                            <option value="30">Last 30 days</option>
+                                        </select>
+                                    </div>
+                                    <div style={{height: '300px'}}>
+                                        <ResponsiveContainer>
+                                            <BarChart data={transferStats}>
+                                                <CartesianGrid strokeDasharray="3 3" />
+                                                <XAxis dataKey="title" />
+                                                <YAxis allowDecimals={false} />
+                                                <Tooltip />
+                                                <Bar dataKey="count" fill="#B45253" />
+                                            </BarChart>
+                                        </ResponsiveContainer>
+                                    </div>
+                                    {transferStats.length === 0 && <p style={{textAlign:'center',color:'#888'}}>No transfers in this period.</p>}
                                 </div>
                                 <div className="cards-column">
                                     <div className="stat-card red">
