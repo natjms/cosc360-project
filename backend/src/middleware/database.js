@@ -1,4 +1,4 @@
-import { getDatabaseConnection } from "#src/db/connection.js";
+import { getDatabaseConnection, DBError } from "#src/db/connection.js";
 /**
  * Adds a DB connection to req.conn for use later
  */
