@@ -1,6 +1,7 @@
 import express from 'express';
 import { SL, at_least } from '#src/middleware/authentication.js';
-import { connect_db, objectId, DBError } from '#src/db/connection.js';
+import { objectId } from '#src/db/connection.js';
+import { connect_db } from '#src/middleware/database.js';
 
 import * as accounts from '#src/db/accounts.js';
 import * as books from '#src/db/books.js';
@@ -132,19 +133,6 @@ router.post('/:account_id/:conversation_id', at_least(SL.authenticated), async (
 	res.status(201).send(message)
 });
 
-router.use(async (err, req, res, next) => {
-	if (res.headersSent) {
-		next(err);
-	}
 
-	if (err instanceof DBError) {
-		res.status(400).send(err.sendable());
-		return;
-	} else {
-		console.error(err);
-		res.status(500);
-		res.send({error: 'An unknown conversations error occured. Please try again later'});
-	}
-});
 
 export default router;

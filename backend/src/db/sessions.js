@@ -1,5 +1,5 @@
 import { randomBytes } from 'node:crypto';
-import { objectId, DBError } from '#src/db/connection.js';
+import { objectId } from '#src/db/connection.js';
 
 /*
 {

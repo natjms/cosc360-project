@@ -1,7 +1,8 @@
 import express from 'express';
 import { SL, at_least } from '#src/middleware/authentication.js';
-import { connect_db, DBError } from '#src/db/connection.js';
-import { assertUniqueness } from '#src/db/connection.js';;
+import { DBError } from '#src/db/connection.js';
+import { connect_db } from '#src/middleware/database.js';
+import { assertUniqueness } from '#src/db/connection.js';
 
 import mongodb from 'mongodb';
 import multer from "multer";
@@ -14,11 +15,6 @@ import * as catalog from '#src/db/catalog.js';
 const router = express.Router();
 router.use(connect_db);
 
-
-const unimplemented = (req, res) => {
-	res.status(500);
-	res.send({ error: 'UNIMPLEMENTED' });
-}
 
 // Multer setup
 const storage = multer.diskStorage({
@@ -219,7 +215,7 @@ router.use(async (err, req, res, next) => {
 	} else {
 		console.error(err);
 		res.status(500);
-		res.send({error: 'AN UNKNOWN ACCOUNT ERROR OCCURRED. Please try again later'});
+		res.send({error: 'An unknown database error occurred. Please try again later'});
 	}
 });
 

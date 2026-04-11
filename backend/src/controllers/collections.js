@@ -1,13 +1,9 @@
 import express from 'express';
 import { SL, at_least } from '#src/middleware/authentication.js';
-import { connect_db } from '#src/db/connection.js';
+import { connect_db } from '#src/middleware/database.js';
 import * as dbCollections from '#src/db/collections.js';
 const router = express.Router();
 
-const unimplemented = (req, res) => {
-	res.status(500);
-	res.send({ error: 'UNIMPLEMENTED' });
-}
 
 router.use(connect_db);
 

@@ -1,6 +1,6 @@
 import express from 'express';
 import { SL, at_least } from '#src/middleware/authentication.js';
-import { connect_db, DBError } from '#src/db/connection.js';
+import { connect_db, catchDBError } from '#src/middleware/database.js';
 import * as dbCatalog from '#src/db/catalog.js';
 import { getBookById, createBook, transferBook, getBooksByEntry, deleteBook, getRecentBook } from '#src/db/books.js';
 import * as dbAccounts from '#src/db/accounts.js';
@@ -8,12 +8,8 @@ import * as dbTransfers from '#src/db/transfers.js';
 
 const router = express.Router();
 
-const unimplemented = (req, res) => {
-	res.status(500);
-	res.send({ error: 'UNIMPLEMENTED' });
-}
-
 router.use(connect_db);
+router.use(catchDBError);
 
 // searching
 router.get('/search', at_least(SL.unauthenticated), async (req, res) => {
@@ -27,7 +23,7 @@ router.get('/search', at_least(SL.unauthenticated), async (req, res) => {
     }
 });
 
-//router get all books to display in genres
+//router get all books 
 router.get('/public', async (req, res) => {
     try {
         const connection = req.conn;
@@ -77,7 +73,6 @@ router.post('/', at_least(SL.admin), async (req, res) => {
         res.status(400).send({error: err.message});
     }
 });
-router.patch('/:book_id', at_least(SL.admin), unimplemented);
 
 router.delete('/:book_id', at_least(SL.admin), async (req, res) => {
 	try{
@@ -169,23 +164,6 @@ router.get('/recent/:num', at_least(SL.authenticated), async (req, res) => {
 		res.status(400).send({ error: err.message });
 	}
 });
-
-router.use(async (err, req, res, next) => {
-	if (res.headersSent) {
-		next(err);
-	}
-
-	if (err instanceof DBError) {
-		res.status(400).send(err.sendable());
-		return;
-	} else {
-		console.error(err);
-		res.status(500);
-		res.send({error: 'An unknown books error occured. Please try again later'});
-	}
-});
-
-
 
 
 export default router;

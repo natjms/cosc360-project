@@ -1,6 +1,6 @@
 import express from 'express';
 import { SL, at_least } from '#src/middleware/authentication.js';
-import { connect_db } from '#src/db/connection.js';
+import { connect_db } from '#src/middleware/database.js';
 
 import * as accounts from '#src/db/accounts.js';
 import * as catalog from '#src/db/catalog.js';

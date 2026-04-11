@@ -1,16 +1,11 @@
 import express from 'express';
 import { SL, at_least } from '#src/middleware/authentication.js';
-import { connect_db } from '#src/db/connection.js';
+import { connect_db } from '#src/middleware/database.js';
 
 import * as sessions from '#src/db/sessions.js';
 import * as accounts from '#src/db/accounts.js';
 
 const router = express.Router();
-
-const unimplemented = (req, res) => {
-	res.status(500);
-	res.send({ error: 'UNIMPLEMENTED' });
-}
 
 router.use(connect_db);
 
@@ -20,6 +15,7 @@ req.body = {
 	password_plaintext: Person's password in plain text to test
 }
  */
+
 router.post('/login', at_least(SL.unauthenticated), async (req, res) => {
 	try {
 		const credential = req.body?.credential;
