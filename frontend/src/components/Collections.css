@@ -9,6 +9,12 @@
 
 }
 
+.about-banner{
+	color: white;
+	background-color: black;
+	margin-bottom: 15px;
+}
+
 .collection{
 	display: flex;
 	text-align: center;
@@ -21,11 +27,11 @@
 	display: flex;
 	justify-content: center;
 	flex-direction: row;
-	background-color: lightgrey;
 	width: 80vw;
 	height: 35vh;
 	margin: 20px;
 	overflow: auto;
 	gap: 20px;
+	background-color: #cd9d65;
 
 }

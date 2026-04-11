@@ -14,7 +14,6 @@ import AddBookPage from './AddBookPage.jsx';
 import MyAccount from './components/MyAccount';
 import Admin from './Admin.jsx';
 import LoginPage from './LoginPage.jsx';
-import Profile from './components/Profile';
 import Catalog from './components/Catalog';
 import User from './components/User';
 import PageNotFound from './components/PageNotFound';
@@ -124,7 +123,6 @@ createRoot(document.getElementById('root')).render(
         <Route path = '/notifications' element = {<LoginGatedPage><Notifications/></LoginGatedPage>}/>
         <Route path = '/conversations' element = {<LoginGatedPage><Conversations/></LoginGatedPage>}/>
         <Route path="/add" element={<AdminGatedPage><AddBookPage/></AdminGatedPage>}/>
-        <Route path = '/profile' element = {<LoginGatedPage><Profile/></LoginGatedPage>} />
         <Route path = '/myaccount' element = {<LoginGatedPage><MyAccount/></LoginGatedPage>} />
         <Route path = '/sharebook/' element = {<LoginGatedPage><ShareBook/></LoginGatedPage>} />
         <Route path = '/admin' element = {<AdminGatedPage><Admin/></AdminGatedPage>} />

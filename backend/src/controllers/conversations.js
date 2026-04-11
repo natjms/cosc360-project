@@ -8,7 +8,6 @@ import * as catalog from '#src/db/catalog.js';
 import * as conversations from '#src/db/conversations.js';
 import * as notifications from '#src/db/notifications.js';
 import * as messages from '#src/db/messages.js';
->>>>>>> main
 
 const router = express.Router();
 
