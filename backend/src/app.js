@@ -1,5 +1,4 @@
 import express from 'express';
-import { UPLOAD_DIR } from "../config/path.js";
 import { getDatabaseConnection } from './db/connection.js';
 import cors from 'cors';
 
@@ -17,8 +16,8 @@ dotenv.config();
 
 const server = express();
 server.use(cors());
-const port = 3000;
 server.use(express.json())
+console.log(process.env.UPLOAD_DIR);
 
 server.use('/api/accounts', accounts_controller);
 server.use('/api/books', books_controller);
@@ -28,12 +27,12 @@ server.use('/api/notifications', notifications_controller);
 server.use('/api/sessions', sessions_controller);
 server.use('/api/search', search_controller);
 server.use('/api/stats', statsRouter);
-server.use("/uploaded_images",express.static(UPLOAD_DIR));
+server.use("/api/images",express.static(process.env.UPLOAD_DIR));
 
 server.get('/api', (req, res) => {
   res.send('Hello World!');
 });
 
-server.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
+server.listen(process.env.PORT, () => {
+  console.log(`Example app listening on port ${process.env.PORT}`);
 });

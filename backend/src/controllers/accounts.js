@@ -1,7 +1,6 @@
 import express from 'express';
 import { SL, at_least } from '#src/middleware/authentication.js';
 import { connect_db, DBError } from '#src/db/connection.js';
-import { UPLOAD_DIR } from "../../config/path.js";
 
 import mongodb from 'mongodb';
 import multer from "multer";
@@ -20,10 +19,10 @@ const unimplemented = (req, res) => {
 	res.send({ error: 'UNIMPLEMENTED' });
 }
 
-// Multer setup 
+// Multer setup
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, UPLOAD_DIR); //no error and file is accepted
+    cb(null, process.env.UPLOAD_DIR); //no error and file is accepted
   },
   filename: function (req, file, cb) {
     const uniqueName = Date.now() + path.extname(file.originalname);
@@ -67,17 +66,14 @@ router.post('/', at_least(SL.unauthenticated), upload.single("image"), async (re
       	const account = req.body;
 
 	   		if (req.file) {
-        		account.imagePath = `/uploaded_images/${req.file.filename}`;
+        		account.imagePath = `/images/${req.file.filename}`;
       		}
 	
 		const accountId = await accounts.createAccount(req.conn, account);
 		res.status(201).send({ id: accountId });
   	} catch (err) {
   		console.error("FULL ERROR:", err);
-  		res.status(500).send({
-    	error: err.message,
-    	stack: err.stack
-  });
+  		res.status(500).send({ error: err.message, });
 }
   }
 );
