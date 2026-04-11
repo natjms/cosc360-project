@@ -4,20 +4,17 @@ Team members: Estella Arnott (79989893), Megan Dava (48785497), Ailish Curran (6
 
 ## Setup
 
+Create a .env file in the `/backend` directory. This can be done by cloning the example.env file:
+
+on MacOS/Linux:
 ```
-npm install
+cd /backend; cp example.env .env
 ```
 
 ## Run
 
-In separate terminal windows, run the front end server:
-
+To run the site, run
 ```
-npm run dev
+docker compose up
 ```
-
-And the background
-
-```
-node backend/app.js
-```
+in a terminal window in the base directory. By default, the site will run at http://localhost:5173/.
