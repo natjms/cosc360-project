@@ -131,17 +131,6 @@ router.get('/:book_id/available', at_least(SL.authenticated), async (req, res) =
     res.status(200).send(copies);
 });
 
-router.get('/:book_id/request', at_least(SL.authenticated), async (req, res) => {
-	try{
-	const { book_id, receiver_account_id } = req.body;
-		transferBook(req.conn, book_id, receiver_account_id);
-        	res.status(204).send();
-	}
-	catch(err){
-        	res.status(400).send({error: err.message});
-	}
-});
-
 router.post('/:book_id/transfer', at_least(SL.authenticated), async (req, res) => {
 	try {
 		const book = await getBookById(req.conn, req.params.book_id);
