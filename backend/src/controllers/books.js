@@ -146,7 +146,7 @@ router.use(async (err, req, res, next) => {
 	} else {
 		console.error(err);
 		res.status(500);
-		res.send({error: 'An unknown error occured. Please try again later'});
+		res.send({error: 'An unknown books error occured. Please try again later'});
 	}
 });
 

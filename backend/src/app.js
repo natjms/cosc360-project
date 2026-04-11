@@ -1,6 +1,5 @@
 import express from 'express';
-import path from 'path';
-import { fileURLToPath } from 'url';
+import { UPLOAD_DIR } from "../config/path.js";
 import { getDatabaseConnection } from './db/connection.js';
 import cors from 'cors';
 
@@ -16,10 +15,6 @@ import statsRouter from './controllers/stats.js';
 import dotenv from 'dotenv';
 dotenv.config();
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const imagesPath = path.join(__dirname, 'images');
-
 const server = express();
 server.use(cors());
 const port = 3000;
@@ -32,8 +27,8 @@ server.use('/api/conversations', conversations_controller);
 server.use('/api/notifications', notifications_controller);
 server.use('/api/sessions', sessions_controller);
 server.use('/api/search', search_controller);
-server.use('/api/stats', statsRouter)
-server.use('/api/images', express.static('/uploaded_images/'));
+server.use('/api/stats', statsRouter);
+server.use("/uploaded_images",express.static(UPLOAD_DIR));
 
 server.get('/api', (req, res) => {
   res.send('Hello World!');

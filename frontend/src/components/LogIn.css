@@ -41,16 +41,17 @@
 
 label, #email, #password { 
   margin-left: 50px; 
-  width: 70%; 
+  width: 100%; 
   margin-bottom: 5px;
   border-color: black; 
   border-width: 1px;
   height: 20px; 
 }
 
-.login-error {
-	text-align: left;
+.errorMsg{
+	font-size: 60%;
 	color: red;
+	margin-left: 20px;
 }
 
 .submit { 

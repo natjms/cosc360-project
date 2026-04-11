@@ -8,7 +8,7 @@ export default function Login(props) {
     const [password, setPassword] = useState("")
     const [email, setEmail] = useState("")
     const [emailError, setEmailError] = useState("");
-    const [login_error, setLoginError] = useState(null);
+    const [passwordError, setPasswordError] = useState("");
 
     const handleSignup = () => {
          navigate('/signup'); 
@@ -17,12 +17,11 @@ export default function Login(props) {
     function handleEmailChange(e) {
         setEmail(e.target.value);
         setEmailError("");
-        setLoginError(null);
     }
 
     function handlePasswordChange(e) {
         setPassword(e.target.value);
-        setLoginError(null);
+        setPasswordError("");
     }
 
 
@@ -33,9 +32,19 @@ export default function Login(props) {
 
         const emailReg = /^(.+)@([^\.].*)\.([a-z]{2,})$/;
 
+        if (email === "") {
+            setEmailError("Enter the email you registered with");
+            hasError = true;
+        }
+
+        if (password === "") {
+            setPasswordError("Enter a password");
+            hasError = true;
+        }
+
         if (!emailReg.test(email)) {
             {/*if pattern does not match */ }
-            setEmailError("Enter a valid email");
+            setEmailError("Have you signed up? If so, enter a valid email ex: example@gmail.com");
             hasError = true;
         }
 
@@ -97,10 +106,10 @@ export default function Login(props) {
                     value={email}
                     onChange={handleEmailChange}>
                     </input>
-                    <p className='login-error'>{emailError}</p>
+                    <span className = "errorMsg">{emailError}</span>
                 </div>
 
-                <div className="control">
+                <div className={passwordError ? "control error" : "control"}>
                   <h3><label htmlFor = "Password">PASSWORD</label> </h3>
                   <input 
                     type ="password" 
@@ -108,12 +117,10 @@ export default function Login(props) {
                     id = "password" 
                     placeholder = "Enter a password"
                     value={password}
-                    onChange= {handlePasswordChange}>
-                    </input> 
+                    onChange= {handlePasswordChange}/>
+                    <span className = "errorMsg">{passwordError}</span>
                 </div>
-                  { login_error &&
-                    <p className='login-error'>{login_error}</p>
-				  }
+                 
                   <button className = "submit" type = "submit">Submit</button>
                   <p id = "response"></p>
              </form>

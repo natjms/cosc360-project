@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import './MyAccount.css'
 
 function MyAccount() {
   const navigate = useNavigate();
@@ -43,10 +44,6 @@ function MyAccount() {
         setVisibleBox(true)
     }
 
-    function handleBack() { 
-      navigate('/profile')
-    }
-
  useEffect(() => {
 
     const getUserInfo = async () => { 
@@ -69,16 +66,16 @@ function MyAccount() {
       });
 
       const data =  await res.json();
-      console.log(data);
-      setUser(data);
+      console.log("data", data);
+      setUser(data); 
 
       if (!res.ok) {
         setError(data.error || 'Failed to get user');
         return;
       }
     } catch(error) { 
-                console.error("Network or server error", error)
-            }
+        console.error("Network or server error", error)
+      }
     
     }
     getUserInfo();
@@ -86,7 +83,8 @@ function MyAccount() {
 
 
 async function handleDelete() { 
-  fetch(`/api/accounts/${user._id}`, {
+  if(confirm("Are you sure you want to delete your account? This can not be undone")) { 
+    fetch(`/api/accounts/${user._id}`, {
         method: "DELETE",
         headers: { 
             'Content-Type': 'application/json',
@@ -96,6 +94,9 @@ async function handleDelete() {
 
         alert("Account has been deleted")
         navigate('/profile')
+      } else { 
+        return;
+      }
     }
 
 
@@ -109,7 +110,6 @@ async function validateForm(e) {
             'Content-Type': 'application/json',
             'Authorization': `Basic ${localStorage.getItem('token')}`,
         
-         
           },
           body: JSON.stringify({
                     email: email,
@@ -134,79 +134,162 @@ async function validateForm(e) {
           }
   
   }
-  
 
   return (
     <>
-    <button onClick = {handleBack}>Back</button>
-    <h2>My Account</h2> 
-    <button onClick = {handleDelete} type="button">Delete Account</button>
-    <br></br>
-    <button onClick={updateInfo} className = "button" style = {{marginLeft: "0"}}>Update Information</button>
 
-    <form action='#'>
-    <div>
-      <p><strong>Current Username:</strong> {user?.username}</p>
+    <div className = "header">
 
-       {visibleBox &&
-      <>
-      <p><strong>Update Username:</strong></p>
-      <input type="text" placeholder = "Enter new username if applicable" value = {username} onChange = {handleUsernameChange} style = {{width: "200px"}}/>    
-      </>
-      }
-      
-      <hr></hr>
-      
-      <p><strong>Current Email:</strong> {user?.email}</p>
-      
-      {visibleBox &&
-      <>
-      <p><strong>Update Email:</strong></p>
-      <input type="text" placeholder = "Enter new email if applicable" value = {email} onChange = {handleEmailChange} style = {{width: "200px"}}/>    
-      </>
-      }
+    <div className = "bio">
+      <h2>{user?.username} </h2>
+      <h2>IMAGE HERE</h2>
+    </div>
 
-
-      <hr></hr>
-      <p><strong>Current City:</strong> {user?.city}</p>
-
-       {visibleBox &&
-      <>
-      <p><strong>Update City:</strong></p>
-      <input type="text" placeholder = "Enter new city if applicable" value = {city} onChange = {handleCityChange} style = {{width: "200px"}}/>    
-      </>
-      }
-
-
-      <hr></hr>
-      <p><strong>Current Country:</strong>{user?.country}</p>
-
-        {visibleBox &&
-      <>
-
-      <p><strong>Update Country:</strong></p>
-      <input type="text" placeholder = "Enter new country if applicable" value = {country} onChange = {handleCountryChange} style = {{width: "200px"}}/>    
-      </>
-      }
-
-        {visibleBox &&
-      <>
-
-      <p><strong>Update Password:</strong></p>
-      <input type="password" placeholder = "Enter new password if applicable" value = {password_plaintext} onChange = {handlePasswordChange} style = {{width: "200px"}}/>    
-      </>
-
-      }
+    <div className = "editAccount">
+      <button className = "deleteButton" onClick = {handleDelete} type="button">Delete Account</button>
+      <button className = "updateButton" onClick={updateInfo} type = "button">Edit Profile</button>
+    </div>
 
     </div>
-     
-    <br></br>
-    <button onClick={validateForm} className = "submit" style = {{marginLeft: 0, width: "100px", height: "40px"}}>Submit</button>
-    </form>
-    </>
+  
+  <div className = "profileContainer">
+
+  <form className="accountForm" action="#">
+
+
+  <div className="username">
+
+  <div className="fillRow">
+    <div>
+      <p><strong>Current username</strong> {user?.username}</p>
+    </div>
+
+    {visibleBox && (
+      <div>
+        <span><strong>Update Username:</strong></span>
+        <input
+          type="text"
+          value={username}
+          onChange={handleUsernameChange}
+          style={{ width: "200px" }}
+        />
+      </div>
+    )}
+  </div>
+
+</div>
+
+  
+
+<div className="email">
+
+  <div className="fillRow">
+    <div>
+      <p><strong>Current Email:</strong> {user?.email}</p>
+    </div>
+
+    {visibleBox && (
+      <div>
+        <span><strong>Update Email:</strong></span>
+        <input
+          type="text"
+          value={email}
+          onChange={handleEmailChange}
+          style={{ width: "200px" }}
+        />
+      </div>
+    )}
+  </div>
+
+</div>
+
+
+
+ <div className="city">
+
+  <div className="fillRow">
+    <div>
+      <p><strong>Current City:</strong> {user?.city}</p>
+    </div>
+
+    {visibleBox && (
+      <div>
+        <span><strong>Update City:</strong></span>
+        <input
+          type="text"
+          value={city}
+          onChange={handleCityChange}
+          style={{ width: "200px" }}
+        />
+      </div>
+    )}
+  </div>
+
+</div>
+
+ <div className="country">
+
+  <div className="fillRow">
+    <div>
+      <p><strong>Current Country:</strong> {user?.country}</p>
+    </div>
+
+    {visibleBox && (
+      <div>
+        <span><strong>Update Country:</strong></span>
+        <input
+          type="text"
+          value={country}
+          onChange={handleCountryChange}
+          style={{ width: "200px" }}
+        />
+      </div>
+    )}
+  </div>
+
+</div>
+
+ <div className="password">
+
+  <div className="fillRow">
+    <div>
+      <p><strong>Current Password is hidden for security:</strong></p>
+    </div>
+
+    {visibleBox && (
+      <div>
+        <span><strong>Update Password:</strong></span>
+        <input
+          type="password"
+          value={password_plaintext}
+          onChange={handlePasswordChange}
+          style={{ width: "200px" }}
+        />
+      </div>
+    )}
+  </div>
+
+</div>
+
+  <button
+    onClick={validateForm}
+    className="submit"
+    style={{ marginLeft: "200px", width: "100px", height: "40px" }}> Submit </button>
+
+</form>
+
+<div>
+    <h2 style = {{marginLeft: "40px", marginRight: "40px"}}>COULD DISPLAY STATS IF TIME PERMITS</h2>
+</div>
+
+</div>
+
+</>
+
   );
 
-}
+  }
+
 
 
 

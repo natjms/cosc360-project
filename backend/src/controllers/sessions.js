@@ -59,7 +59,7 @@ router.post('/login', at_least(SL.unauthenticated), async (req, res) => {
 	} catch (e) {
 		console.error(e)
 		res.status(500);
-		res.send({error: 'An unknown error occured. Please try again later'});
+		res.send({error: 'AN UNKNOWN SESSION ERROR OCCURRED. Please try again later'});
 		return;
 	}
 });

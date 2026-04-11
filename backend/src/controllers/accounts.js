@@ -1,6 +1,7 @@
 import express from 'express';
 import { SL, at_least } from '#src/middleware/authentication.js';
 import { connect_db, DBError } from '#src/db/connection.js';
+import { UPLOAD_DIR } from "../../config/path.js";
 
 import mongodb from 'mongodb';
 import multer from "multer";
@@ -11,18 +12,18 @@ import * as books from '#src/db/books.js';
 import * as catalog from '#src/db/catalog.js';
 
 const router = express.Router();
+router.use(connect_db);
+
 
 const unimplemented = (req, res) => {
 	res.status(500);
 	res.send({ error: 'UNIMPLEMENTED' });
 }
 
-router.use(connect_db);
-
 // Multer setup 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "/uploaded_images/"); //no error and file is accepted
+    cb(null, UPLOAD_DIR); //no error and file is accepted
   },
   filename: function (req, file, cb) {
     const uniqueName = Date.now() + path.extname(file.originalname);
@@ -30,7 +31,13 @@ const storage = multer.diskStorage({
   }
 });
 
-const upload = multer({ storage });
+const upload = multer({storage,limits: { fileSize: 2 * 1024 * 1024 }, fileFilter: function (req, file, cb) {
+	if (file.mimetype === "image/jpeg" || file.mimetype ==="image/png") {
+		cb(null, true); //no error, file is accepted
+
+	} else {
+		cb(new Error("Only JPG and PNG files are allowed"),false); } } });
+
 
 // Get all accounts as a list. Returns an array of accounts
 router.get('/', at_least(SL.authenticated), async (req, res) => {
@@ -55,19 +62,25 @@ router.get('/', at_least(SL.authenticated), async (req, res) => {
 
 // Register a new account
 router.post('/', at_least(SL.unauthenticated), upload.single("image"), async (req, res) => {
-	try {
-      const account = req.body;
-
-	   if (req.file) {
-        	account.imagePath = `/images/${req.file.filename}`;
-      }
 	
-	const accountId = await accounts.createAccount(req.conn, req.body);
-	res.status(201).send({ id: accountId });
-  } catch (err) {
-      console.error(err);
-      res.status(500).send({ error: "Error creating account" });
-    }
+	console.log("FILE?", req.file);
+	
+	try {
+      	const account = req.body;
+
+	   		if (req.file) {
+        		account.imagePath = `/uploaded_images/${req.file.filename}`;
+      		}
+	
+		const accountId = await accounts.createAccount(req.conn, account);
+		res.status(201).send({ id: accountId });
+  	} catch (err) {
+  		console.error("FULL ERROR:", err);
+  		res.status(500).send({
+    	error: err.message,
+    	stack: err.stack
+  });
+}
   }
 );
 
@@ -79,9 +92,10 @@ router.get('/current-user', at_least(SL.authenticated), async (req, res) => {
                 res.send({ error: "Account not found"});
                 return;
             }
-
-        const {_id, username, email, password, city, country } = account;
-        res.json({ _id, username, email, password, city, country });
+		
+        const {_id, username, email, password, city, country} = account;
+		console.log("ACCOUNT", account)
+        res.json({ _id, username, email, password, city, country});
         
     } catch (err) {
         console.error(err);
@@ -192,9 +206,12 @@ router.get('/:account_id/holdings', at_least(SL.unauthenticated), async (req, re
 	res.status(200).send(possessed_books);
 });
 
+
+
 router.use(async (err, req, res, next) => {
 	if (res.headersSent) {
 		next(err);
+		return next(err);
 	}
 
 	if (err instanceof DBError) {
@@ -203,8 +220,9 @@ router.use(async (err, req, res, next) => {
 	} else {
 		console.error(err);
 		res.status(500);
-		res.send({error: 'An unknown error occured. Please try again later'});
+		res.send({error: 'AN UNKNOWN ACCOUNT ERROR OCCURRED. Please try again later'});
 	}
 });
+
 
 export default router;

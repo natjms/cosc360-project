@@ -36,6 +36,23 @@ export function validateAccount(account) {
 		issues.push('Invalid email');
 	}
 
+	
+    const lengthReg = /^.{9,17}$/;
+	const digitReg = /[0-9]/;
+	const specialCharReg = /[!@#$%^&*(),.?":{}|<>_\-\\[\]\/+=;]/;
+	const uppercaseReg = /[A-Z]/;
+
+	const password = account.password;
+
+	if (!password) {
+  		issues.push('Password is required');
+	} else {
+  		if (!lengthReg.test(password)) issues.push('Password must be 9 to 17 characters long');
+  		if (!digitReg.test(password)) issues.push('Password must include at least one digit');
+  		if (!specialCharReg.test(password)) issues.push('Password must include at least one special character');
+  		if (!uppercaseReg.test(password)) issues.push('Password must include at least one uppercase letter');
+		}
+
 	return issues;
 }
 
@@ -96,10 +113,6 @@ export async function createAccount(connection, account) {
 	account.password_hash = await bcrypt.hash(account.password_plaintext, 10);
 	delete account.password_plaintext;
 	account.joinDate = Date.now();
-
-	if (account.imagePath) {
-    	account.imagePath = account.imagePath; 
-	}
 
 	account.disabled = false;
 	

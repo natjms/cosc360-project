@@ -1,0 +1,67 @@
+.header { 
+    display: flex;
+    background-color: #FFE797;
+    flex-direction: column; 
+    margin-top: 20px;
+    margin-bottom: 20px; 
+}
+
+.accountForm { 
+  border: 5px solid #FFE797;
+  margin-left: 20px;
+  width: 60%
+}
+
+.editAccount { 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap:40px; 
+    margin-bottom: 50px; 
+}
+
+.deleteButton, .updateButton { 
+    margin-top: 30px;
+    height: 30px; 
+    width: 120px;
+}
+
+.bio { 
+    display: flex; 
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.email { 
+  display: flex;
+  flex-direction: column; 
+  gap: 5px;
+}
+
+.username, .email, .country, .city, .password { 
+  display: flex;
+  flex-direction: column; 
+  gap: 5px;
+}
+
+.fillRow {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  column-gap: 20px; 
+
+  align-items: center; 
+}
+
+.description { 
+  margin-bottom: 5px; 
+}
+
+.profileContainer { 
+  display: flex; 
+  flex-direction: row;
+}
+
+
+
+
