@@ -13,7 +13,18 @@ function MyAccount() {
   const [password_plaintext, setPassword_plaintext] = useState("");
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [visibleBox, setVisibleBox] = useState(false)
+  const [visibleBox, setVisibleBox] = useState(false);
+  const [image, setImage] = useState(null);
+
+  const [errors, setErrors] = useState({
+    username: "",
+    city: "",
+    country: "",
+    email: "",
+    password: "",
+    confirm: "",
+    image: ""
+});
 
    function handleEmailChange(e) {
     if(e != null)
@@ -48,38 +59,53 @@ function MyAccount() {
 
     const getUserInfo = async () => { 
 
-      const token = localStorage.getItem('token');
+       const token = localStorage.getItem("token");
 
        if (!token || token.trim() === '') {
         setError("Not logged in");
         setLoading(false);
         return;
       }
+    		try {
+      			const response = await fetch('/api/accounts/');
+      			const userData = await response.json();
+      			setUser(userData);
 
-      try { 
-      const res = await fetch('/api/accounts/current-user', {
+
+        		const imageData = userData.imagePath
+        		setImage(`/api${imageData}`);
+      
+      const res = await fetch("/api/accounts/current-user", {
         method: "GET",
-        headers: { 
-            'Content-Type': 'application/json',
-            'Authorization': `Basic ${token}`
-        }
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Basic ${token}`,
+        },
       });
 
-      const data =  await res.json();
-      console.log("data", data);
-      setUser(data); 
+      const data = await res.json();
 
       if (!res.ok) {
-        setError(data.error || 'Failed to get user');
+        setError(data.error || "Failed to get user");
         return;
       }
-    } catch(error) { 
-        console.error("Network or server error", error)
+
+      setUser(data);
+
+      if (data.imagePath) {
+        setImage(`/api${data.imagePath}`);
       }
-    
+
+    } catch (error) {
+      console.error("Network or server error", error);
+      setError("Network error");
+    } finally {
+      setLoading(false);
     }
-    getUserInfo();
-  }, []);
+  };
+
+  getUserInfo();
+}, []);
 
 
 async function handleDelete() { 
@@ -93,7 +119,7 @@ async function handleDelete() {
         })
 
         alert("Account has been deleted")
-        navigate('/profile')
+        navigate('/logout')
       } else { 
         return;
       }
@@ -102,6 +128,46 @@ async function handleDelete() {
 
 async function validateForm(e) {
     e.preventDefault()
+
+    let hasError = false;
+
+        const usernameReg = /^[a-zA-Z][a-zA-Z0-9_.]+$/; 
+        const emailReg = /^(.+)@([^\.].*)\.([a-z]{2,})$/;
+        const lengthReg = /^.{9,17}$/;
+        const digitReg = /[0-9]/;
+        const specialCharReg = /[!@#$%^&*(),.?":{}|<>_\-\\[\]\/+=;]/;
+        const uppercaseReg = /[A-Z]/;
+
+        const newErrors = {
+            username: "",
+            email: "",
+            password: "",
+            image: ""
+        };
+
+
+        if (username !== "" && !usernameReg.test(username)) {
+		        newErrors.username = ("Must start with a letter and contain two characters. No spaces or special characters allowed");
+            hasError = true;
+	    }
+
+        if (email !== "" && !emailReg.test(email)) {
+            newErrors.email = ("Enter a valid email format: example@gmail.com");
+            hasError = true;
+        }
+
+        if ( password_plaintext !== "" && ( !lengthReg.test(password_plaintext) || !digitReg.test(password_plaintext) ||!uppercaseReg.test(password_plaintext) || !specialCharReg.test(password_plaintext)))      
+           
+        { newErrors.password = "Needs 7-19 characters, at least one digit, one uppercase, one special character";
+          hasError = true;
+        }
+
+        setErrors(newErrors);
+
+        if(hasError) { 
+            return;
+        }
+
 
   try { 
   const response = await fetch(`/api/accounts/${user._id}`, {
@@ -125,9 +191,10 @@ async function validateForm(e) {
             } else { 
             
             const data = await response.json(); 
+            console.log("USERNAME", data.username)
             
             alert("successfully updated")
-            navigate('/profile')
+            navigate('/');
             }
           }catch(error) { 
             console.log("error")
@@ -142,7 +209,7 @@ async function validateForm(e) {
 
     <div className = "bio">
       <h2>{user?.username} </h2>
-      <h2>IMAGE HERE</h2>
+      <img className='profileImg' src={image}></img>
     </div>
 
     <div className = "editAccount">
@@ -157,8 +224,9 @@ async function validateForm(e) {
   <form className="accountForm" action="#">
 
 
+<div className={errors.username ? "control error" : "control"}> 
+  
   <div className="username">
-
   <div className="fillRow">
     <div>
       <p><strong>Current username</strong> {user?.username}</p>
@@ -176,10 +244,12 @@ async function validateForm(e) {
       </div>
     )}
   </div>
-
+  </div>
+   <span className = "errorMessage">{errors.username}</span>
 </div>
 
-  
+
+<div className={errors.email ? "control error" : "control"}>  
 
 <div className="email">
 
@@ -200,7 +270,8 @@ async function validateForm(e) {
       </div>
     )}
   </div>
-
+</div>
+<span className = "errorMessage">{errors.email}</span>
 </div>
 
 
@@ -249,6 +320,7 @@ async function validateForm(e) {
 
 </div>
 
+<div className={errors.password ? "control error" : "control"}> 
  <div className="password">
 
   <div className="fillRow">
@@ -268,7 +340,8 @@ async function validateForm(e) {
       </div>
     )}
   </div>
-
+</div>
+<span className = "errorMessage">{errors.password}</span>
 </div>
 
   <button

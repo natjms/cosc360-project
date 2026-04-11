@@ -74,6 +74,7 @@ function Signup() {
 
         let hasError = false;
 
+        const usernameReg = /^[a-zA-Z][a-zA-Z0-9_.]+$/; 
         const emailReg = /^(.+)@([^\.].*)\.([a-z]{2,})$/;
         const lengthReg = /^.{9,17}$/;
         const digitReg = /[0-9]/;
@@ -90,11 +91,6 @@ function Signup() {
             image: ""
         };
 
-        if (username === "") {
-            newErrors.username = ("Fill in a username, you can change it later");
-            hasError = true;
-        }
-
         if (city === "") {
             newErrors.city = ("Fill in the city you live in");
             hasError = true;
@@ -104,6 +100,11 @@ function Signup() {
             newErrors.country = ("Select a country of where you currently reside");
             hasError = true;
         }
+
+        if (username === "" || !usernameReg.test(username)) {
+		    newErrors.username = ("Must start with a letter and contain two characters. No spaces or special characters allowed");
+            hasError = true;
+	    }
 
         if (!emailReg.test(email)) {
             newErrors.email = ("Enter a valid email format: example@gmail.com");
@@ -148,13 +149,19 @@ function Signup() {
 
         const data = await response.json();
 
-        if (response.ok) {
-            alert("Account created successfully!");
-            navigate('/login');
+        if (!response.ok) {
+        if (response.status === 409) {
+            setMessage(data.error || "The email or username is taken");
         }
- 
-        setMessage(data.message);
-    }   catch (error) {
+            setMessage(data.error || "Something went wrong");
+        return;
+        }
+        
+        alert("Account created successfully!");
+        navigate('/login');
+        
+
+     } catch (error) {
         console.error("Fetch error:", error);
         setMessage("Error submitting form");
     }

@@ -62,6 +62,26 @@
   flex-direction: row;
 }
 
+.errorMessage{
+	font-size: 60%;
+	color: red;
+}
+
+.control {
+  display: flex;
+  flex-direction: column;
+}
+
+
+.control.error input,
+.control.error select {
+  border: 2px solid red;
+  background-color: #fff5f5;
+}
+
+.control.error .errorMsg {
+  color: red;
+}
 
 
 

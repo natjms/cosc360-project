@@ -1,6 +1,7 @@
 import express from 'express';
 import { SL, at_least } from '#src/middleware/authentication.js';
 import { connect_db, DBError } from '#src/db/connection.js';
+import { assertUniqueness } from '#src/db/connection.js';;
 
 import mongodb from 'mongodb';
 import multer from "multer";
@@ -65,18 +66,46 @@ router.post('/', at_least(SL.unauthenticated), upload.single("image"), async (re
 	try {
       	const account = req.body;
 
-	   		if (req.file) {
-        		account.imagePath = `/images/${req.file.filename}`;
-      		}
-			
-		const accountId = await accounts.createAccount(req.conn, account);
-		res.status(201).send({ id: accountId });
-  	} catch (err) {
+		if (req.file) {
+        	account.imagePath = `/images/${req.file.filename}`;
+      	}
+	await assertUniqueness(
+        req.conn,
+        "accounts",      
+        "email",
+        account.email,
+        null
+      );
+	
+	await assertUniqueness(
+        req.conn,
+        "accounts",
+        "username",
+        account.username,
+        null
+      );
+	
+	const accountId = await accounts.createAccount(req.conn, account);
+	
+	return res.status(201).send({ id: accountId });
+  	
+	} catch (err) {
   		console.error("FULL ERROR:", err);
-  		res.status(500).send({ error: err.message, });
-}
+  		
+		if (err.name === "DBError") {
+        return res.status(409).send({
+          field: err.field || "unknown",
+          error: err.message,
+        });
+      }
+
+      return res.status(500).send({
+        error: "Internal server error",
+      });
+    }
   }
 );
+  
 
 router.get('/current-user', at_least(SL.authenticated), async (req, res) => {
 	try {
@@ -87,9 +116,8 @@ router.get('/current-user', at_least(SL.authenticated), async (req, res) => {
                 return;
             }
 		
-        const {_id, username, email, password, city, country} = account;
-		console.log("ACCOUNT", account)
-        res.json({ _id, username, email, password, city, country});
+        const { _id, username, email, city, country, imagePath  } = account;
+		res.json({ _id, username, email, city, country, imagePath  });	
         
     } catch (err) {
         console.error(err);
