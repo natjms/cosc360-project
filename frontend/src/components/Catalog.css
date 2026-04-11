@@ -1,18 +1,91 @@
-.container{
+.catalog-page-container {
 	display: flex;
 	justify-content: center;
-	height: 80vh;
+    margin-top: 2em;
+    margin-bottom: 2em;
 }
 
-.book{
+.catalog-page-book-container {
 	display: block;
 	text-align: center;
 	justify-content: center;
 	align-items: center;
 	background-color: #FFE797;
-	color: white;
+	color: black;
 	width: 60vw;
 	border: 3px black solid;
 	border-radius: 30px;
-	
+    padding: 2em;
+}
+
+.catalog-page-book {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+}
+
+.catalog-page-error-message {
+    text-align: center;
+    color: red;
+}
+
+.catalog-page-title {
+    text-transform: inherit;
+    text-align: left;
+    margin-top: 0;
+}
+
+.catalog-page-author {
+    font-weight: bold;
+    font-size: 1.2em;
+    text-align: left;
+}
+
+.catalog-page-cover {
+    width: 200px;
+    height: 300px;
+    object-fit: cover;
+    margin-right: 1em;
+    margin-bottom: 2em;
+}
+
+.catalog-page-description {
+    text-align: justify;
+}
+
+.catalog-page-find-container {
+}
+
+ul.catalog-page-holders {
+    padding-left: 0;
+    list-style: none;
+}
+
+ul.catalog-page-holders li {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+ul.catalog-page-holders li > a:first-child {
+    flex-grow: 0;
+}
+
+ul.catalog-page-holders li > a {
+    flex-grow: 1;
+    color: black;
+    text-decoration: none;
+}
+
+ul.catalog-page-holders img {
+    width: 3em;
+    height: 3em;
+    border-radius: 100%;
+    object-fit: cover;
+    margin-right: 1em;
+}
+
+p.catalog-page-holder-username {
+    font-weight: bold;
+    text-align: left;
 }
