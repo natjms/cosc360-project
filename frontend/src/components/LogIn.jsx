@@ -71,7 +71,7 @@ export default function Login(props) {
                 localStorage.setItem('username', userData.username);
 
                 props.onLoginSuccess?.();
-                navigate('/profile');
+                navigate(`/user/${userData.username}`);
             }
 
         }   catch(error) { 

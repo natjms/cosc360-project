@@ -20,7 +20,7 @@ const CollectionResult = ({collection}) => (
     </article>
 );
 
-const CatalogEntryResult = ({entry}) => {
+const CatalogEntryResult = ({entry, handleDelete}) => {
 	return (
 		<article style={{ display: 'flex', gap: '20px', alignItems: 'start'}}>
 			{entry.cover && (
@@ -115,7 +115,7 @@ export default function SearchResults() {
                                     style={{
                                         borderBottom: '1px solid #eee',
                                     }}>
-                                    <CatalogEntryResult entry={e} />
+                                    <CatalogEntryResult entry={e} handleDelete={handleDelete} />
                                 </li>
                             ))}
                         </ul>
@@ -143,7 +143,7 @@ export default function SearchResults() {
                                     style={{
                                         borderBottom: '1px solid #eee',
                                     }}>
-                                        <CollectionResult account={c} />
+                                        <CollectionResult collection={c} />
                                 </li>
                             ))}
                         </ul>

@@ -33,13 +33,8 @@ function Navbar() {
         setInterval(checkUnreadNotifications, 10000);
     }, []);
 
-    const handleLoginSuccess = () => {
-        setIsLoggedIn(true);
-    };
-
     const handleLogout = async () => {
-        const success = await Logout(navigate);
-        if (success) setIsLoggedIn(false);
+        await Logout(navigate);
     };
 
     function togglePop() { 
