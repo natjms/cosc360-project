@@ -120,6 +120,17 @@ router.post('/:isbn/share', at_least(SL.authenticated), async (req, res) => {
 	}
 });
 
+router.get('/:book_id/available', at_least(SL.authenticated), async (req, res) => {
+    const entry = await dbCatalog.getCatalogEntryByISBN(req.conn, req.params.book_id);
+    let copies = await getBooksByEntry(req.conn, entry._id);
+
+    for (const i in copies) {
+        copies[i].possessor = await dbAccounts.getAccountById(req.conn, copies[i].possessor);
+    }
+
+    res.status(200).send(copies);
+});
+
 router.get('/:book_id/request', at_least(SL.authenticated), async (req, res) => {
 	try{
 	const { book_id, receiver_account_id } = req.body;
@@ -169,8 +180,6 @@ router.get('/recent/:num', at_least(SL.authenticated), async (req, res) => {
 		res.status(400).send({ error: err.message });
 	}
 });
-
-
 
 router.use(async (err, req, res, next) => {
 	if (res.headersSent) {
