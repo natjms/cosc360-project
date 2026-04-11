@@ -257,7 +257,7 @@ export default function Admin(props) {
                             <div className="search-container">
                                 <h2>User Accounts</h2>
                                 <div>
-                                    <input type="text" placeholder="Filter..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
+                                    <input type="text" placeholder="Filter by username..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
                                     <button onClick={() => fetchData(searchTerm)}>Search</button>
                                 </div>
                             </div>
