@@ -1,14 +1,12 @@
 import express from 'express';
 import { SL, at_least } from '#src/middleware/authentication.js';
-import { connect_db, objectId } from '#src/db/connection.js';
+import { objectId } from '#src/db/connection.js';
+import { connect_db } from '#src/middleware/database.js';
 import * as notifications from '#src/db/notifications.js';
 
 const router = express.Router();
 
-const unimplemented = (req, res) => {
-	res.status(500);
-	res.send({ error: 'UNIMPLEMENTED' });
-}
+
 
 const its_mine = (req, res, next) => {
 	if (req.account.username !== 'admin' && !objectId(req.params.account_id).equals(req.account._id)) {
