@@ -44,13 +44,7 @@ export default function Collections() {
 	console.log(collection);
 	
 	const books = collection.book.map(b => {
-		return <BookItem
-		title={b.title}
-		author={b.author}
-		image={b.cover}
-		description={b.description}
-		key={b.isbn}
-		/>;
+		return <BookItem entry={b} key={b.isbn}/>;
 	});
 
 	return (

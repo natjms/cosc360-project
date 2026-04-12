@@ -59,14 +59,7 @@ export default function AddCollection(){
   				});
 				console.log(showElement);
 			}}>
-		<BookItem
-		title={book.title}
-		author={book.author}
-		image={book.cover}
-		description={book.description}
-		key={book.isbn}
-		
-		/>
+		<BookItem entry={book} key={book.isbn}/>
 		</div>);
 	}
 

@@ -40,12 +40,9 @@ export default function ShareBook(){
 		);
 			alert("Book added to collection");
 			}}>
-		<BookItem
-		title={book.title}
-		author={book.author}
-		image={book.cover}
-		description={book.description}
-		key={book.isbn}/> </a>);
+		<BookItem entry={book} key={book.isbn}/>
+        </a>
+        );
 	}
 
 	if(!bookList) {return <p>loading...</p>;}

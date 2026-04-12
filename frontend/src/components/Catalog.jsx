@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router';
-import BookItem from './BookItem'; 
 import noCover from '../assets/noCover.jpeg';
 import PageNotFound from './PageNotFound';
 import './Catalog.css';
