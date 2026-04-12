@@ -1,10 +1,33 @@
-.cover img{
-	max-width: 10vw;
-	height: auto;
+.book-item-container > div {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    width: 700px;
+    max-width: 80vw;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 2em;
 }
-.book-item{
-	display: block;
-	justify-content: center;
-	align-items: center;
-	text-align: center;
+
+.book-item-container img {
+    width: 8em;
+    height: 12em;
+    object-fit: contain;
+    border: 3px double black;
+}
+
+.book-item-inner {
+    margin-left: 2em;
+}
+
+.book-item-inner > p {
+    text-align: left;
+}
+
+.book-item-description {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+          line-clamp: 4;
+  -webkit-box-orient: vertical;
 }

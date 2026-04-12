@@ -4,10 +4,7 @@ import './User.css';
 import PageNotFound from './PageNotFound';
 import BookItem from './BookItem';
 
-
-
 function User(){
-	
 	const [user, setUser] = useState(null);
 	const [holdings, setHoldings] = useState(null);
 	const [isThisUser, setIsThisUser] = useState(false);
@@ -26,7 +23,6 @@ function User(){
       			const userData = await res.json();
       			setUser(userData);
 
-
         		const imageData = userData.imagePath
         		setImage(`/api${imageData}`);
       			const res2 = await fetch('/api/accounts/' + userData._id + '/holdings');
@@ -41,17 +37,17 @@ function User(){
         		});
 			const loggedInUser = await response.json();
 			if(userData.username == loggedInUser.username){
-				setIsThisUser(true);	
+				setIsThisUser(true);
 			}
 
-			
     		} catch (err) {
       			console.error(err);
     		}
 	}
 	fetchData();
 	},[params.username]);
-	//first load, return blank page until load 
+
+	//first load, return blank page until load
 	if(!user) {return <p>loading...</p>;}
 	if(!user.username ){
 		return (
@@ -118,14 +114,16 @@ function User(){
 		let bookInstance = holdings[i];
 		let book = bookInstance.catalog_entry;
 		if (!book) continue;
-		comp.push(
-			<div key={book.isbn} style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-				<BookItem
-				title={book.title}
-				author={book.author}
-				image={book.cover}
-				description={book.description}
-				key={book.isbn}/>
+		comp.push(<>
+			    <div key={book.isbn} className='user-page-book-list'>
+			    	<BookItem
+			    	title={book.title}
+			    	author={book.author}
+			    	image={book.cover}
+			    	description={book.description}
+			    	key={book.isbn}/>
+
+			    </div>
 				{isThisUser && (
 					transferBookId === String(bookInstance._id) ? (
 						<div style={{display: 'flex', gap: '6px', marginTop: '6px'}}>
@@ -142,11 +140,9 @@ function User(){
 						<button style={{marginTop: '6px'}} onClick={() => { setTransferBookId(String(bookInstance._id)); setTransferUsername(''); }}>Transfer</button>
 					)
 				)}
-			</div>
+            </>
 		);
 	}
-			
-	
 
 return (
 	<div>

@@ -3,15 +3,15 @@ import "./BookItem.css";
 
 export default function BookItem({title,image,description,author}){
 	return( 
-		<div className="center">
-		<div className="book-item">
-			<h2> {title} </h2>
-			<div className = "cover">
-			<img src={image ? image : noCover} />
-			</div>
-			<h3> by {author} </h3>
-			<h3> {description} </h3>
-		</div>
+		<div className="book-item-container">
+            <div>
+    		    <img src={image ? image : noCover} />
+    		    <div className="book-item-inner">
+    		    	<h3> {title} </h3>
+    		    	<p> by {author} </p>
+    		    	<p className='book-item-description'> {description} </p>
+                </div>
+            </div>
 		</div>
 	);
 }
