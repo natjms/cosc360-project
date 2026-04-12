@@ -20,7 +20,7 @@ const CollectionResult = ({collection}) => (
     </article>
 );
 
-const CatalogEntryResult = ({entry, handleDelete}) => {
+const CatalogEntryResult = ({entry}) => {
 	return (
 		<article style={{ display: 'flex', gap: '20px', alignItems: 'start'}}>
 			{entry.cover && (
@@ -35,19 +35,6 @@ const CatalogEntryResult = ({entry, handleDelete}) => {
 		        <p style={{ margin: '0', color: '#555' }}><strong>Author:</strong> {entry.author}</p>
 		        <p style={{ fontSize: '0.9em', color: '#777' }}><strong>ISBN:</strong> {entry.isbn}</p>
 		        <p>{entry.description}</p>
-		        <button
-		            onClick={() => handleDelete(entry._id)}
-		            style={{
-		                backgroundColor: '#dc3545',
-		                color: 'white',
-		                border: 'none',
-		                padding: '8px 12px',
-		                borderRadius: '4px',
-		                cursor: 'pointer'
-		            }}
-		        >
-		            Delete from Catalog
-		        </button>
 		    </div>
 		</article>
 	);
@@ -73,23 +60,6 @@ export default function SearchResults() {
         refreshSearch();
     }, [search_params]);
 
-    const handleDelete = async (id) => {
-        if (!window.confirm("Are you sure you want to delete this catalog entry?")) return;
-
-        try {
-            const response = await fetch(`/api/books/${id}`, {
-                method: 'DELETE'
-            });
-            if (response.ok) {
-                alert("Deleted successfully!");
-                refreshSearch();
-            } else {
-                alert("Failed to delete.");
-            }
-        } catch (err) {
-            console.error("Delete error:", err);
-        }
-    };
 	const changeHandler = (e) => {
 		setNewQuery(e.target.value);
 	};
@@ -115,7 +85,7 @@ export default function SearchResults() {
                                     style={{
                                         borderBottom: '1px solid #eee',
                                     }}>
-                                    <CatalogEntryResult entry={e} handleDelete={handleDelete} />
+                                    <CatalogEntryResult entry={e} />
                                 </li>
                             ))}
                         </ul>
