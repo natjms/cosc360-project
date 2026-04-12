@@ -35,3 +35,21 @@
 	background-color: #cd9d65;
 
 }
+
+.collections-page-list-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.collections-page-list-container ul {
+    list-style: none;
+    padding-left: 0;
+    text-align: left;
+    width: 500px;
+    max-width: 80vw;
+}
+
+.collections-page-list-container p, .collections-page-list-container h2 {
+    text-align: left;
+}
