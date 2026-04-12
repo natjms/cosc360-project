@@ -43,7 +43,6 @@ function Navbar() {
             <ul>
                 <li><a href="/">Home</a></li>
                 <li><a href="/collections" onClick = {handleCollections}>Collections</a></li>
-                <li><a href="/genres">Genres</a></li>
                 <li><a href= "/about" onClick={handleAbout}>About</a></li>
 
                 <li><a href="/add" onClick={handleAddBook} style={{color: '#B45253', fontWeight: 'bold'}}> + Add a Book</a></li>

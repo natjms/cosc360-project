@@ -17,7 +17,6 @@ import LoginPage from './LoginPage.jsx';
 import Catalog from './components/Catalog';
 import User from './components/User';
 import PageNotFound from './components/PageNotFound';
-import Genres from './components/Genres';
 import ShareBook from './components/ShareBook';
 import AddCollection from './components/AddCollection';
 import Notifications from './Notifications';
@@ -115,7 +114,6 @@ createRoot(document.getElementById('root')).render(
         <Route path = "/search" element = {<SearchResults />} />
         <Route path = '/about' element = {<About />} />
         <Route path = '/collections' element = {<Collections/>}/>
-        <Route path = '/genres' element = {<Genres/>} />
 	<Route path = '/catalog/:isbn' element = {<Catalog/>} />
 	<Route path = '/user/:username' element = {<User/>} />
 
