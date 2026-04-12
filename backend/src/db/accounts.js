@@ -100,30 +100,10 @@ export function getAccountByCredential(connection, username_or_email) {
 }
 
 export async function createAccount(connection, account) {
-	if (account.username !== "" && !account.username?.match(/^[a-zA-Z][a-zA-Z0-9_.]+$/)) {
-		issues.push('Invalid username');
+	const validation_issues = validateAccount(account);
+	if (validation_issues.length > 0) {
+		throw new DBError('Invalid account', validation_issues);
 	}
-
-	// This matches things that are not valid email addresses but whatever
-	if (account.email !== "" && !account.email?.match(/^\S+@\S+\.\S+$/)) {
-		issues.push('Invalid email');
-	}
-
-    const lengthReg = /^.{9,}$/;
-	const digitReg = /[0-9]/;
-	const specialCharReg = /[!@#$%^&*(),.?":{}|<>_\-\\[\]\/+=;]/;
-	const uppercaseReg = /[A-Z]/;
-
-	const password = account.password_plaintext;
-
-	if (password !== "") {
-  		issues.push('Password is required');
-	} else {
-  		if (!lengthReg.test(password)) issues.push('Password must be at least 9 characters long');
-  		if (!digitReg.test(password)) issues.push('Password must include at least one digit');
-  		if (!specialCharReg.test(password)) issues.push('Password must include at least one special character');
-  		if (!uppercaseReg.test(password)) issues.push('Password must include at least one uppercase letter');
-		}
 
 	await assertUniqueness(connection, 'accounts', 'username', account.username);
 	await assertUniqueness(connection, 'accounts', 'email', account.email);
@@ -145,30 +125,34 @@ export async function updateAccount(connection, account_id, account_patch) {
 	let account = { ...account_patch };
 	let issues = [];
 
+	await assertUniqueness(connection, 'accounts', 'username', account_patch.username);
+	await assertUniqueness(connection, 'accounts', 'email', account_patch.email);
+
 	// Only set the properties if they're explicitly declared in the patch;
 	// otherwise we run the risk of accidentally setting a field to undefined
 	// or null
-	if (account.password_plaintext) {
-		account.password_hash = await bcrypt.hash(account.password_plaintext, 10);
-		delete account.password_plaintext;
-	}
-
-	if (account.username && !account.username?.match(/^[a-zA-Z][a-zA-Z0-9_.]+$/)) {
+	if (account.username !== "" && !account.username?.match(/^[a-zA-Z][a-zA-Z0-9_.]+$/)) {
 		issues.push('Invalid username');
 	}
 
 	// This matches things that are not valid email addresses but whatever
-	if (account.email && !account.email.match(/^\S+@\S+\.\S+$/)) {
+	if (account.email !== "" && !account.email?.match(/^\S+@\S+\.\S+$/)) {
 		issues.push('Invalid email');
 	}
 
-	if (account.username) {
-	await assertUniqueness(connection, 'accounts', 'username', account.username);
-	}
+    const lengthReg = /^.{9,}$/;
+	const digitReg = /[0-9]/;
+	const specialCharReg = /[!@#$%^&*(),.?":{}|<>_\-\\[\]\/+=;]/;
+	const uppercaseReg = /[A-Z]/;
 
-	if (account.email) {
-	await assertUniqueness(connection, 'accounts', 'email', account.email);
-	}
+	const password = account.password_plaintext;
+
+	if (password !== "") {
+  		if (!lengthReg.test(password)) issues.push('Password must be at least 9 characters long');
+  		if (!digitReg.test(password)) issues.push('Password must include at least one digit');
+  		if (!specialCharReg.test(password)) issues.push('Password must include at least one special character');
+  		if (!uppercaseReg.test(password)) issues.push('Password must include at least one uppercase letter');
+		}
 
 
     const result = await connection

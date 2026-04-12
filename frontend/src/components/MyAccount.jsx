@@ -15,6 +15,7 @@ function MyAccount() {
   const [loading, setLoading] = useState(true);
   const [visibleBox, setVisibleBox] = useState(false);
   const [image, setImage] = useState(null);
+  const [message, setMessage] = useState("");
 
   const [errors, setErrors] = useState({
     username: "",
@@ -182,9 +183,10 @@ async function validateForm(e) {
         body: JSON.stringify(payload),
     });
           
-          if(!response.ok) { 
-                throw new Error("invalid email")
-            } else { 
+          if (!response.ok) {
+            if (response.status === 409) {
+            setMessage(data.error || "The email or username is taken");
+           }
             
             const data = await response.json(); 
             
