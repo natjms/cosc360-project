@@ -100,7 +100,10 @@ export function at_least(minimum_level) {
 		// Protect admin routes
 		if (minimum_level >= SL.admin && account.username !== 'admin') {
 			res.status(403);
-			res.send({error: 'You aren\'t allowed to do this'});
+			res.send({
+                error: 'You aren\'t allowed to do this. Please log in again',
+                code: 'ATTEMPTED_UNAUTHORIZED_ACCESS',
+            });
 			return;
 		}
 

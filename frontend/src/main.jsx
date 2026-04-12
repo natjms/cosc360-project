@@ -37,7 +37,11 @@ const fetchInterceptors = [
 	async (options, response) => {
 		if (options?.headers?.Authorization && (response.status === 403 || response.status === 401)) {
 			const json_data = await response.json();
-			const log_out_codes = ['ACCOUNT_DISABLED', 'ACCOUNT_DELETED', 'SESSION_EXPIRED', 'SESSION_GONE'];
+			const log_out_codes = [
+                'ACCOUNT_DISABLED', 'ACCOUNT_DELETED', 'SESSION_EXPIRED', 'SESSION_GONE',
+                'ATTEMPTED_UNAUTHORIZED_ACCESS',
+            ];
+
 			if (log_out_codes.includes(json_data.code)) {
 				alert(json_data.error);
 
