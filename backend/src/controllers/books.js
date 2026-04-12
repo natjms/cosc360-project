@@ -2,6 +2,7 @@ import express from 'express';
 import { SL, at_least } from '#src/middleware/authentication.js';
 import { connect_db, catchDBError } from '#src/middleware/database.js';
 import * as dbCatalog from '#src/db/catalog.js';
+import * as notifications from '#src/db/notifications.js';
 import { getBookById, createBook, transferBook, getBooksByEntry, deleteBook } from '#src/db/books.js';
 import * as dbAccounts from '#src/db/accounts.js';
 import * as dbTransfers from '#src/db/transfers.js';
@@ -165,6 +166,13 @@ router.post('/:book_id/transfer', at_least(SL.authenticated), async (req, res) =
 			req.conn, req.params.book_id, book.catalog_entry,
 			req.account._id, recipient._id
 		);
+
+        const catalog_entry = await dbCatalog.getCatalogEntryById(req.conn, book.catalog_entry);
+	    await notifications.sendNotification(req.conn, recipient._id,
+            'You recieved a new book',
+            `${req.account.username} has sent you their copy of ${catalog_entry.title}`
+	    );
+
 		res.status(204).send();
 	} catch (err) {
 		res.status(400).send({ error: err.message });
