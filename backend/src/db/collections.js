@@ -7,7 +7,7 @@ import * as catalog from '#src/db/catalog.js';
 	title: Friendly name
 	description: Description of collection
 	owner: ID of owning account
-	list: Array of ObjectIds of catalog entries. The contents of a catalog are
+	list: Array of ISBNs of catalog entries. The contents of a catalog are
 	      represented as an array of catalog entry ObjectIDs
 }
 */
@@ -54,12 +54,12 @@ export async function createCollection(connection, owner_account_id, collection)
 /**
  * Return true if the given catalog entry is already in the collection
  */
-export async function entryIsInCollection(connection, collection_id, entry_id) {
+export async function entryIsInCollection(connection, collection_id, entry_isbn) {
 	const collection = await connection
 		.collection('collections')
 		.findOne({
 			_id: objectId(collection_id),
-			list: entry_id
+			list: entry_isbn
 		});
 	
 	return collection !== null
@@ -72,31 +72,30 @@ export async function entryIsInCollection(connection, collection_id, entry_id) {
  * - If it's already in the collection, this function does nothing. Thus,
  *   this operating is idempotent
  */
-export async function addEntryToCollection(connection, collection_id, entry_id) {
-	const entry = await catalog.getCatalogEntryByISBN(connection, entry_id);
-	console.log(entry);
+export async function addEntryToCollection(connection, collection_id, entry_isbn) {
+	const entry = await catalog.getCatalogEntryByISBN(connection, entry_isbn);
 	if (entry === null) {
-		throw new DBError(`Entry with isbn ${entry_id} does not exist`);
+		throw new DBError(`Entry with isbn ${entry_isbn} does not exist`);
 	}
 
-	if (await entryIsInCollection(connection, collection_id, entry_id)) {
+	if (await entryIsInCollection(connection, collection_id, entry_isbn)) {
 		return;
 	}
-	
+
 	return connection
 		.collection('collections')
 		.updateOne(
 			{ _id: objectId(collection_id) },
-			{ '$push': { list: entry_id } }
+			{ '$push': { list: entry_isbn } }
 		);
 }
 
-export function removeEntryFromCollection(connection, collection_id, entry_id) {
+export function removeEntryFromCollection(connection, collection_id, entry_isbn) {
 	return connection
 		.collection('collections')
 		.updateOne(
 			{ _id: objectId(collection_id) },
-			{ '$pull': { list: entry_id } }
+			{ '$pull': { list: entry_isbn } }
 		);
 }
 
@@ -114,7 +113,7 @@ export function getCollectionsFromOwner(connection, account_id) {
 }
 
 export async function getEntriesInCollection(connection, collection_id) {
-	const entry_ids = (await getCollectionByISBN(connection, collection_id)).list;
+	const entry_ids = (await getCollectionById(connection, collection_id)).list;
 
 	return connection
 		.collection('catalog')

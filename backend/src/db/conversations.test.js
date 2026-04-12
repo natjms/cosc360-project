@@ -36,7 +36,7 @@ const setup = async () => {
 			 + 'v/AAAAAAAEAAEvUrSNAAAAAElFTkSuQmCC',
 	});
 
-	const book_id = await books.createBook(conn, account_id1, entry_id);
+	const book_id = await books.createBook(conn, account_id1, '0942299795');
 
 	const conversation_id = await conversations.startConversation(conn, account_id1, account_id2, book_id);
 

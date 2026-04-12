@@ -41,7 +41,7 @@ describe('account db interactions', () => {
 		});
 
 		test('empty account validation', () => {
-			expect(accounts.validateAccount({}).length).toEqual(3);
+			expect(accounts.validateAccount({}).length).toEqual(4);
 		});
 
 		test('an attempt to validate an account retrieved from database', () => {
@@ -52,7 +52,7 @@ describe('account db interactions', () => {
 				country: 'Canada',
 				// Should be `password_plaintext`
 				password_hash: 'A valid and str0ng password!',
-			}).length).toEqual(1);
+			}).length).toEqual(2);
 		});
 
 		test('an invalid username', () => {
@@ -77,7 +77,7 @@ describe('account db interactions', () => {
 				username: 'example',
 				email: 'test@example.com',
 				password_plaintext: 'password',
-			}).length).toEqual(1);
+			}).length).toEqual(4);
 		});
 	});
 

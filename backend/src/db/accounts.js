@@ -35,7 +35,7 @@ export function validateAccount(account) {
 		issues.push('Invalid email');
 	}
 
-    const lengthReg = /^.{9,17}$/;
+    const lengthReg = /^.{9,}$/;
 	const digitReg = /[0-9]/;
 	const specialCharReg = /[!@#$%^&*(),.?":{}|<>_\-\\[\]\/+=;]/;
 	const uppercaseReg = /[A-Z]/;
@@ -45,7 +45,7 @@ export function validateAccount(account) {
 	if (!password) {
   		issues.push('Password is required');
 	} else {
-  		if (!lengthReg.test(password)) issues.push('Password must be 9 to 17 characters long');
+  		if (!lengthReg.test(password)) issues.push('Password must be at least 9 characters long');
   		if (!digitReg.test(password)) issues.push('Password must include at least one digit');
   		if (!specialCharReg.test(password)) issues.push('Password must include at least one special character');
   		if (!uppercaseReg.test(password)) issues.push('Password must include at least one uppercase letter');
@@ -151,16 +151,14 @@ export async function updateAccount(connection, account_id, account_patch) {
 	}
 
 
-console.log(' updateOne function hit', account_id);
+    const result = await connection
+      .collection('accounts')
+      .updateOne(
+        { _id: objectId(account_id) },
+        { $set: account }
+      );
 
-const result = await connection
-  .collection('accounts')
-  .updateOne(
-    { _id: objectId(account_id) },
-    { $set: account }
-  );
-
-console.log('Update result:', result);
+    return result;
 }
 
 /**

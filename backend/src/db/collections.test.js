@@ -90,19 +90,19 @@ describe('collection db interactions', () => {
 	describe('collection items', () => {
 		test('contains items if they\'ve been added, and not removed', async () => {
 			// Not initially in collection
-			expect(await collections.entryIsInCollection(conn, d.collection._id, d.entry._id))
+			expect(await collections.entryIsInCollection(conn, d.collection._id, d.entry.isbn))
 				.toBeFalsy();
 
-			await collections.addEntryToCollection(conn, d.collection._id, d.entry._id);
+			await collections.addEntryToCollection(conn, d.collection._id, d.entry.isbn);
 
 			// Now it should be
-			expect(await collections.entryIsInCollection(conn, d.collection._id, d.entry._id))
+			expect(await collections.entryIsInCollection(conn, d.collection._id, d.entry.isbn))
 				.toBeTruthy();
 
-			await collections.removeEntryFromCollection(conn, d.collection._id, d.entry._id);
+			await collections.removeEntryFromCollection(conn, d.collection._id, d.entry.isbn);
 
 			// It finally shouldn't be in the collection
-			expect(await collections.entryIsInCollection(conn, d.collection._id, d.entry._id))
+			expect(await collections.entryIsInCollection(conn, d.collection._id, d.entry.isbn))
 				.toBeFalsy();
 		});
 
@@ -112,15 +112,15 @@ describe('collection db interactions', () => {
 		});
 
 		test('will not add duplicates', async () => {
-			await collections.addEntryToCollection(conn, d.collection._id, d.entry._id);
-			await collections.addEntryToCollection(conn, d.collection._id, d.entry._id);
+			await collections.addEntryToCollection(conn, d.collection._id, d.entry.isbn);
+			await collections.addEntryToCollection(conn, d.collection._id, d.entry.isbn);
 
 			const collection_entries = await collections.getEntriesInCollection(conn, d.collection._id);
 
 			expect(collection_entries.length).toBe(1);
-			expect(collection_entries[0]._id.equals(d.entry._id)).toBeTruthy();
+			expect(collection_entries[0].isbn).toBe(d.entry.isbn);
 
-			await collections.removeEntryFromCollection(conn, d.collection._id, d.entry._id);
+			await collections.removeEntryFromCollection(conn, d.collection._id, d.entry.isbn);
 		});
 	});
 

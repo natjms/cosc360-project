@@ -39,7 +39,7 @@ const setup = async () => {
 			 + 'v/AAAAAAAEAAEvUrSNAAAAAElFTkSuQmCC',
 	});
 
-	const book_id = await books.createBook(conn, account_id1, entry_id);
+	const book_id = await books.createBook(conn, account_id1, '0942299795');
 
 	d.account1 = await accounts.getAccountById(conn, account_id1);
 	d.account2 = await accounts.getAccountById(conn, account_id2);
