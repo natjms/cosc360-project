@@ -114,13 +114,16 @@ function Home() {
             <div className='home-recent-transfers'>
                 <h2> Trading right now </h2>
                 <ul>
-                    { recent_transfers.length > 0 &&
+                    { recent_transfers.length > 0 ?
                         recent_transfers.map((transfer, i) =>
                             <li key={i}>
-                                <img src={transfer.catalog_entry.cover}
-                                    alt={`Cover of ${transfer.catalog_entry.title}`}/>
+                                <Link to={`/catalog/${transfer.catalog_entry.isbn}`}>
+                                    <img src={transfer.catalog_entry.cover}
+                                        alt={`Cover of ${transfer.catalog_entry.title}`}/>
+                                </Link>
                             </li>
                         )
+                        : <p>Nothing to show yet...</p>
                     }
                 </ul>
             </div>
