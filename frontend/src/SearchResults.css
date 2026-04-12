@@ -3,9 +3,12 @@
     flex-direction: row;
 }
 
-.account-result-container > img {
+.account-result-container img {
     width: 5em;
     height: 5em;
+    text-overflow: hide;
+    display: block;
+    overflow-x: clip;
     object-fit: cover;
     border-radius: 100%;
     margin-right: 2em;

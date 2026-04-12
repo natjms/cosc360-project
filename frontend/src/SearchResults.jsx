@@ -1,14 +1,19 @@
 import { useSearchParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 
 import SearchBar from './components/SearchBar.jsx';
 import './SearchResults.css';
 
 const AccountResult = ({account}) => (
     <article className='account-result-container'>
-        <img src={`/api${account.imagePath}`} alt={`${account.username}'s profile photo`}/>
+        <Link to={`/user/${account.username}`}>
+            <img src={`/api${account.imagePath}`} alt={`${account.username}'s profile photo`}/>
+        </Link>
         <div>
-            <p className='account-result-username'>{account.username}</p>
+            <Link to={`/user/${account.username}`}>
+                <p className='account-result-username'>{account.username}</p>
+            </Link>
             <p className='account-result-location'>{account.city}, {account.country}</p>
         </div>
     </article>
@@ -16,7 +21,9 @@ const AccountResult = ({account}) => (
 
 const CollectionResult = ({collection}) => (
     <article className='collection-result-container'>
-        <p className='collection-result-title'>{collection.title}</p>
+        <Link to={`/collection/${collection._id}`}>
+            <p className='collection-result-title'>{collection.title}</p>
+        </Link>
     </article>
 );
 
@@ -24,14 +31,20 @@ const CatalogEntryResult = ({entry}) => {
 	return (
 		<article style={{ display: 'flex', gap: '20px', alignItems: 'start'}}>
 			{entry.cover && (
-				<img
-				src={entry.cover}
-				alt={entry.title}
-				style={{width: '100px', borderRadius: '4px', boxShadow: '0 2px 5px rgba(0,0,0,0.2'}}
-				/>
+                <Link to={`/catalog/${entry.isbn}`}>
+    				<img
+    				    src={entry.cover}
+    				    alt={entry.title}
+    				    style={{width: '100px', borderRadius: '4px', boxShadow: '0 2px 5px rgba(0,0,0,0.2'}}
+    				    />
+                </Link>
 			)}
 			<div style={{ flex: 1 }}>
-		        <h2 style={{ margin: '0 0 5px 0' }}>{entry.title}</h2>
+		        <h2 style={{ margin: '0 0 5px 0' }}>
+                    <Link to={`/catalog/${entry.isbn}`}>
+                        {entry.title}
+                    </Link>
+                </h2>
 		        <p style={{ margin: '0', color: '#555' }}><strong>Author:</strong> {entry.author}</p>
 		        <p style={{ fontSize: '0.9em', color: '#777' }}><strong>ISBN:</strong> {entry.isbn}</p>
 		        <p>{entry.description}</p>
