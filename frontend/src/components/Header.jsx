@@ -7,12 +7,12 @@ function Header() {
     return (
         <header className="site-header" style={{ borderBottom: '1px dotted #CCC' }}>
             <div className="logo">
-                <img src={logo} alt="Library logo" className="logo-img" />
-                <h1>Virtual Library</h1>
+                <img  src={logo} alt="Library logo" className="logo-img" />
+                <h1 className="title">Virtual Library</h1>
             </div>
 
             <div className="header-right">
-                <SearchBarNavigator />
+                <SearchBarNavigator className="search"/>
                 <Navbar />
             </div>
         </header>

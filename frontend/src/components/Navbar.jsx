@@ -36,31 +36,10 @@ function Navbar() {
     const handleLogout = async () => {
         await Logout(navigate);
     };
-
-    function togglePop() { 
-        setSeen(!seen); 
-    };
-
-    const handleAbout = () => { 
-        navigate('/About'); 
-    };
-
-    const handleCollections = () => { 
-        navigate('/Collections')
-    }
-
-
-    const handleAddBook = () => {
-        navigate('/add');
-    };
-
-    const handleProfile = () => {
+        const handleProfile = () => {
         navigate(`/user/${localStorage.getItem(username)}`)
     };
 
-    const handleAdmin = () => {
-        navigate('/admin');
-    }
 	
     function togglePop() {
         setSeen(!seen);
@@ -69,7 +48,7 @@ function Navbar() {
     return (
         <>
         <nav className="main-nav">
-            <ul>
+            <ul className='items'> 
                 <li><Link to="/">Home</Link></li>
                 <li><Link to="/collections">Collections</Link></li>
                 <li><Link to="/about">About</Link></li>
@@ -95,7 +74,7 @@ function Navbar() {
                 }
             </ul>
 
-			<ul>
+			<ul className='items'>
 				{ localStorage.getItem('token') &&
 					<>
 						<li><Link to='/conversations'>Conversations</Link></li>
