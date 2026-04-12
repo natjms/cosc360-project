@@ -9,6 +9,7 @@ export default function Login(props) {
     const [email, setEmail] = useState("")
     const [emailError, setEmailError] = useState("");
     const [passwordError, setPasswordError] = useState("");
+    const [login_error, setLoginError] = useState(null);
 
     const handleSignup = () => {
          navigate('/signup'); 
@@ -17,11 +18,13 @@ export default function Login(props) {
     function handleEmailChange(e) {
         setEmail(e.target.value);
         setEmailError("");
+        setLoginError(null);
     }
 
     function handlePasswordChange(e) {
         setPassword(e.target.value);
         setPasswordError("");
+        setLoginError(null);
     }
 
 
@@ -120,6 +123,7 @@ export default function Login(props) {
                     onChange= {handlePasswordChange}/>
                     <span className = "errorMsg">{passwordError}</span>
                 </div>
+                  { login_error && <p className='errorMsg'>{login_error}</p> }
                  
                   <button className = "submit" type = "submit">Submit</button>
                   <p id = "response"></p>
