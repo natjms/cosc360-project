@@ -18,3 +18,11 @@ To run the site, run
 docker compose up
 ```
 in a terminal window in the base directory. By default, the site will run at http://localhost:5173/.
+
+## Test
+
+To run the test suite, run
+```
+docker exec -ti library-backend npm run test
+```
+once the docker container is running. (press d to detach or use a separate terminal window)
