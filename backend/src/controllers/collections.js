@@ -20,7 +20,6 @@ router.get('/public', at_least(SL.unauthenticated), async (req, res) => {
 router.post('/', at_least(SL.authenticated), async (req, res) => {
 	try{
 		let {title, description} = req.body;
-		
 		let id = await dbCollections.createCollection(req.conn, req.account._id, {title, description});
 		res.status(201).send({id: id});
 	}
@@ -31,7 +30,7 @@ router.post('/', at_least(SL.authenticated), async (req, res) => {
 
 router.get('/:collection_id', at_least(SL.unauthenticated), async (req, res) =>{
 	try{
-		let collection = await dbCollections.getCollectionById(req.conn, req.params.collection_id);			
+		let collection = await dbCollections.getCollectionById(req.conn, req.params.collection_id);
 		res.status(200).send(collection);
 	}
 	catch(err){
@@ -40,13 +39,17 @@ router.get('/:collection_id', at_least(SL.unauthenticated), async (req, res) =>{
 });
 router.get('/:collection_id/items', at_least(SL.unauthenticated), async (req, res) => {
 	try{
-		let entries = await dbCollections.getEntriesInCollection(req.conn, req.params.collection_id);	
+		let entries = await dbCollections.getEntriesInCollection(req.conn, req.params.collection_id);
 		res.status(200).send(entries);
 	}
 	catch(err){
 		res.status(400).send({error: err.message});
 	}
 });
+
+/*
+ * Due to time constraints, collections are permanent :)
+ *
 router.post('/:collection_id/insert/:entry_id', at_least(SL.authenticated), async (req, res) => {
 	try{
 	await dbCollections.addEntryToCollection(req.conn, req.params.collection_id, req.params.entry_id);
@@ -57,7 +60,6 @@ router.post('/:collection_id/insert/:entry_id', at_least(SL.authenticated), asyn
 	}
 })
 
-
 router.delete('/:collection_id', at_least(SL.authenticated), async (req, res) => {
 	try{
 		await dbCollections.deleteCollection(req.conn, req.params.collection_id);
@@ -67,6 +69,7 @@ router.delete('/:collection_id', at_least(SL.authenticated), async (req, res) =>
 		res.status(400).send({error: err.message});
 	}
 });
+*/
 
 router.get('/recent/:num', at_least(SL.authenticated), async (req, res) => {
 	try{
