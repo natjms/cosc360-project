@@ -8,7 +8,7 @@ Create a .env file in the `/backend` directory. This can be done by cloning the 
 
 on MacOS/Linux:
 ```
-cd /backend; cp example.env .env
+cd backend; cp example.env .env
 ```
 
 ## Run
