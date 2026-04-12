@@ -49,6 +49,7 @@ const fetchInterceptors = [
 				// Log out the user
 				localStorage.removeItem('token');
 				localStorage.removeItem('account_id');
+				localStorage.removeItem('username');
 
 				// Get them out of here, from where ever they are. We can't really
 				// use react-router at this level
