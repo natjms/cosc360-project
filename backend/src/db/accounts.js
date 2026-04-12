@@ -100,10 +100,30 @@ export function getAccountByCredential(connection, username_or_email) {
 }
 
 export async function createAccount(connection, account) {
-	const validation_issues = validateAccount(account);
-	if (validation_issues.length > 0) {
-		throw new DBError('Invalid account', validation_issues);
+	if (account.username !== "" && !account.username?.match(/^[a-zA-Z][a-zA-Z0-9_.]+$/)) {
+		issues.push('Invalid username');
 	}
+
+	// This matches things that are not valid email addresses but whatever
+	if (account.email !== "" && !account.email?.match(/^\S+@\S+\.\S+$/)) {
+		issues.push('Invalid email');
+	}
+
+    const lengthReg = /^.{9,}$/;
+	const digitReg = /[0-9]/;
+	const specialCharReg = /[!@#$%^&*(),.?":{}|<>_\-\\[\]\/+=;]/;
+	const uppercaseReg = /[A-Z]/;
+
+	const password = account.password_plaintext;
+
+	if (password !== "") {
+  		issues.push('Password is required');
+	} else {
+  		if (!lengthReg.test(password)) issues.push('Password must be at least 9 characters long');
+  		if (!digitReg.test(password)) issues.push('Password must include at least one digit');
+  		if (!specialCharReg.test(password)) issues.push('Password must include at least one special character');
+  		if (!uppercaseReg.test(password)) issues.push('Password must include at least one uppercase letter');
+		}
 
 	await assertUniqueness(connection, 'accounts', 'username', account.username);
 	await assertUniqueness(connection, 'accounts', 'email', account.email);

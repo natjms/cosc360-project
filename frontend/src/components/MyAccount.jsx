@@ -165,18 +165,12 @@ async function validateForm(e) {
             return;
         }
 
-        console.log("USERNAME", username)
-        console.log("password", password_plaintext)
-        console.log("email", email)
-        console.log("city", city)
-        console.log("country", country)
-
         const payload = {};
-        if (username) payload.username = username;
-        if (email) payload.email = email;
-        if (city) payload.city = city;
-        if (country) payload.country = country;
-        if (password_plaintext) payload.password_plaintext = password;
+          if (username) payload.username = username;
+          if (email) payload.email = email;
+          if (city) payload.city = city;
+          if (country) payload.country = country;
+          if (password_plaintext) payload.password_plaintext = password;
 
      try {
         const response = await fetch(`/api/accounts/${user._id}`, {
@@ -188,7 +182,7 @@ async function validateForm(e) {
         body: JSON.stringify(payload),
     });
           
-            if(!response.ok) { 
+          if(!response.ok) { 
                 throw new Error("invalid email")
             } else { 
             
@@ -351,10 +345,6 @@ async function validateForm(e) {
     style={{ marginLeft: "200px", width: "100px", height: "40px" }}> Submit </button>
 
 </form>
-
-<div>
-    <h2 style = {{marginLeft: "40px", marginRight: "40px"}}>COULD DISPLAY STATS IF TIME PERMITS</h2>
-</div>
 
 </div>
 

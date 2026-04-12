@@ -43,15 +43,13 @@ function About() {
 
       <div className = "paragraph">
         <h1>MORE ABOUT US</h1>
-        <p className = "aboutpara">We are a group of people who love books. Our mission is to spread books
-          with other people. We are a group of people who love books. Our mission is to spread books
-          with other people. We are a group of people who love books. Our mission is to spread books
-          with other people. We are a group of people who love books. Our mission is to spread books
-          with other people. We are a group of people who love books. Our mission is to spread books
-          with other people. We are a group of people who love books. Our mission is to spread books
-          with other people. We are a group of people who love books. Our mission is to spread books
-          with other people. We are a group of people who love books. Our mission is to spread books
-          with other people.</p>
+        <p className = "aboutpara">We are a collection of people who believe books are meant to be shared. 
+          What started out as a small group of readers exchanging books with each
+          other has grown into a community of sharing and discovering new books.
+          Whether you are looking to free space on a shelf or are searching 
+          for something new to dive into, this is the perfect place to do so. 
+          Thank you for being apart of our book exchange. This community would
+          not be what it is without you</p>
       </div>
       </>
     );
