@@ -36,8 +36,6 @@ const upload = multer({storage,limits: { fileSize: 2 * 1024 * 1024 }, fileFilter
 
 
 router.patch('/:account_id', at_least(SL.authenticated), async (req, res) => {
-	console.log('ROUTE HIT');
-	console.log('BODY:', req.body);
 	if (req.account.username !== 'admin' && !req.account._id.equals(req.params.account_id)) {
 		res.status(403).send({'error': 'You can only update your own account'});
 		return;
@@ -49,8 +47,6 @@ router.patch('/:account_id', at_least(SL.authenticated), async (req, res) => {
 	if (req.body.city) updates.city = req.body.city;
 	if (req.body.country) updates.country = req.body.country;
 	if (req.body.password_plaintext) updates.password_plaintext = req.body.password_plaintext;
-
-	console.log("UPDATES", updates)
 
 	await accounts.updateAccount(req.conn, req.params.account_id, updates);
 	res.status(200).json({ success: true });

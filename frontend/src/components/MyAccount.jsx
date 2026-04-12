@@ -171,7 +171,7 @@ async function validateForm(e) {
           if (email) payload.email = email;
           if (city) payload.city = city;
           if (country) payload.country = country;
-          if (password_plaintext) payload.password_plaintext = password;
+          if (password_plaintext) payload.password_plaintext = password_plaintext;
 
      try {
         const response = await fetch(`/api/accounts/${user._id}`, {

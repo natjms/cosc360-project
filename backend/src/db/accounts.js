@@ -148,12 +148,14 @@ export async function updateAccount(connection, account_id, account_patch) {
 	const password = account.password_plaintext;
 
 	if (password !== "") {
-  		if (!lengthReg.test(password)) issues.push('Password must be at least 9 characters long');
-  		if (!digitReg.test(password)) issues.push('Password must include at least one digit');
-  		if (!specialCharReg.test(password)) issues.push('Password must include at least one special character');
-  		if (!uppercaseReg.test(password)) issues.push('Password must include at least one uppercase letter');
+  		if(lengthReg.test(password) && digitReg.test(password) && specialCharReg.test(password) && uppercaseReg.test(password)){
+			account.password_hash = await bcrypt.hash(account.password_plaintext, 10);
+			delete account.password_plaintext;
 		}
-
+		else{
+			delete account.password_plaintext;
+		}
+	}
 
     const result = await connection
       .collection('accounts')
