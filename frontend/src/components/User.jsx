@@ -158,12 +158,7 @@ return (
 					<div style={{display: 'flex', flexWrap: 'wrap', gap: '12px'}}>
 						{catalogList.map(book => (
 							<div key={book.isbn} style={{cursor: 'pointer'}} onClick={() => handleAddBook(book.isbn)}>
-								<BookItem
-									title={book.title}
-									author={book.author}
-									image={book.cover}
-									description={book.description}
-								/>
+								<BookItem entry={book}/>
 							</div>
 						))}
 					</div>
