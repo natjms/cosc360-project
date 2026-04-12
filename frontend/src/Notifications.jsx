@@ -92,8 +92,10 @@ const Notifications = (props) => {
                 }
             }
 
-            setInterval(pollNotifications, 10000);
         })();
+
+        const interval = setInterval(pollNotifications, 10000);
+        return () => clearInterval(interval);
     }, []);
 
     return <div className='notifications-container'>
