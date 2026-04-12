@@ -16,6 +16,10 @@ export async function Logout(navigate) {
         localStorage.removeItem('token');
         localStorage.removeItem('account_id');
         localStorage.removeItem('username');
+
+        clearInterval(localStorage.getItem('notification_interval'));
+        localStorage.removeItem('notification_interval');
+
         navigate('/');
         return true;
 

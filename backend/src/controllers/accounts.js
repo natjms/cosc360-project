@@ -159,6 +159,8 @@ router.delete('/:account_id', at_least(SL.authenticated), async (req, res) => {
 		return;
 	}
 
+    await books.deleteAccountsBooks(req.conn, req.params.account_id);
+
 	const result = await accounts.deleteAccount(req.conn, req.params.account_id);
 	res.status(204).send();
 });

@@ -37,6 +37,12 @@ export async function deleteBook(connection, book_id) {
 		.deleteOne({ _id: objectId(book_id) });
 }
 
+export function deleteAccountsBooks(connection, account_id) {
+    return connection
+        .collection('books')
+        .deleteMany({ possessor: objectId(account_id) });
+}
+
 export async function transferBook(connection, book_id, receiver_account_id) {
 	return connection
 		.collection('books')

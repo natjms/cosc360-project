@@ -30,7 +30,7 @@ function Navbar() {
         checkUnreadNotifications();
 
         // Check again every 10 seconds
-        setInterval(checkUnreadNotifications, 10000);
+        localStorage.setItem('notification_interval', setInterval(checkUnreadNotifications, 10000));
     }, []);
 
     const handleLogout = async () => {
