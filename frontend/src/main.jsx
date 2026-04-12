@@ -9,6 +9,7 @@ import Signup from './components/Signup';
 import SearchResults from './SearchResults.jsx'
 import About from './components/About';
 import Collections from './components/Collections';
+import Collection from './components/Collection';
 import Conversations from './Conversations.jsx';
 import AddBookPage from './AddBookPage.jsx';
 import MyAccount from './components/MyAccount';
@@ -118,6 +119,7 @@ createRoot(document.getElementById('root')).render(
         <Route path = "/search" element = {<SearchResults />} />
         <Route path = '/about' element = {<About />} />
         <Route path = '/collections' element = {<Collections/>}/>
+        <Route path = '/collection/:collection_id' element = {<Collection/>}/>
 	<Route path = '/catalog/:isbn' element = {<Catalog/>} />
 	<Route path = '/user/:username' element = {<User/>} />
 

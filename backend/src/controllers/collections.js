@@ -29,18 +29,17 @@ router.post('/', at_least(SL.authenticated), async (req, res) => {
 	}
 });
 
-router.get('/:collection_id', at_least(SL.authenticated), async (req, res) =>{
+router.get('/:collection_id', at_least(SL.unauthenticated), async (req, res) =>{
 	try{
 		let collection = await dbCollections.getCollectionById(req.conn, req.params.collection_id);			
-		res.status(200).send({collection: collection});
+		res.status(200).send(collection);
 	}
 	catch(err){
 		res.status(400).send({error: err.message});
 	}
 });
-router.get('/:collection_id/items', at_least(SL.authenticated), async (req, res) => {
+router.get('/:collection_id/items', at_least(SL.unauthenticated), async (req, res) => {
 	try{
-		let {title, description} = req.body;
 		let entries = await dbCollections.getEntriesInCollection(req.conn, req.params.collection_id);	
 		res.status(200).send(entries);
 	}
