@@ -12,13 +12,33 @@ function Home() {
     const [staff_picks, setStaffPicks] = useState([]);
     const [errorMessage, setErrorMessage]= useState(null);
 
+    const [recent_transfers, setRecentTransfers] = useState([]);
+    const [recent_transfer_checkpoint , setRecentTransferCheckpoint] = useState(Date.now());
+
+    useEffect(() => {
+        const interval = setInterval(async () => {
+            const recent_transfers_response = await fetch(
+                `/api/books/recent/?earliest=${recent_transfer_checkpoint}&count=1`
+            );
+
+            if (recent_transfers_response.ok) {
+                let new_recent_transfers = await recent_transfers_response.json()
+                setRecentTransfers([...new_recent_transfers, ...recent_transfers].slice(0, 100));
+                setRecentTransferCheckpoint(Date.now());
+            }
+
+            clearInterval(interval);
+        }, 5000);
+    }, [recent_transfers]);
+
     useEffect(() => {
         (async () => {
             const random_books_response = await fetch('/api/books/random?count=3', {
                 headers: {'Content-Type': 'application/json'},
             });
-            console.log(random_books_response);
-            if (!random_books_response.ok) {
+            if (random_books_response.ok) {
+                setStaffPicks(await random_books_response.json());
+            } else {
                 try {
                     const error_response = await random_books_response.json();
                     console.error(error_response);
@@ -30,8 +50,6 @@ function Home() {
                     return;
                 }
             }
-
-            setStaffPicks(await random_books_response.json());
         })();
     }, []);
 
@@ -93,6 +111,19 @@ function Home() {
              </p>
         </div>
         </div>
+            <div className='home-recent-transfers'>
+                <h2> Trading right now </h2>
+                <ul>
+                    { recent_transfers.length > 0 &&
+                        recent_transfers.map((transfer, i) =>
+                            <li key={i}>
+                                <img src={transfer.catalog_entry.cover}
+                                    alt={`Cover of ${transfer.catalog_entry.title}`}/>
+                            </li>
+                        )
+                    }
+                </ul>
+            </div>
 
     </>
     );

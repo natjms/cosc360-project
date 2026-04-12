@@ -29,3 +29,14 @@ export async function getMostTransferredBooks(connection, since) {
 		{ $project: { _id: 0, title: '$catalog_info.title', count: 1 } }
 	]).toArray();
 }
+
+export function getRecentTransfers(connection, earliest=0, maximum=5) {
+    return connection
+        .collection('transfers')
+        .find({
+           timestamp: { '$gt': new Date(earliest) }
+        })
+        .sort({timestamp: -1})
+        .limit(maximum < 20 ? maximum : 20)
+        .toArray();
+}

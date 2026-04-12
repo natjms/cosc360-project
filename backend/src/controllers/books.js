@@ -2,7 +2,7 @@ import express from 'express';
 import { SL, at_least } from '#src/middleware/authentication.js';
 import { connect_db, catchDBError } from '#src/middleware/database.js';
 import * as dbCatalog from '#src/db/catalog.js';
-import { getBookById, createBook, transferBook, getBooksByEntry, deleteBook, getRecentBook } from '#src/db/books.js';
+import { getBookById, createBook, transferBook, getBooksByEntry, deleteBook } from '#src/db/books.js';
 import * as dbAccounts from '#src/db/accounts.js';
 import * as dbTransfers from '#src/db/transfers.js';
 
@@ -49,6 +49,24 @@ router.get('/random', async (req, res) => {
     const random_books = await dbCatalog.getRandomCatalogEntries(req.conn, count);
 
     res.status(200).send(random_books);
+});
+
+
+router.get('/recent', at_least(SL.unauthenticated), async (req, res) => {
+	try{
+        const earliest = Number(req.query.earliest) || 0;
+        const count = Number(req.query.count) || 20;
+		let query = await dbTransfers.getRecentTransfers(req.conn, earliest, count);
+
+        for (const i in query) {
+            query[i].catalog_entry = await dbCatalog.getCatalogEntryById(req.conn, query[i].catalog_entry);
+        }
+
+		res.status(200).send(query);
+	} catch(err){
+        console.error(err);
+		res.status(400).send({ error: err.message });
+	}
 });
 
 // Add a "kind" of book to the database. Recognize a new book within the
@@ -152,18 +170,5 @@ router.post('/:book_id/transfer', at_least(SL.authenticated), async (req, res) =
 		res.status(400).send({ error: err.message });
 	}
 });
-
-
-router.get('/recent/:num', at_least(SL.authenticated), async (req, res) => {
-	try{
-		console.log(req.params.num);
-		const query = getRecentBook(req.conn, req.params.num);
-		res.status(200).send(query);
-	}
-	catch(err){
-		res.status(400).send({ error: err.message });
-	}
-});
-
 
 export default router;
