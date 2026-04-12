@@ -58,6 +58,14 @@ const Conversations = (props) => {
 		fetchConversations();
 	}, [show_complete_conversations]);
 
+    useEffect(() => {
+        return () => {
+            if (message_poll_timer) {
+                clearInterval(message_poll_timer);
+            }
+        };
+    });
+
 	const pollMessages = async () => {
 		console.log(`Polling messages at ${Date.now()}`);
 		const response = await fetch(`/api/conversations/${account_id}/${active_conversation_id}`, {
